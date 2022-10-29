@@ -3,6 +3,8 @@ import { OrbitControls } from './jsm/controls/OrbitControls.js'
 import Stats from './jsm/libs/stats.module.js'
 import { GUI } from './jsm/libs/lil-gui.module.min.js'
 
+import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
+
 const scene = new THREE.Scene()
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
@@ -22,29 +24,31 @@ const material = new THREE.MeshBasicMaterial({
 const cube = new THREE.Mesh(geometry, material)
 scene.add(cube)
 
-window.addEventListener(
-    'resize',
-    () => {
-        camera.aspect = window.innerWidth / window.innerHeight
-        camera.updateProjectionMatrix()
-        renderer.setSize(window.innerWidth, window.innerHeight)
-        render()
-    },
-    false
-)
+// Test Licht
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+scene.add( directionalLight );
 
-const stats = Stats()
-document.body.appendChild(stats.dom)
+// Test Model Import
+const loader = new GLTFLoader();
 
-const gui = new GUI()
-const cubeFolder = gui.addFolder('Cube')
-cubeFolder.add(cube.scale, 'x', -5, 5)
-cubeFolder.add(cube.scale, 'y', -5, 5)
-cubeFolder.add(cube.scale, 'z', -5, 5)
-cubeFolder.open()
-const cameraFolder = gui.addFolder('Camera')
-cameraFolder.add(camera.position, 'z', 0, 10)
-cameraFolder.open()
+loader.load( '3Dmodels/spaceship.glb', function ( gltf ) {
+
+	scene.add( gltf.scene );
+
+    gltf.animations; // Array<THREE.AnimationClip>
+    gltf.scene; // THREE.Group
+    gltf.scenes; // Array<THREE.Group>
+    gltf.cameras; // Array<THREE.Camera>
+    gltf.asset; // Object
+
+}, undefined, function ( error ) { // Error handling
+
+	console.error( error );
+
+} );
+
+
+
 
 function animate() {
     requestAnimationFrame(animate)
@@ -52,7 +56,6 @@ function animate() {
     cube.rotation.y += 0.01
     controls.update()
     render()
-    stats.update()
 }
 
 function render() {
