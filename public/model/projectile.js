@@ -1,10 +1,18 @@
 class Projectile  {
     //extends Entity
 
+    constructor() {
+
+    }
+
+    makeDecision(){
 
 
+    }
 
 }
+
+
    //User Input:
 
 document.addEventListener("keypress", function(event) {
