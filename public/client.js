@@ -3,14 +3,18 @@ import { OrbitControls } from './jsm/controls/OrbitControls.js'
 import Stats from './jsm/libs/stats.module.js'
 import { GUI } from './jsm/libs/lil-gui.module.min.js'
 
+var animationFrame = document.getElementById('animateScene')
+var windowWidth = animationFrame.width
+var windowHeight = animationFrame.height
+
 const scene = new THREE.Scene()
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(75, windowWidth / window.innerHeight, 0.1, 100)
 camera.position.z = 2
 
 const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)
+renderer.setSize(windowWidth, window.innerHeight)
+animationFrame.appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
@@ -25,9 +29,9 @@ scene.add(cube)
 window.addEventListener(
     'resize',
     () => {
-        camera.aspect = window.innerWidth / window.innerHeight
+        camera.aspect = windowWidth / window.innerHeight
         camera.updateProjectionMatrix()
-        renderer.setSize(window.innerWidth, window.innerHeight)
+        renderer.setSize(windowWidth, window.innerHeight)
         render()
     },
     false
