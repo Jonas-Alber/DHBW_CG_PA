@@ -3,22 +3,18 @@ import { OrbitControls } from './jsm/controls/OrbitControls.js'
 import Stats from './jsm/libs/stats.module.js'
 import { GUI } from './jsm/libs/lil-gui.module.min.js'
 
-window.addEventListener('load', function () {
-  animateBlock();
-})
+var animationFrame = document.getElementById('animateScene')
+var windowWidth = animationFrame.width
+var windowHeight = animationFrame.height
 
-function animateBlock(){
-  
-var innerWidth = document.getElementById('animateScene').offsetWidth;
-var innerHeight = window.innerHeight;
 const scene = new THREE.Scene()
 
-const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(75, windowWidth / window.innerHeight, 0.1, 100)
 camera.position.z = 2
 
 const renderer = new THREE.WebGLRenderer()
-renderer.setSize(innerWidth, innerHeight)
-document.getElementById("animateScene").appendChild(renderer.domElement)
+renderer.setSize(windowWidth, window.innerHeight)
+animationFrame.appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
@@ -33,16 +29,16 @@ scene.add(cube)
 window.addEventListener(
     'resize',
     () => {
-        camera.aspect = innerWidth / innerHeight
+        camera.aspect = windowWidth / window.innerHeight
         camera.updateProjectionMatrix()
-        renderer.setSize(innerWidth, innerHeight)
+        renderer.setSize(windowWidth, window.innerHeight)
         render()
     },
     false
 )
 
 const stats = Stats()
-document.getElementById("animateScene").appendChild(stats.dom)
+document.getElementById('animateScene').appendChild(stats.dom)
 
 const gui = new GUI()
 const cubeFolder = gui.addFolder('Cube')
@@ -68,6 +64,3 @@ function render() {
 }
 
 animate()
-
-
-}
