@@ -24,36 +24,80 @@ const material = new THREE.MeshBasicMaterial({
 const cube = new THREE.Mesh(geometry, material)
 scene.add(cube)
 
+scene.background = new THREE.Color(0x0d0d0d);
+
 // Test Licht
 const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 scene.add( directionalLight );
 
 // Test Model Import
-const loader = new GLTFLoader();
+var loader = new GLTFLoader();
+var player; //variable für unser 3D Objekt
+var playerHitBox;
 
 loader.load( '3Dmodels/spaceship.glb', function ( gltf ) {
 
+    player = gltf.scene; //3D Objekt der Player Variable zuweisen 
+    player.scale.set(0.5,0.5,0.5);
 	scene.add( gltf.scene );
 
-    gltf.animations; // Array<THREE.AnimationClip>
-    gltf.scene; // THREE.Group
-    gltf.scenes; // Array<THREE.Group>
-    gltf.cameras; // Array<THREE.Camera>
-    gltf.asset; // Object
+    
+    //playerBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()); // Hit Box des Objekts
+    //playerBox.setFromObject(player);
+    //console.log(playerBox);
 
+    // box helper
+    playerHitBox = new THREE.BoxHelper( player );
+    playerHitBox.material.color.set( 0xff0000 );
+    scene.add( playerHitBox );
+
+    //scene.add(playerBox);
+  
 }, undefined, function ( error ) { // Error handling
 
 	console.error( error );
 
 } );
 
+// Test Box
+const testCube = new THREE.Mesh(
+    new THREE.BoxGeometry(1,1,1),
+    new THREE.MeshPhongMaterial({ color: 0x0000ff })
+);
+testCube.position.set(3,0,2);
+scene.add(testCube)
 
+let testBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+testBox.setFromObject(testCube);
+
+// Test Keybord Constrolls
+
+document.onkeydown = function (e){
+    if (e.keyCode ===37) //left
+        player.position.x -=1;
+    if (e.keyCode ===38) //up
+        player.position.z -=1;
+    if (e.keyCode ===39) //right
+        player.position.x +=1;
+    if (e.keyCode ===40) //down
+        player.position.z +=1;
+}
+
+// Test Collison
+
+function checkCollision(){
+
+}
 
 
 function animate() {
     requestAnimationFrame(animate)
     cube.rotation.x += 0.01
     cube.rotation.y += 0.01
+
+    playerHitBox.update();
+    checkCollision();
+    
     controls.update()
     render()
 }
