@@ -1,21 +1,28 @@
 import * as THREE from 'three'
 import { OrbitControls } from './jsm/controls/OrbitControls.js'
-import Stats from './jsm/libs/stats.module.js'
-import { GUI } from './jsm/libs/lil-gui.module.min.js'
+//import Stats from './jsm/libs/stats.module.js
+//import { GUI } from './jsm/libs/lil-gui.module.min.js'
 
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
 
+
+// Scene Initialiesieren 
 const scene = new THREE.Scene()
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
-camera.position.z = 2
+camera.position.z = 5
+camera.position.y = 2
+//camera.rotateX(Math.PI)
 
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
+scene.background = new THREE.Color(0x222222);
 
+
+/*
 const geometry = new THREE.BoxGeometry()
 const material = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
@@ -23,12 +30,14 @@ const material = new THREE.MeshBasicMaterial({
 })
 const cube = new THREE.Mesh(geometry, material)
 scene.add(cube)
+*/
 
-scene.background = new THREE.Color(0x0d0d0d);
 
 // Test Licht
 const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 scene.add( directionalLight );
+const ambiantLight = new THREE.AmbientLight( 0xffffff, 0.5 );
+scene.add( ambiantLight );
 
 // Test Model Import
 var loader = new GLTFLoader();
@@ -41,17 +50,10 @@ loader.load( '3Dmodels/spaceship.glb', function ( gltf ) {
     player.scale.set(0.5,0.5,0.5);
 	scene.add( gltf.scene );
 
-    
-    //playerBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()); // Hit Box des Objekts
-    //playerBox.setFromObject(player);
-    //console.log(playerBox);
-
-    // box helper
+    // box helper Hitbox
     playerHitBox = new THREE.BoxHelper( player );
     playerHitBox.material.color.set( 0xff0000 );
-    scene.add( playerHitBox );
-
-    //scene.add(playerBox);
+    scene.add( playerHitBox ); // Hitbox zu Testzwcken anzeigen
   
 }, undefined, function ( error ) { // Error handling
 
@@ -71,7 +73,6 @@ let testBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
 testBox.setFromObject(testCube);
 
 // Test Keybord Constrolls
-
 document.onkeydown = function (e){
     if (e.keyCode ===37) //left
         player.position.x -=1;
@@ -92,13 +93,13 @@ function checkCollision(){
 
 function animate() {
     requestAnimationFrame(animate)
-    cube.rotation.x += 0.01
-    cube.rotation.y += 0.01
+    //cube.rotation.x += 0.01
+    //cube.rotation.y += 0.01
 
-    playerHitBox.update();
+    playerHitBox.update(); // akktualiesiert die position der Hittbox
     checkCollision();
     
-    controls.update()
+    controls.update(); // Orbit Controlls (final nicht benötigt)
     render()
 }
 
