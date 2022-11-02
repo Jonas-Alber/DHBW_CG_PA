@@ -1,22 +1,24 @@
-import * as THREE from 'three'
-import { OrbitControls } from './jsm/controls/OrbitControls.js'
+import * as THREE from '/build/three.module.js'
+import { OrbitControls } from '/jsm/controls/OrbitControls.js'
 //import Stats from './jsm/libs/stats.module.js
 //import { GUI } from './jsm/libs/lil-gui.module.min.js'
 
-import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
 
-
+export function animateBlock(){
+  var innerWidth = document.getElementById('animateScene').offsetWidth;
+var innerHeight = window.innerHeight;
 // Scene Initialiesieren 
 const scene = new THREE.Scene()
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 100)
 camera.position.z = 5
 camera.position.y = 2
 //camera.rotateX(Math.PI)
 
 const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)
+renderer.setSize(innerWidth, innerHeight)
+document.getElementById('animateScene').appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 scene.background = new THREE.Color(0x222222);
@@ -108,3 +110,5 @@ function render() {
 }
 
 animate()
+
+}
