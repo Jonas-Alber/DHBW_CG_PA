@@ -21,10 +21,10 @@ export class InfoScreenHandler{
   }
 
   getInnerHTML(storageLocation){
-    //return this.screenElements[storageLocation].innerHTML;
+    return this.screenElements[storageLocation].innerHTML;
   }
 
   setInnerHTML(storageLocation, insertText){
-    //this.screenElements[storageLocation].innerHTML = insertText;
+    this.screenElements[storageLocation].innerHTML = insertText;
   }
 }

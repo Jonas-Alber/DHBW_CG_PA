@@ -1,13 +1,10 @@
-import * as THREE from 'three'
-import { OrbitControls } from './jsm/controls/OrbitControls.js'
-import Stats from './jsm/libs/stats.module.js'
-import { GUI } from './jsm/libs/lil-gui.module.min.js'
+//import * as THREE from 'three'
+import * as THREE from '/build/three.module.js'
+import { OrbitControls } from '/jsm/controls/OrbitControls.js'
+import Stats from '/jsm/libs/stats.module.js'
+import { GUI } from '/jsm/libs/lil-gui.module.min.js'
 
-window.addEventListener('load', function () {
-  animateBlock();
-})
-
-function animateBlock(){
+export function animateBlock(){
   
 var innerWidth = document.getElementById('animateScene').offsetWidth;
 var innerHeight = window.innerHeight;

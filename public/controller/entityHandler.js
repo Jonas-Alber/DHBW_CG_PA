@@ -1,4 +1,4 @@
-class EntityHandler {
+export class EntityHandler {
   constructor(){
     var entitys = new Array();
     var objects  = new Array();

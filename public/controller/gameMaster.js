@@ -1,9 +1,11 @@
-import * as WorldGenFactory from 'controller/worldGen'
-import * as EntityHandler from 'controller/entityHandler'
+import {WorldGenFactory} from '/controller/worldGen.js'
+import {EntityHandler} from '/controller/entityHandler.js'
+import {InfoScreenHandler} from '/view/infoScreen.js'
+import * as ExampleAnimation from '/view/example.js'
 
 const setFPS = 30;
 
-class GameMaster{
+export class GameMaster{
 
   /**
    * Initializes the game
@@ -17,6 +19,15 @@ class GameMaster{
    * Start the game
    */
   startGame(){
+    //TODO: Example Code to be Removed
+    var test = new InfoScreenHandler("leftInfoScreen");
+    var location = test.addDivWithText("ter2r23r332st");
+    test.setInnerHTML(location, "Roffelson");
+    //End of Example Code
+
+    //TODO: Example Code for Animation Rendering
+    ExampleAnimation.animateBlock();
+    //End of Example Code
     this.resumeGame();
   }
 
