@@ -2,7 +2,6 @@ import * as Object from './object'
 
 
 class Entity extends Object  {
-//extends Parentclass
 
     constructor(positionX, positionY) {
         super(); //Aufruf constructor von object.js
@@ -10,38 +9,39 @@ class Entity extends Object  {
 
         this.positionX = positionX;
         this.positionY = positionY;
-        this.degree = degree;
+        this.rotation = rotation;
     }
 
 
-//Trenne positions
-    adjustPosition(amountX, amountY){
+    adjustXPosition(amountX){
 
-        //Get current position
+        //Load current position into positionX var
 
-        //Adjust the current position by amount
-        let positionX = positionX + amountX;
-        let positionY = positionY + amountY;
+        //Adjust position in x-direction
 
-        //   cube.rotation.x += 0.01
-        //     cube.rotation.y += 0.01
+        Entity.position = positionX + amountX;
+    }
 
-        return (positionX, positionY)
+    adjustYPosition(amountY){
 
+        //Load current position into positionY var
+
+        //Adjust position in y-direction
+
+        Entity.position = positionY + amountY;
     }
 
 
 
-    adjustRotation(degree){
 
+    adjustRotation(degreeAdjustment){
+        //Load current rotation into rotation var
 
-        let newDegree = newDegree + degree;
-
-        return (newDegree)
-
+        //Adjust rotation of entity
+        Entity.rotation = rotation + degreeAdjustment;
     }
 
 }
 
-
+//Beispiel Aufruf
 //Entity.adjustPosition(5, 8);

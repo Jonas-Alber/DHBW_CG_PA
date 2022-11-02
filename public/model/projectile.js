@@ -1,7 +1,10 @@
-class Projectile  {
-    //extends Entity
+import * as Object from './object'
+import * as Entity from './entity'
+
+class Projectile extends Entity{
 
     constructor() {
+        super();
 
     }
 

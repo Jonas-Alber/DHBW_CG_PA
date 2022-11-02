@@ -1,7 +1,5 @@
 class Object {
 
-    //var healthpoints = 0;
-
 
     constructor(healthPoints, threeObject) {
         this.healthPoints = healthPoints;
@@ -10,7 +8,7 @@ class Object {
 
     setHP(healthPoints) {
         //set the healthpoints of an object
-        //healthpoints = ...
+        let healthpoints = this.healthPoints;
     }
 
     getHP() {
