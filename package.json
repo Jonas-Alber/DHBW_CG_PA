@@ -24,5 +24,10 @@
   "dependencies": {
     "express": "^4.18.1",
     "three": "^0.142.0"
-  }
+  },
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {}
 }
