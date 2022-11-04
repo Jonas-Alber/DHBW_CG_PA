@@ -23,18 +23,6 @@ document.getElementById('animateScene').appendChild(renderer.domElement)
 const controls = new OrbitControls(camera, renderer.domElement)
 scene.background = new THREE.Color(0x222222);
 
-
-/*
-const geometry = new THREE.BoxGeometry()
-const material = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: true,
-})
-const cube = new THREE.Mesh(geometry, material)
-scene.add(cube)
-*/
-
-
 // Test Licht
 const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 scene.add( directionalLight );
@@ -95,9 +83,6 @@ function checkCollision(){
 
 function animate() {
     requestAnimationFrame(animate)
-    //cube.rotation.x += 0.01
-    //cube.rotation.y += 0.01
-
     playerHitBox.update(); // akktualiesiert die position der Hittbox
     checkCollision();
     
