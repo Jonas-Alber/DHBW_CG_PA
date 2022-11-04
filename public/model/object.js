@@ -1,9 +1,9 @@
 class Object {
 
-
-    constructor(healthPoints, threeObject) {
+    constructor(healthPoints, model, hitbox) {
         this.healthPoints = healthPoints;
-        //three..
+        this.model = model;
+        this.hitbox = hitbox;
     }
 
     setHP(healthPoints) {
@@ -17,9 +17,4 @@ class Object {
     }
 
 
-
-
-
-
 }
-
