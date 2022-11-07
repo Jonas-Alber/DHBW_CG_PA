@@ -2,9 +2,9 @@
 * Author: Jonas Alber
 */
 import { WorldGenFactory } from '/controller/worldGen.js'
-import { EntityHandler } from '/controller/entityHandler.js'
+import { EntityHandler, ObjectFactory } from '/controller/entityHandler.js'
 import { InfoScreenHandler } from '/view/infoScreen.js'
-import * as ExampleAnimation from '/view/example.js'
+//import * as ExampleAnimation from '/view/example.js'
 
 const setFPS = 30;
 
@@ -16,6 +16,9 @@ export class GameMaster {
   constructor() {
     this.entityHandler = new EntityHandler();
     this.worldGenFactory = new WorldGenFactory();
+    this.playerObject = ObjectFactory('../3Dmodels/spaceship.glb', 0.5, 3);
+    console.log(this.playerObject);
+    this.entityHandler.addObject(this.playerObject);
     document.addEventListener("keypress", this.__userInputHandler(event));
   }
 
@@ -43,7 +46,7 @@ export class GameMaster {
     //End of Example Code
 
     //TODO: Example Code for Animation Rendering
-    ExampleAnimation.animateBlock();
+    //ExampleAnimation.animateBlock();
     //End of Example Code
 
     //Load Player Entity
@@ -77,6 +80,6 @@ export class GameMaster {
    * Tasks to be executed every frame
    */
   __task30ms() {
-    this.entityHandler.moveObjects();
+    //this.entityHandler.moveObjects();
   }
 }

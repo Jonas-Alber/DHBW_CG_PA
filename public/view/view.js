@@ -53,7 +53,7 @@ export function get3DModel(modelPath, sizeFactor){ // modelPath = '../3Dmodels/s
         scene.add( gltf.scene );
         obj.scale.set(sizeFactor,sizeFactor,sizeFactor);
 
-        hitbox = new THREE.BoxHelper( player );
+        hitbox = new THREE.BoxHelper( obj );
         hitbox.material.color.set( 0xff0000 ); // just for testing 
         scene.add( hitbox ); 
     
@@ -61,7 +61,7 @@ export function get3DModel(modelPath, sizeFactor){ // modelPath = '../3Dmodels/s
         console.error( error );
     } );
 
-    return [obj, hitbox]
+    return {object: obj, hitbox: hitbox}
 }
 
 export function moveX(x,obj){
