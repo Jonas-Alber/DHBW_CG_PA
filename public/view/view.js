@@ -45,6 +45,8 @@ export function getDirectionalLight(x,y,z,color,intensity){
 }
 
 export function get3DModel(modelPath, sizeFactor){ // modelPath = '../3Dmodels/spaceship.glb'
+    var obj;
+    var hitbox;
     loader.load( modelPath, function ( gltf ) {
 
         obj = gltf.scene; 
