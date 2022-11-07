@@ -1,10 +1,9 @@
-import * as Object from './object'
-import * as Entity from './entity'
+import {Entity} from '/model/entity.js'
 
-class Projectile extends Entity{
+export class ProjectileEntity extends Entity{
 
-    constructor() {
-        super();
+    constructor(model, hitbox) {
+        super(model, hitbox);
 
     }
 
@@ -15,7 +14,7 @@ class Projectile extends Entity{
 
 }
 
-
+/*
    //User Input:
 
 document.addEventListener("keypress", function(event) {
@@ -30,4 +29,4 @@ document.addEventListener("keypress", function(event) {
         case 40:
             //gehe nach unten
     }
-})
+})*/

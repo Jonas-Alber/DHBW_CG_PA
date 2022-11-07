@@ -1,26 +1,52 @@
+/*
+* Author: Jonas Alber
+*/
+import {Object} from '/model/object.js';
+import {Entity} from '/model/entity.js'
 export class EntityHandler {
   constructor(){
-    var entitys = new Array();
-    var objects  = new Array();
+    this.entitys = [];
+    this.objects  = [];
   }
 
-  addEntity(){
-
+  addEntity(entity){
+    if(entity instanceof Entity){
+      this.entitys.push(entity);
+    }
   }
 
-  addObject(){
-
+  addObject(object){
+    if(object instanceof Object){
+      this.objects.push(object);
+    }
   }
 
-  moveObject(){
-
+  getObject(index){
+    return this.objects[index];
   }
 
-  removeEntity(){
-
+  moveObjects(){
+    this.entitys.forEach(function(value, i){
+      this.__handleMoveObject(value, i);
+    });
   }
 
-  removeObject(){
+  __handleMoveObject(element, index){
+    if(element instanceof Entity){
+      element.makeDecision();
+    }
+    else{
+      this.removeEntity(index);
+    }
+  }
 
+
+  removeEntity(index){
+    this.entitys.splice(index,1);
+    this.removeObject(index);
+  }
+
+  removeObject(index){
+    this.objects.splice(index,1);
   }
 }

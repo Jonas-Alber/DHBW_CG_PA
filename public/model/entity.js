@@ -1,15 +1,10 @@
-import * as Object from './object'
+import {Object} from '/model/object.js'
 
 
-class Entity extends Object  {
+export class Entity extends Object  {
 
-    constructor(positionX, positionY) {
-        super(); //Aufruf constructor von object.js
-
-
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.rotation = rotation;
+    constructor(model, hitbox, healthPoints=1) {
+        super(model, hitbox, healthPoints); //Aufruf constructor von object.js
     }
 
 
@@ -19,7 +14,7 @@ class Entity extends Object  {
 
         //Adjust position in x-direction
 
-        Entity.position = positionX + amountX;
+        this.model.position.x += amountX;
     }
 
     adjustYPosition(amountY){
@@ -28,7 +23,7 @@ class Entity extends Object  {
 
         //Adjust position in y-direction
 
-        Entity.position = positionY + amountY;
+        this.model.position.y += amountY;
     }
 
 
@@ -38,7 +33,7 @@ class Entity extends Object  {
         //Load current rotation into rotation var
 
         //Adjust rotation of entity
-        Entity.rotation = rotation + degreeAdjustment;
+        //Entity.rotation = rotation + degreeAdjustment;
     }
 
 }

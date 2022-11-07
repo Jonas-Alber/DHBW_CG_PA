@@ -1,6 +1,6 @@
-class Object {
+export class Object {
 
-    constructor(healthPoints, model, hitbox) {
+    constructor(model, hitbox, healthPoints=1) {
         this.healthPoints = healthPoints;
         this.model = model;
         this.hitbox = hitbox;
@@ -8,12 +8,12 @@ class Object {
 
     setHP(healthPoints) {
         //set the healthpoints of an object
-        let healthpoints = this.healthPoints;
+        this.healthpoints = healthPoints;
     }
 
     getHP() {
         //retrieve healthpoints
-        return this.healthPoints
+        return this.healthPoints;
     }
 
 
