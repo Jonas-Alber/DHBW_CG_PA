@@ -1,5 +1,6 @@
 import * as THREE from '/build/three.module.js'
 import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
+import { ObjectFactory, EntityHandler } from '/controller/entityHandler.js';
 
 //class View{}
 
@@ -44,24 +45,42 @@ export function getDirectionalLight(x,y,z,color,intensity){
 
 }
 
-export function get3DModel(modelPath, sizeFactor){ // modelPath = '../3Dmodels/spaceship.glb'
+export async function get3DModel(modelPath, sizeFactor){ // modelPath = '../3Dmodels/spaceship.glb'
     var obj;
     var hitbox;
-    loader.load( modelPath, function ( gltf ) {
-
-        obj = gltf.scene; 
-        scene.add( gltf.scene );
-        obj.scale.set(sizeFactor,sizeFactor,sizeFactor);
-
-        hitbox = new THREE.BoxHelper( obj );
-        hitbox.material.color.set( 0xff0000 ); // just for testing 
-        scene.add( hitbox ); 
+    return await loader.load( modelPath, function(gltf){
+            obj = gltf.scene; 
+            scene.add( gltf.scene );
+            obj.scale.set(sizeFactor,sizeFactor,sizeFactor);
     
-    }, undefined, function ( error ) { // Error handling
-        console.error( error );
-    } );
+            hitbox = new THREE.BoxHelper( obj );
+            hitbox.material.color.set( 0xff0000 ); // just for testing 
+            scene.add( hitbox );
+            console.log({object: obj, hitbox: hitbox});
+            return {object: obj, hitbox: hitbox};
+        }, undefined, function ( error ) { // Error handling
+            console.error( error );
+    });
 
-    return {object: obj, hitbox: hitbox}
+    //return {object: obj, hitbox: hitbox}
+}
+
+export function add3DModel(entityHandler, modelPath, sizeFactor, type = 0){ // modelPath = '../3Dmodels/spaceship.glb'
+    var obj;
+    var hitbox;
+    loader.load( modelPath, function(gltf){
+            obj = gltf.scene; 
+            scene.add( gltf.scene );
+            obj.scale.set(sizeFactor,sizeFactor,sizeFactor);
+    
+            hitbox = new THREE.BoxHelper( obj );
+            hitbox.material.color.set( 0xff0000 ); // just for testing 
+            scene.add( hitbox );
+            var object = ObjectFactory(obj, hitbox, type);
+            entityHandler.addObject(object);
+        }, undefined, function ( error ) { // Error handling
+            console.error( error );
+    });
 }
 
 export function moveX(x,obj){

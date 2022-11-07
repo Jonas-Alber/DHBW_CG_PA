@@ -4,9 +4,8 @@
 import { WorldGenFactory } from '/controller/worldGen.js'
 import { EntityHandler, ObjectFactory } from '/controller/entityHandler.js'
 import { InfoScreenHandler } from '/view/infoScreen.js'
+import { add3DModel, render } from '/view/view.js';
 //import * as ExampleAnimation from '/view/example.js'
-
-const setFPS = 30;
 
 export class GameMaster {
 
@@ -16,10 +15,14 @@ export class GameMaster {
   constructor() {
     this.entityHandler = new EntityHandler();
     this.worldGenFactory = new WorldGenFactory();
-    this.playerObject = ObjectFactory('../3Dmodels/spaceship.glb', 0.5, 3);
-    console.log(this.playerObject);
-    this.entityHandler.addObject(this.playerObject);
-    document.addEventListener("keypress", this.__userInputHandler(event));
+
+  }
+
+  initGame(){
+    add3DModel(this.entityHandler,'3Dmodels/spaceship.glb', 0.5, 3);
+    var test = new InfoScreenHandler("leftInfoScreen");
+    var location = test.addDivWithText("ter2r23r332st");
+    test.setInnerHTML(location, "Roffelson");
   }
 
 
@@ -27,59 +30,21 @@ export class GameMaster {
  * Takes a event and store the information in the player entity
  * @param {*} event 
  */
-  __userInputHandler(event){
+  userInputHandler(event){
     try{
-      this.entityHandler.getObject(0).storeUserInput(event.key);
+      if(this.entityHandler.objects.length > 0){
+        this.entityHandler.getObject(0).storeUserInput(event.key);
+      }
     }catch(exception){
       console.warn("Player entity is not initialized: ",exception);
     }
   }
-
-  /**
-   * Start the game
-   */
-  startGame() {
-    //TODO: Example Code to be Removed
-    var test = new InfoScreenHandler("leftInfoScreen");
-    var location = test.addDivWithText("ter2r23r332st");
-    test.setInnerHTML(location, "Roffelson");
-    //End of Example Code
-
-    //TODO: Example Code for Animation Rendering
-    //ExampleAnimation.animateBlock();
-    //End of Example Code
-
-    //Load Player Entity
-
-    //End of Player Load
-    this.resumeGame();
-  }
-
-  /**
-   * Stop the game
-   */
-  stopGame() {
-    this.pauseGame();
-  }
-
-  /**
-   * Stop the animation rendering process
-   */
-  pauseGame() {
-    clearInterval(this.__task30ms);
-  }
-
-  /**
-   * Start the animation rendering process
-   */
-  resumeGame() {
-    setInterval(this.__task30ms, setFPS);
-  }
-
+  
   /**
    * Tasks to be executed every frame
    */
   __task30ms() {
-    //this.entityHandler.moveObjects();
+    render();
+    this.entityHandler.moveObjects();
   }
 }

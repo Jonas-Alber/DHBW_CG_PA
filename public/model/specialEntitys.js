@@ -10,16 +10,24 @@ export class PlayerEntity extends Entity{
 
     makeDecision(){
         switch(this.userInput){
-            case 39:
+            case 'd':
+                console.log("rechts");
+                break;
                 //gehe nach rechts
-            case 37:
+            case 'a':
+                console.log("links");
+                break;
                 //gehe nach links
-            case 38:
+            case 'w':
+                console.log("oben");
                 //gehe nach oben
-            case 40:
+                break;
+            case 's':
+                console.log("unten");
                 //gehe nach unten
+                break;
         }
-
+        this.userInput = undefined;
     }
 
     storeUserInput(inputValue){

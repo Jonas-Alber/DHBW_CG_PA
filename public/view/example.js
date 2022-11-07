@@ -35,7 +35,7 @@ var player; //variable für unser 3D Objekt
 var playerHitBox;
 
 loader.load( '3Dmodels/spaceship.glb', function ( gltf ) {
-
+    
     player = gltf.scene; //3D Objekt der Player Variable zuweisen 
     player.scale.set(0.5,0.5,0.5);
 	scene.add( gltf.scene );

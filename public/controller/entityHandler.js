@@ -27,18 +27,16 @@ export class EntityHandler {
   }
 
   moveObjects(){
-    this.object.forEach(function(value, i){
-      try{
-        this.__handleMoveObject(value, i);
-      }catch(exception){
-
-      }
-    });
-  }
-
-  __handleMoveObject(element, index){
-    if(element instanceof Entity){
-      element.makeDecision();
+    if(this.objects.length > 0){
+      this.objects.forEach(function(element, i){
+        try{
+          if(element instanceof Entity|| element instanceof PlayerEntity){
+            element.makeDecision();
+          }
+        }catch(exception){
+          console.warn(exception);
+        }
+      });
     }
   }
 
@@ -56,22 +54,20 @@ export class EntityHandler {
  *  2 = AiEntity
  *  3 = PlayerEntity
  */
-export function ObjectFactory(modelLocation, modelSize = 1, type = 0){
-  console.log(modelLocation);
-  var object3DModel = get3DModel(modelLocation, modelSize);
+export function ObjectFactory(object, hitbox, type = 0){
   var object;
   switch(type){
     case 1:
-      object = new ProjectileEntity(object3DModel.object, object3DModel.hitbox);
+      object = new ProjectileEntity(object, hitbox);
       break;
     case 2:
-      object = new AiEntity(object3DModel.object, object3DModel.hitbox);
+      object = new AiEntity(object, hitbox);
       break;
     case 3:
-      object = new PlayerEntity(object3DModel.object, object3DModel.hitbox);
+      object = new PlayerEntity(object, hitbox);
       break;
     default:
-      object = new Object(object3DModel.object, object3DModel.hitbox);
+      object = new Object(object, hitbox);
       break;
   }
   return object;
