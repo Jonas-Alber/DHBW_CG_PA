@@ -27,3 +27,29 @@ export class PlayerEntity extends Entity{
     }
 
 }
+
+export class ProjectileEntity extends Entity{
+
+    constructor(model, hitbox) {
+        super(model, hitbox);
+
+    }
+
+    makeDecision(){
+
+    }
+
+}
+
+export class AiEntity extends Entity{
+
+    constructor(model, hitbox, healthPoints = 1) {
+        super(model, hitbox, healthPoints);
+
+    }
+
+    makeDecision(){
+
+    }
+
+}
