@@ -64,13 +64,13 @@ testBox.setFromObject(testCube);
 
 // Test Keybord Constrolls
 document.onkeydown = function (e){
-    if (e.keyCode ===37) //left
+    if (e.key === 'ArrowLeft' || e.key === 'a') //left
         player.position.x -=1;
-    if (e.keyCode ===38) //up
+    if (e.key ==='ArrowUp' || e.key === 'w') //up
         player.position.z -=1;
-    if (e.keyCode ===39) //right
+    if (e.key ==='ArrowRight' || e.key === 'd') //right
         player.position.x +=1;
-    if (e.keyCode ===40) //down
+    if (e.key ==='ArrowDown' || e.key === 's') //down
         player.position.z +=1;
 }
 

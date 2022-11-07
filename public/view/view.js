@@ -87,3 +87,24 @@ export function checkCollision(){
 }
 
 // ---- Input Handler ----
+
+var lastKeyPressed = 'none';
+
+document.onkeydown = function (e){
+    if (e.key === 'ArrowLeft' || e.key === 'a') //left
+        lastKeyPressed = 'left';
+    if (e.key === 'ArrowUp' || e.key === 'w') //up
+        lastKeyPressed = 'up';
+    if (e.key === 'ArrowRight' || e.key === 'd') //right
+        lastKeyPressed = 'right';
+    if (e.key === 'ArrowDown' || e.key === 's') //down
+        lastKeyPressed = 'down';
+    if (e.key === 'Space') //Space
+        lastKeyPressed = 'space';
+}
+
+export function getLastKeyPressed(){
+    key = lastKeyPressed
+    lastKeyPressed = 'none'
+    return key
+}
