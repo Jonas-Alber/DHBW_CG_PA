@@ -1,10 +1,10 @@
-import { init } from 'express/lib/application';
-import View from 'express/lib/view';
 import * as THREE from '/build/three.module.js'
 import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
 
 //class View{}
-//export function initScene(){
+
+// ---- Initialisierung der Scene ----
+//export function initScene(){ 
     var innerWidth = document.getElementById('animateScene').offsetWidth;
     var innerHeight = window.innerHeight;
 
@@ -34,20 +34,17 @@ export function render() {
     renderer.render(scene, camera)
 }
 
-export function addAmbientLight(x,y,z,color,intensity){
+// ---- 3D Model Handler ----
+
+export function getAmbientLight(x,y,z,color,intensity){
 
 }
 
-export function DirectionalLight(x,y,z,color,intensity){
+export function getDirectionalLight(x,y,z,color,intensity){
 
 }
 
-export function checkCollision(){
-
-}
-
-export function get3DModel(modelPath, sizeFactor){ // modelPath = '3Dmodels/spaceship.glb'
- 
+export function get3DModel(modelPath, sizeFactor){ // modelPath = '../3Dmodels/spaceship.glb'
     loader.load( modelPath, function ( gltf ) {
 
         obj = gltf.scene; 
@@ -59,9 +56,32 @@ export function get3DModel(modelPath, sizeFactor){ // modelPath = '3Dmodels/spac
         scene.add( hitbox ); 
     
     }, undefined, function ( error ) { // Error handling
-        console.error( 'Model konnte nicht geladen werden' );
+        console.error( error );
     } );
 
     return [obj, hitbox]
+}
+
+export function moveX(x,obj){
+    obj.position.x += x;
+}
+
+export function moveY(y,obj){
+    obj.position.y += y;
+}
+
+export function moveZ(z,obj){ 
+    obj.position.z += z;
+}
+
+export function rotateZ(z,obj){
+    obj.rotateZ(z, obj);
+}
+
+// ---- Collison Handler ----
+
+export function checkCollision(){
 
 }
+
+// ---- Input Handler ----
