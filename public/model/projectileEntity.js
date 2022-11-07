@@ -1,18 +1,6 @@
 import {Entity} from '/model/entity.js'
 
-export class ProjectileEntity extends Entity{
 
-    constructor(model, hitbox) {
-        super(model, hitbox);
-
-    }
-
-    makeDecision(){
-
-
-    }
-
-}
 
 /*
    //User Input:
