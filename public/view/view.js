@@ -30,7 +30,9 @@ import { ObjectFactory, EntityHandler } from '/controller/entityHandler.js';
     scene.add( ambiantLight );
 //}
 
-
+/**
+ * Render Function
+ */
 export function render() {
     renderer.render(scene, camera)
 }
