@@ -11,6 +11,9 @@ jobs:
         with:
           release-type: node
           package-name: release-please-action
+  jsdoc:
+    runs-on: ubuntu-latest
+    steps:
       - uses: andstor/jsdoc-action@v1
         with:
           source_dir: ./public
