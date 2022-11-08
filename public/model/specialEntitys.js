@@ -9,22 +9,29 @@ export class PlayerEntity extends Entity{
     }
 
     makeDecision(){
+        this.moveObject();
         switch(this.userInput){
             case 'd':
-                console.log("rechts");
+                this.moveRight();
                 break;
                 //gehe nach rechts
             case 'a':
-                console.log("links");
+                this.moveLeft();
                 break;
                 //gehe nach links
             case 'w':
-                console.log("oben");
-                //gehe nach oben
+                this.moveForward();
                 break;
             case 's':
-                console.log("unten");
+                this.moveBackward();
                 //gehe nach unten
+                break;
+            case ' ':
+                console.log("FEUER FREI!");
+                //gehe nach unten
+                break;
+            default:
+                this.noBoost();
                 break;
         }
         this.userInput = undefined;

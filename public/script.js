@@ -1,15 +1,16 @@
 import {GameMaster} from '/controller/gameMaster.js'
 
+/**
+* Start the game
+*/
 const setFPS = 30;
 
+let activeControlButton;
 var gameMaster = new GameMaster();
 gameMaster.initGame();
 startGame();
 
 
-/**
-* Start the game
-*/
 function startGame() {
     //TODO: Example Code to be Removed
     
@@ -46,9 +47,32 @@ function startGame() {
     document.addEventListener("keypress", function(event){
         gameMaster.userInputHandler(event);
     });
+    registerControlButtonEventListener("controlMoveUp",'w');
+    registerControlButtonEventListener("controlMoveDown",'s');
+    registerControlButtonEventListener("controlMoveLeft",'a');
+    registerControlButtonEventListener("controlMoveRight",'d');
+    registerControlButtonEventListener("controlShoot",' ');
     setInterval(function(){
         gameMaster.__task30ms();
     }, 
     1000/setFPS
     );
+  }
+
+  function pressControlButton(parameter){
+    activeControlButton = setInterval(function(){
+      gameMaster.userInputHandler(parameter);
+    }, 1000/setFPS);
+  }
+  function releaseControlButton(){
+    clearInterval(activeControlButton);
+  }
+
+  function registerControlButtonEventListener(buttonId, buttonValue){
+    document.getElementById(buttonId).addEventListener("mousedown", function(){
+      pressControlButton(buttonValue);
+    });
+    document.getElementById(buttonId).addEventListener("mouseup", function(){
+      releaseControlButton();
+    });
   }
