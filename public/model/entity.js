@@ -14,7 +14,7 @@ export class Entity extends Object  {
     getXPos(){
         return this.model.position.x;
     }
-    getYPos(){
+    getYPos(){ //quasi obsolet, da nur in x und z Position Bewegung erforderlich
         return this.model.position.y;
     }
     getZPos(){
@@ -25,6 +25,7 @@ export class Entity extends Object  {
         this.model.position.x=xPos;
         this.model.position.z=zPos;
     }
+
 
     speedDown(){
         if(this.xSpeed < 0){
