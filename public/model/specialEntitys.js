@@ -2,14 +2,27 @@ import {Entity} from '/model/entity.js'
 
 export class PlayerEntity extends Entity{
 
-    constructor(model, hitbox, healthPoints = 1) {
+    constructor(model, hitbox, healthPoints = 1, cameraEntity = undefined) {
         super(model, hitbox, healthPoints);
         this.userInput;
+        this.cameraEntity = cameraEntity;
+    }
 
+    setCameraEntity(cameraEntity) {
+        this.cameraEntity = cameraEntity;
+    }
+
+    getCameraEntity() {
+        return this.cameraEntity;
     }
 
     makeDecision(){
+        this.speedDown();
         this.moveObject();
+        if(this.cameraEntity != undefined){
+            this.cameraEntity.setXPos(this.getXPos());
+            this.cameraEntity.setZPos(this.getZPos());
+        }
         switch(this.userInput){
             case 'd':
                 this.moveRight();
@@ -30,9 +43,6 @@ export class PlayerEntity extends Entity{
                 console.log("FEUER FREI!");
                 //gehe nach unten
                 break;
-            default:
-                this.noBoost();
-                break;
         }
         this.userInput = undefined;
     }
@@ -43,6 +53,34 @@ export class PlayerEntity extends Entity{
 
 }
 
+export class CameraEntity{
+    constructor(camera, xOffset=0, zOffset=0) {
+        this.camera = camera;
+        this.xOffset = xOffset;
+        this.zOffset = zOffset;
+    }
+
+    setXPos(xPos){
+        this.camera.position.x = xPos + this.xOffset;
+    }
+
+    setZPos(zPos){
+        this.camera.position.z = zPos + this.zOffset;
+    }
+
+    adjustXPos(xAdjust){
+        this.camera.position.x += xAdjust;
+    }
+
+    adjustZPos(zAdjust){
+        this.camera.position.z += zAdjust;
+    }
+
+    setCameraOffset(xOffset, zOffset){
+        this.xOffset = xOffset;
+        this.zOffset = zOffset;
+    }
+}
 export class ProjectileEntity extends Entity{
 
     constructor(model, hitbox) {

@@ -1,6 +1,8 @@
+import { CompressedTextureLoader } from 'three';
 import {Object} from '/model/object.js'
 
-
+const speedMultiplier = 0.5;
+const speedDivider = speedMultiplier / 4;
 export class Entity extends Object  {
 
     constructor(model, hitbox, healthPoints=1) {
@@ -9,34 +11,77 @@ export class Entity extends Object  {
         this.zSpeed=0;
     }
 
-    noBoost(){
-        if(this.xSpeed > 0) this.xSpeed-= 0.25;
-        if(this.xSpeed < 0) this.xSpeed+= 0.25;
-        if(this.zSpeed > 0) this.zSpeed-= 0.25;
-        if(this.zSpeed < 0) this.zSpeed+= 0.25;
+    getXPos(){
+        return this.model.position.x;
+    }
+    getYPos(){
+        return this.model.position.y;
+    }
+    getZPos(){
+        return this.model.position.z;
+    }
+
+    setPosition(xPos, zPos){
+        this.model.position.x=xPos;
+        this.model.position.z=zPos;
+    }
+
+    speedDown(){
+        if(this.xSpeed < 0){
+            if(this.xSpeed < -speedDivider){
+                this.xSpeed+= speedDivider;
+            }
+            else{
+                this.xSpeed = 0;
+            } 
+        }
+        else{
+            if(this.xSpeed > speedDivider){
+                this.xSpeed-= speedDivider;
+            }
+            else{
+                this.xSpeed = 0;
+            } 
+        }
+
+        if(this.zSpeed < 0){
+            if(this.zSpeed < -speedDivider){
+                this.zSpeed+= speedDivider;
+            }
+            else{
+                this.zSpeed = 0;
+            } 
+        }
+        else{
+            if(this.zSpeed > speedDivider){
+                this.zSpeed-= speedDivider;
+            }
+            else{
+                this.zSpeed = 0;
+            } 
+        }
     }
 
     moveObject(){
         this.model.position.z += 0.05 * this.zSpeed;
         this.model.position.x += 0.05 * this.xSpeed;
         this.hitbox.update();
-        console.log(this.xSpeed, this.zSpeed);
     }
 
     moveForward(){
-        this.zSpeed += 1; 
+        this.zSpeed -= speedMultiplier; 
     }
 
     moveBackward(){
-        this.zSpeed -= 1;
+        this.zSpeed += speedMultiplier;
     }
 
     moveLeft(){
-        this.xSpeed -= 1;
+        this.xSpeed -= speedMultiplier;
     }
 
     moveRight(){
-        this.xSpeed += 1;
+        this.xSpeed += speedMultiplier;
     }
 
 
