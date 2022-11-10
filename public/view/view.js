@@ -115,8 +115,8 @@ export function rotateZ(z,obj){
 
 // ---- Collison Handler ----
 
-export function checkCollision(hitbox1, hitbox1){
-    if(hitbox1.intersectsBox(hitbox1)){
+export function checkCollision(hitbox1, hitbox2){
+    if(hitbox1.intersectsBox(hitbox2)){
         console.log("collison")
         return true
     }   
