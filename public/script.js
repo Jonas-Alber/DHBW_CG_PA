@@ -63,20 +63,30 @@ function startGame() {
   }
 
   function pressControlButton(parameter){
-    var interval = setInterval(function(){
-      gameMaster.userInputHandler(parameter);
-    }, 1000/setFPS);
-    activeControlButton.push({parameter: interval});
+    var parameterExists = false;
+    for(var indexPoint in activeControlButton){
+      if(activeControlButton[indexPoint].key === parameter){
+        parameterExists = true;
+        break;
+      }
+    }
+    if(!parameterExists){
+      var interval = setInterval(function(){
+        gameMaster.userInputHandler(parameter);
+      }, 1000/setFPS);
+      activeControlButton.push({key: parameter, function: interval});
+    }
   }
 
 /**Test */
   function releaseControlButton(parameter){
-    var indexPoint = activeControlButton.indexOf(parameter);
-    if(indexPoint > -1){
-      clearInterval(activeControlButton[indexPoint]);
+    for(var indexPoint in activeControlButton){
+      if(activeControlButton[indexPoint].key == parameter){
+        clearInterval(activeControlButton[indexPoint].function);
+        activeControlButton.splice(indexPoint, 1);
+        break;
+      }
     }
-    
-    delete activeControlButton[parameter];
   }
 
   function registerControlButtonEventListener(buttonId, buttonValue){
@@ -84,6 +94,6 @@ function startGame() {
       pressControlButton(buttonValue);
     });
     document.getElementById(buttonId).addEventListener("mouseup", function(){
-      releaseControlButton();
+      releaseControlButton(buttonValue);
     });
   }
