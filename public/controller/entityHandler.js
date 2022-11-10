@@ -1,59 +1,77 @@
 /*
 * Author: Jonas Alber
 */
-import {Object} from '/model/object.js';
-import {Entity} from '/model/entity.js';
-import {get3DModel} from '/view/view.js';
-import { PlayerEntity, ProjectileEntity, AiEntity, CameraEntity } from '/model/specialEntitys.js';
+import { Object } from '/model/object.js';
+import { Entity } from '/model/entity.js';
+import { PlayerEntity, ProjectileEntity, AiEntity} from '/model/specialEntitys.js';
 import { Object3D } from 'three';
 export class EntityHandler {
-  constructor(){
-    this.objects  = [];
+  constructor() {
+    this.objects = [];
+    this.entities = [];
   }
 
-  addObject(entity){
-    if(entity instanceof Entity || entity instanceof Object || entity instanceof CameraEntity){
+  addObject(entity) {
+    if (entity instanceof Object || entity instanceof Entity ||  entity instanceof PlayerEntity) {
       this.objects.push(entity);
     }
-    else{
+    else {
       console.log("Given Element is not a Object");
       console.log(entity);
+    }
+
+    if (entity instanceof Entity||  entity instanceof PlayerEntity) {
+      this.entities.push(entity);
     }
     return this.getObjectIndex(entity);
   }
 
-  getObjectIndex(object){
+  getObjectIndex(object) {
     return this.objects.indexOf(object);
   }
 
-  getObject(index){
+  getObject(index) {
     return this.objects[index];
   }
 
-  moveObjects(){
-    if(this.objects.length > 0){
-      this.objects.forEach(function(element, i){
-        try{
-          if(element instanceof Entity|| element instanceof PlayerEntity){
-            element.makeDecision();
+  moveObjects() {
+    if (this.entities.length > 0 &&  this.objects.length > 0) {
+      var objectIndex;
+      var hasCollision = false;
+      for(var entityIndex in this.entities){
+        try {
+          var element = this.entities[entityIndex];
+          objectIndex = this.objects.indexOf(element);
+          for (var index in this.objects) {
+            if(objectIndex!=index){
+              //if (checkCollision(element.hitbox, this.objects[index].hitbox)) {
+              if (false){
+                hasCollision = true;
+                break;
+              }
+            } 
+            
           }
-        }catch(exception){
+          element.makeDecision();
+        } catch (exception) {
           console.warn(exception);
         }
+      }
+      this.entities.forEach(function (element, i) {
+        
       });
     }
   }
 
-  removeObject(index){
-    this.objects.splice(index,1);
+  removeObject(index) {
+    if (this.object[index] instanceof Entity) {
+      this.entities.splice(this.entities.indexOf(this.object[index]), 1);
+    }
+    this.objects.splice(index, 1);
   }
 
-  checkIsPlayerEntity(entity){
+  checkIsPlayerEntity(entity) {
     return entity instanceof PlayerEntity;
-  }
-
-  checkIsCameraEntity(entity){
-    return entity instanceof CameraEntity;
   }
 }
 
@@ -66,9 +84,9 @@ export class EntityHandler {
  *  2 = AiEntity
  *  3 = PlayerEntity
  */
-export function ObjectFactory(object, hitbox, type = 0){
+export function ObjectFactory(object, hitbox, type = 0) {
   var object;
-  switch(type){
+  switch (type) {
     case 1:
       object = new ProjectileEntity(object, hitbox);
       break;
