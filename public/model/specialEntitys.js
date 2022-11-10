@@ -54,10 +54,13 @@ export class PlayerEntity extends Entity{
 }
 
 export class CameraEntity{
-    constructor(camera, xOffset=0, zOffset=0) {
+    constructor(camera, canvasWidth, canvasHeight, xOffset=0, zOffset=0) {
         this.camera = camera;
         this.xOffset = xOffset;
         this.zOffset = zOffset;
+        this.canvasWidth =  canvasWidth;
+        this.canvasHeight = canvasHeight;
+        this.canvasHalfHeight = canvasHeight/8;
     }
 
     setXPos(xPos){
@@ -65,7 +68,7 @@ export class CameraEntity{
     }
 
     setZPos(zPos){
-        this.camera.position.z = zPos + this.zOffset;
+        this.camera.position.z = zPos + this.zOffset+5;
     }
 
     adjustXPos(xAdjust){

@@ -1,34 +1,40 @@
+// AUTOR: Ralf Ehli
+
 import * as THREE from '/build/three.module.js'
 import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
 import { ObjectFactory, EntityHandler, PlayerObjectFactory } from '/controller/entityHandler.js';
+import { ObjectPosition } from '/model/helperClass.js';
 
-//class View{}
+
 
 // ---- Initialisierung der Scene ----
-//export function initScene(){ 
-    var innerWidth = document.getElementById('animateScene').offsetWidth;
-    var innerHeight = window.innerHeight;
 
-    const scene = new THREE.Scene();
+var innerWidth = document.getElementById('animateScene').offsetWidth;
+var innerHeight = window.innerHeight;
 
-    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 100);
-    camera.position.z = 5;
-    camera.position.y = 2;
+const scene = new THREE.Scene();
 
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(innerWidth, innerHeight);
-    document.getElementById('animateScene').appendChild(renderer.domElement);
+const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 2000);
+camera.rotation.x = (-Math.PI/2) + 0.7;
+camera.position.y = 30;
 
-    var loader = new GLTFLoader();
+//camera.position.y = Math.PI/2;
+//camera.rotation.x = Math.PI/2;
 
-    scene.background = new THREE.Color(0x222222);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(innerWidth, innerHeight);
+document.getElementById('animateScene').appendChild(renderer.domElement);
+
+var loader = new GLTFLoader();
+
+scene.background = new THREE.Color(0x222222);
 
     // Test Licht
     const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
     scene.add( directionalLight );
     const ambiantLight = new THREE.AmbientLight( 0xffffff, 0.5 );
     scene.add( ambiantLight );
-//}
+
 
 /**
  * Render Function
@@ -47,38 +53,24 @@ export function getDirectionalLight(x,y,z,color,intensity){
 
 }
 
-export async function get3DModel(modelPath, sizeFactor){ // modelPath = '../3Dmodels/spaceship.glb'
-    var obj;
-    var hitbox;
-    return await loader.load( modelPath, function(gltf){
-            obj = gltf.scene; 
-            scene.add( gltf.scene );
-            obj.scale.set(sizeFactor,sizeFactor,sizeFactor);
-    
-            hitbox = new THREE.BoxHelper( obj );
-            hitbox.material.color.set( 0xff0000 ); // just for testing 
-            scene.add( hitbox );
-            console.log({object: obj, hitbox: hitbox});
-            return {object: obj, hitbox: hitbox};
-        }, undefined, function ( error ) { // Error handling
-            console.error( error );
-    });
-
-    //return {object: obj, hitbox: hitbox}
-}
-
 export function getCamera(){
     return camera;
 }
 
-export function add3DModel(entityHandler, modelPath, sizeFactor, type = 0, camera = undefined){ // modelPath = '../3Dmodels/spaceship.glb'
+export function add3DModel(entityHandler, modelPath, objectPosition ,type = 0, camera = undefined){ // modelPath = '../3Dmodels/spaceship.glb'
     var obj;
     var hitbox;
+    if(!(objectPosition instanceof  ObjectPosition)){
+      throw "Model has no ObjectPosition Class Instance";
+    }
     loader.load( modelPath, function(gltf){
             obj = gltf.scene; 
             scene.add( gltf.scene );
-            obj.scale.set(sizeFactor,sizeFactor,sizeFactor);
+            obj.scale.set(objectPosition.sizeFactor,objectPosition.sizeFactor,objectPosition.sizeFactor);
             obj.rotateY(Math.PI);
+            obj.position.x = objectPosition.x;
+            obj.position.y = objectPosition.y;
+            obj.position.z = objectPosition.z;
     
             hitbox = new THREE.BoxHelper( obj );
             hitbox.material.color.set( 0xff0000 ); // just for testing 
@@ -113,8 +105,11 @@ export function rotateZ(z,obj){
 
 // ---- Collison Handler ----
 
-export function checkCollision(){
-
+export function checkCollision(hitbox1, hitbox2){
+    if(hitbox1.intersectsBox(hitbox2)){
+        return true;
+    }   
+    return false;
 }
 
 // ---- Input Handler ----
@@ -138,4 +133,26 @@ export function getLastKeyPressed(){
     key = lastKeyPressed
     lastKeyPressed = 'none'
     return key
+}
+export class ModelFactory{
+  constructor(entityHandler,modelPath){
+    this.entityHandler =  entityHandler;
+    this.modelPath =  modelPath;
+    this.xPos = 0;
+    this.zPos = 0;
+    this.scaleFactor = 1;
+  }
+  set xPos(xPos){
+    this.xPos = xPos;
+  }
+  set zPos(zPos){
+    this.zPos = zPos;
+  }
+  set scaleFactor(scaleFactor){
+      this.scaleFactor = scaleFactor;
+  }
+
+  get modelData(){
+
+  }
 }

@@ -4,8 +4,9 @@
 import { WorldGenFactory } from '/controller/worldGen.js'
 import { EntityHandler, ObjectFactory } from '/controller/entityHandler.js'
 import { InfoScreenHandler } from '/view/infoScreen.js'
-import { add3DModel, render, getCamera } from '/view/view.js';
+import { add3DModel, render, getCamera} from '/view/view.js';
 import { CameraEntity } from '/model/specialEntitys.js';
+import { ObjectPosition } from '/model/helperClass.js';
 //import * as ExampleAnimation from '/view/example.js'
 
 const STATIC_CAM = false;
@@ -21,13 +22,16 @@ export class GameMaster {
   }
 
   initGame(){
+    let playerPosition = new ObjectPosition();
+    playerPosition.sizeFactor  = 0.5;
+    var innerWidth = document.getElementById('animateScene').offsetWidth;
+    var innerHeight = window.innerHeight;
     if(STATIC_CAM){
-      add3DModel(this.entityHandler,'3Dmodels/spaceship.glb', 0.5, 3);
+      add3DModel(this.entityHandler,'3Dmodels/spaceship.glb', playerPosition, 3);
     }else{
-      add3DModel(this.entityHandler,'3Dmodels/spaceship.glb', 0.5, 3, new CameraEntity(getCamera(), 0, 4));
+      add3DModel(this.entityHandler,'3Dmodels/spaceship.glb', playerPosition, 3, new CameraEntity(getCamera(),innerWidth, innerHeight, 0, 4));
     }
-    add3DModel(this.entityHandler,'3Dmodels/asteroid.glb', 0.05);
-    
+    this.spawnAsteroids();
     var leftInfoScreen = new InfoScreenHandler("leftInfoScreen");
     var title = leftInfoScreen.addDivWithText("<h1>Roffelson</h1>");
     var subtitle = leftInfoScreen.addDivWithText("<h1>The Space Warior</h1>");
@@ -41,6 +45,27 @@ export class GameMaster {
       <tr><td>Space</td><td><i class='fa-solid fa-meteor'></i></td><td>Ship shoot a projectile</td></tr>\
       </table>"
       );
+  }
+    
+
+  spawnAsteroids(){
+    for(let i = 0; i < 40; i++){
+      let objectPosition = new ObjectPosition();
+      objectPosition.x =  this.getRandomInt(-35,35);
+      objectPosition.z = this.getRandomInt(-100,50);
+      objectPosition.sizeFactor =this.getRandomArbitrary(0.01,0.05);
+      add3DModel(this.entityHandler,'3Dmodels/asteroid.glb', objectPosition);
+    }
+  }
+
+  getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+  }
+
+  getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
   }
 
 
