@@ -1,34 +1,36 @@
+// AUTOR: Ralf Ehli
+
 import * as THREE from '/build/three.module.js'
 import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
 import { ObjectFactory, EntityHandler } from '/controller/entityHandler.js';
 
-//class View{}
+
 
 // ---- Initialisierung der Scene ----
-//export function initScene(){ 
-    var innerWidth = document.getElementById('animateScene').offsetWidth;
-    var innerHeight = window.innerHeight;
 
-    const scene = new THREE.Scene();
+var innerWidth = document.getElementById('animateScene').offsetWidth;
+var innerHeight = window.innerHeight;
 
-    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 100);
-    camera.position.z = 5;
-    camera.position.y = 2;
+const scene = new THREE.Scene();
 
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(innerWidth, innerHeight);
-    document.getElementById('animateScene').appendChild(renderer.domElement);
+const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 100);
+camera.position.z = 5;
+camera.position.y = 2;
 
-    var loader = new GLTFLoader();
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(innerWidth, innerHeight);
+document.getElementById('animateScene').appendChild(renderer.domElement);
 
-    scene.background = new THREE.Color(0x222222);
+var loader = new GLTFLoader();
+
+scene.background = new THREE.Color(0x222222);
 
     // Test Licht
     const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
     scene.add( directionalLight );
     const ambiantLight = new THREE.AmbientLight( 0xffffff, 0.5 );
     scene.add( ambiantLight );
-//}
+
 
 /**
  * Render Function
@@ -103,8 +105,12 @@ export function rotateZ(z,obj){
 
 // ---- Collison Handler ----
 
-export function checkCollision(){
-
+export function checkCollision(hitbox1, hitbox1){
+    if(hitbox1.intersectsBox(hitbox1)){
+        console.log("collison")
+        return true
+    }   
+    return false
 }
 
 // ---- Input Handler ----
