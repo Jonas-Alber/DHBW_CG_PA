@@ -1,6 +1,6 @@
 import * as THREE from '/build/three.module.js'
 import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
-import { ObjectFactory, EntityHandler } from '/controller/entityHandler.js';
+import { ObjectFactory, EntityHandler, PlayerObjectFactory } from '/controller/entityHandler.js';
 
 //class View{}
 
@@ -67,18 +67,28 @@ export async function get3DModel(modelPath, sizeFactor){ // modelPath = '../3Dmo
     //return {object: obj, hitbox: hitbox}
 }
 
-export function add3DModel(entityHandler, modelPath, sizeFactor, type = 0){ // modelPath = '../3Dmodels/spaceship.glb'
+export function getCamera(){
+    return camera;
+}
+
+export function add3DModel(entityHandler, modelPath, sizeFactor, type = 0, camera = undefined){ // modelPath = '../3Dmodels/spaceship.glb'
     var obj;
     var hitbox;
     loader.load( modelPath, function(gltf){
             obj = gltf.scene; 
             scene.add( gltf.scene );
             obj.scale.set(sizeFactor,sizeFactor,sizeFactor);
+            obj.rotateY(Math.PI);
     
             hitbox = new THREE.BoxHelper( obj );
             hitbox.material.color.set( 0xff0000 ); // just for testing 
             scene.add( hitbox );
-            var object = ObjectFactory(obj, hitbox, type);
+            if(camera != undefined) {
+                var object = PlayerObjectFactory(obj, hitbox, camera);
+            }
+            else{
+                var object = ObjectFactory(obj, hitbox, type);
+            }
             entityHandler.addObject(object);
         }, undefined, function ( error ) { // Error handling
             console.error( error );

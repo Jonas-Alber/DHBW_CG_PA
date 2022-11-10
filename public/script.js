@@ -5,7 +5,7 @@ import {GameMaster} from '/controller/gameMaster.js'
 */
 const setFPS = 30;
 
-let activeControlButton;
+let activeControlButton = [];
 var gameMaster = new GameMaster();
 gameMaster.initGame();
 startGame();
@@ -44,8 +44,11 @@ function startGame() {
    * Start the animation rendering process
    */
   function resumeGame() {
-    document.addEventListener("keypress", function(event){
-        gameMaster.userInputHandler(event);
+    document.addEventListener("keydown", function(event){
+      pressControlButton(event.key);
+    });
+    document.addEventListener("keyup", function(event){
+      releaseControlButton(event.key);
     });
     registerControlButtonEventListener("controlMoveUp",'w');
     registerControlButtonEventListener("controlMoveDown",'s');
@@ -60,14 +63,20 @@ function startGame() {
   }
 
   function pressControlButton(parameter){
-    activeControlButton = setInterval(function(){
+    var interval = setInterval(function(){
       gameMaster.userInputHandler(parameter);
     }, 1000/setFPS);
+    activeControlButton.push({parameter: interval});
   }
 
 /**Test */
-  function releaseControlButton(){
-    clearInterval(activeControlButton);
+  function releaseControlButton(parameter){
+    var indexPoint = activeControlButton.indexOf(parameter);
+    if(indexPoint > -1){
+      clearInterval(activeControlButton[indexPoint]);
+    }
+    
+    delete activeControlButton[parameter];
   }
 
   function registerControlButtonEventListener(buttonId, buttonValue){
