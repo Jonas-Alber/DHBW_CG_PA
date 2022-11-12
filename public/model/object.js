@@ -16,5 +16,9 @@ export class Object {
         return this.healthPoints;
     }
 
+    getHitbox(){
+        return this.hitbox;
+    }
+
 
 }
