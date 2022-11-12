@@ -11,15 +11,7 @@ export class Entity extends Object  {
         this.zSpeed=0;
     }
 
-    getXPos(){
-        return this.model.position.x;
-    }
-    getYPos(){
-        return this.model.position.y;
-    }
-    getZPos(){
-        return this.model.position.z;
-    }
+
 
     setPosition(xPos, zPos){
         this.model.position.x=xPos;
