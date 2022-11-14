@@ -92,8 +92,10 @@ export class ProjectileEntity extends Entity {
         //this.userInput;
 
     }
+/*
 
     //The projectile will be shot by the player/enemy in z-Direction
+
     makeDecision(collisionBool) {
 
         if(collisionBool === null) { //no collision
@@ -106,7 +108,11 @@ export class ProjectileEntity extends Entity {
 
         }
     }
+
+ */
 }
+
+
 
 export class AiEntity extends Entity{
 
@@ -115,10 +121,5 @@ export class AiEntity extends Entity{
 
     }
 
-    makeDecision(){
-
-
-
-    }
 
 }
