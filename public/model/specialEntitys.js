@@ -17,6 +17,7 @@ export class PlayerEntity extends Entity{
     }
 
     makeDecision(){
+        let doShoot = false;
         this.speedDown();
         this.moveObject();
         if(this.cameraEntity != undefined){
@@ -46,6 +47,7 @@ export class PlayerEntity extends Entity{
                 break;
         }
         this.userInput = undefined;
+        return  doShoot;
     }
 
     storeUserInput(inputValue){
@@ -104,8 +106,6 @@ export class ProjectileEntity extends Entity {
             While(this.projectile.position.z < collisionBool){
             this.projectile.position.z += 1; //Speed muss noch konkretisiert werden
         }
-
-
         }
     }
 

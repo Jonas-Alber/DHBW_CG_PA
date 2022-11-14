@@ -12,11 +12,21 @@ export class Entity extends Object  {
     }
 
 
+    getXPos(){
+        return this.model.position.x;
+    }
+    getYPos(){ //quasi obsolet, da nur in x und z Position Bewegung erforderlich
+        return this.model.position.y;
+    }
+    getZPos(){
+        return this.model.position.z;
+    }
 
     setPosition(xPos, zPos){
         this.model.position.x=xPos;
         this.model.position.z=zPos;
     }
+
 
     speedDown(){
         if(this.xSpeed < 0){

@@ -5,6 +5,8 @@ import { Object } from '/model/object.js';
 import { Entity } from '/model/entity.js';
 import { PlayerEntity, ProjectileEntity, AiEntity} from '/model/specialEntitys.js';
 import { Object3D } from 'three';
+import { add3DModel } from '/view/view.js';
+import { ObjectPosition } from '/model/helperClass.js';
 export class EntityHandler {
   constructor() {
     this.objects = [];
@@ -37,6 +39,7 @@ export class EntityHandler {
   moveObjects() {
     if (this.entities.length > 0 &&  this.objects.length > 0) {
       var objectIndex;
+      let doShoot;
       var hasCollision = false;
       for(var entityIndex in this.entities){
         try {
@@ -52,7 +55,12 @@ export class EntityHandler {
             } 
             
           }
-          element.makeDecision();
+          doShoot = element.makeDecision();
+          if(doShoot){
+            let positionElement =  new ObjectPosition();
+            positionElement.x = element.model.position.x;
+            positionElement.z = element.model.position.z;
+          }
         } catch (exception) {
           console.warn(exception);
         }

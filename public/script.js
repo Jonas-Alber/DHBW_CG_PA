@@ -1,4 +1,6 @@
-import {GameMaster} from '/controller/gameMaster.js'
+import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
+import {GameMaster} from '/controller/gameMaster.js';
+import {ModelLoader} from '/view/modelLoader.js';
 
 /**
 * Start the game
@@ -6,7 +8,13 @@ import {GameMaster} from '/controller/gameMaster.js'
 const setFPS = 30;
 
 let activeControlButton = [];
-var gameMaster = new GameMaster();
+let modelHandler = new ModelLoader();
+await modelHandler.loadModel('asteroid','3Dmodels/asteroid.glb');
+await modelHandler.loadModel('player','3Dmodels/spaceship.glb');
+//var loader = new GLTFLoader();
+//const result =  await loader.loadAsync('3Dmodels/asteroid.glb');
+console.log(modelHandler);
+var gameMaster = new GameMaster(modelHandler);
 gameMaster.initGame();
 startGame();
 
