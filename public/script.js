@@ -14,10 +14,10 @@ await modelHandler.loadModel('asteroid2','3Dmodels/asteroid2.glb');
 await modelHandler.loadModel('asteroid3','3Dmodels/asteroid3.glb');
 await modelHandler.loadModel('player','3Dmodels/spaceship.glb');
 await modelHandler.loadModel('projectile','3Dmodels/asteroid3.glb');
-//var loader = new GLTFLoader();
-//const result =  await loader.loadAsync('3Dmodels/asteroid.glb');
+
 var gameMaster = new GameMaster(modelHandler);
 gameMaster.initGame();
+setTimeout(3000);
 startGame();
 
 
@@ -34,6 +34,10 @@ function startGame() {
 
     //End of Player Load
     resumeGame();
+    document.getElementById('controler').style.display = 'grid';
+    //document.getElementById('animateScene').style.display = 'block';
+    document.getElementById('loadingScreen').style.display = 'none';
+
   }
 
   /**

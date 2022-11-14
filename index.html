@@ -30,7 +30,19 @@
     </head>
 
     <body>
-        <div class="controler">
+        <video autoplay  muted loop id="backgroundVideo">
+            <source src="/public/img/loadingVideo.mp4" type="video/mp4">
+        </video>
+        <div id="loadingScreen"class="loadingScreen">
+            <!--<img  class="loadingImage" src="/public/img/loadingScreen.jpg">-->
+            <div class="loadingText">
+                <h1>Roffelson</h1>
+                <h1>The Space Warior</h1>
+                <div class="loader"></div>
+                <div class="textLoading">Loading</div>
+            </div>
+        </div>
+        <div id="controler"class="controler">
             <div class="grid-item">
                 <div id="leftInfoScreen"></div>
                 <div class="controlGrid">
@@ -50,6 +62,6 @@
             <div class="grid-item" id="rightInfoScreene"></div>
         </div>
     </body>
-    <script type="module" src="/public/script.js">startGame();</script>
+    <script type="module" src="/public/script.js"></script>
     <!--<script type="module" src="client.js"></script>-->
 </html>

@@ -8,7 +8,8 @@ const hideHitBox = true;
 
 // ---- Initialisierung der Scene ----
 
-var innerWidth = document.getElementById('animateScene').offsetWidth;
+var innerWidth = window.innerWidth*(3/5);
+//var innerWidth = document.getElementById('animateScene').offsetWidth;
 var innerHeight = window.innerHeight;
 
 const scene = new THREE.Scene();

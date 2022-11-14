@@ -1,15 +1,11 @@
 .controler{
-    display: grid;
+    display: none;
     grid-template-columns: 1fr 3fr 1fr;
 }
 
 .controlGrid{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-}
-
-div h1{
-  font-size: 30px;
 }
 
 i{
@@ -20,6 +16,7 @@ button i{
   font-size: 30px;
 }
 .controlButton{
+  display: none;
   margin: 5%;
   text-align: center;
   vertical-align: middle;
@@ -35,8 +32,63 @@ button i{
 }
 
 .grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(0, 0, 0, 0.8);
+  background-color: rgba(255, 255, 255, 0.5);
   position: relative;
   text-align: center;
 }
+
+.loadingScreen{
+  z-index: -1;
+}
+
+.loadingText{
+  text-align: center;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 1);
+  font-size: 40px;
+  text-shadow: 0 0 20px black;
+}
+
+.loader {
+  position:absolute;
+  left: 40%;
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #e60202; /* Blue */
+  align-items: center;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.textLoading{
+  position:absolute;
+  top: 150%;
+  left: 40%;
+}
+
+#backgroundVideo{
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+#backgroundVideo{
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
