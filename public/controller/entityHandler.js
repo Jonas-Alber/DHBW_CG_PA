@@ -5,12 +5,13 @@ import { Object } from '/model/object.js';
 import { Entity } from '/model/entity.js';
 import { PlayerEntity, ProjectileEntity, AiEntity} from '/model/specialEntitys.js';
 import { Object3D } from 'three';
-import { add3DModel } from '/view/view.js';
 import { ObjectPosition } from '/model/helperClass.js';
+import {ObjectSupplier} from '/controller/objectSupplier.js'
 export class EntityHandler {
-  constructor() {
+  constructor(modelLoader) {
     this.objects = [];
     this.entities = [];
+    this.objectSupplier = new ObjectSupplier(modelLoader);
   }
 
   addObject(entity) {
@@ -18,8 +19,8 @@ export class EntityHandler {
       this.objects.push(entity);
     }
     else {
-      console.log("Given Element is not a Object");
-      console.log(entity);
+      //console.log("Given Element is not a Object");
+      //console.log(entity);
     }
 
     if (entity instanceof Entity||  entity instanceof PlayerEntity) {
@@ -55,11 +56,14 @@ export class EntityHandler {
             } 
             
           }
-          doShoot = element.makeDecision();
-          if(doShoot){
+          var decisions = element.makeDecision();
+          if(decisions !=undefined && decisions.doShoot){
             let positionElement =  new ObjectPosition();
             positionElement.x = element.model.position.x;
             positionElement.z = element.model.position.z;
+            positionElement.xSpeed = element.speed.x;
+            positionElement.zSpeed = element.speed.z;
+            this.addObject(this.objectSupplier.projectile(positionElement));
           }
         } catch (exception) {
           console.warn(exception);
@@ -81,35 +85,4 @@ export class EntityHandler {
   checkIsPlayerEntity(entity) {
     return entity instanceof PlayerEntity;
   }
-}
-
-/**
- * 
- * @param {String} modelLocation 
- * @param {Int} type 
- *  0 = Object
- *  1 = ProjectileEntity
- *  2 = AiEntity
- *  3 = PlayerEntity
- */
-export function ObjectFactory(object, hitbox, type = 0) {
-  var object;
-  switch (type) {
-    case 1:
-      object = new ProjectileEntity(object, hitbox);
-      break;
-    case 2:
-      object = new AiEntity(object, hitbox);
-      break;
-    case 3:
-      object = new PlayerEntity(object, hitbox);
-      break;
-    default:
-      object = new Object(object, hitbox);
-      break;
-  }
-  return object;
-}
-export function PlayerObjectFactory(object, hitbox, cameraEntity) {
-  return new PlayerEntity(object, hitbox, 1, cameraEntity);
 }

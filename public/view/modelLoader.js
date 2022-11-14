@@ -23,10 +23,15 @@ export class ModelLoader{
   }
 
   getModel(name){
+    let returnValue;
     for(let index in this.modelBuffer){
       if(this.modelBuffer[index].name == name){
-        return this.modelBuffer[index].model;
+        returnValue = this.modelBuffer[index].model;
       }
     }
+    if(returnValue == undefined){
+      throw Error("No Model with given name found");
+    }
+    return returnValue;
   }
 }

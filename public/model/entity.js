@@ -2,15 +2,22 @@ import { CompressedTextureLoader } from 'three';
 import {Object} from '/model/object.js'
 
 const speedMultiplier = 0.5;
-const speedDivider = speedMultiplier / 4;
+const speedReduceFactor = speedMultiplier / 2;
+const speedCap = 10;
+const speedFactor = 0.07;
+const shootCap = 15;
 export class Entity extends Object  {
 
-    constructor(model, hitbox, healthPoints=1) {
+    constructor(model, hitbox, healthPoints=1, doSpeedDown=true) {
         super(model, hitbox, healthPoints); //Aufruf constructor von object.js
         this.xSpeed=0;
         this.zSpeed=0;
+        this.doSpeedDown = doSpeedDown;
+        this.haveShoot=0;
+        this.speedCap = speedCap;
+        this.speedFactor = speedFactor;
+        this.shootCap = shootCap;
     }
-
 
     getXPos(){
         return this.model.position.x;
@@ -27,19 +34,28 @@ export class Entity extends Object  {
         this.model.position.z=zPos;
     }
 
+    makeDecision(){
+      this.moveObject();
+      if(this.doSpeedDown){
+        this.speedDown();
+      }
+      if(this.haveShoot>0){
+        this.haveShoot-=1;
+      }
+    }
 
     speedDown(){
         if(this.xSpeed < 0){
-            if(this.xSpeed < -speedDivider){
-                this.xSpeed+= speedDivider;
+            if(this.xSpeed < -speedReduceFactor){
+                this.xSpeed+= speedReduceFactor;
             }
             else{
                 this.xSpeed = 0;
             } 
         }
         else{
-            if(this.xSpeed > speedDivider){
-                this.xSpeed-= speedDivider;
+            if(this.xSpeed > speedReduceFactor){
+                this.xSpeed-= speedReduceFactor;
             }
             else{
                 this.xSpeed = 0;
@@ -47,16 +63,16 @@ export class Entity extends Object  {
         }
 
         if(this.zSpeed < 0){
-            if(this.zSpeed < -speedDivider){
-                this.zSpeed+= speedDivider;
+            if(this.zSpeed < -speedReduceFactor){
+                this.zSpeed+= speedReduceFactor;
             }
             else{
                 this.zSpeed = 0;
             } 
         }
         else{
-            if(this.zSpeed > speedDivider){
-                this.zSpeed-= speedDivider;
+            if(this.zSpeed > speedReduceFactor){
+                this.zSpeed-= speedReduceFactor;
             }
             else{
                 this.zSpeed = 0;
@@ -64,26 +80,34 @@ export class Entity extends Object  {
         }
     }
 
+    shootObject(){ 
+      if(this.haveShoot==0){
+        this.haveShoot=shootCap;
+        return true;
+      }
+      return false;
+    }
+
     moveObject(){
-        this.model.position.z += 0.05 * this.zSpeed;
-        this.model.position.x += 0.05 * this.xSpeed;
+        this.model.position.z += this.speedFactor * this.zSpeed;
+        this.model.position.x += this.speedFactor * this.xSpeed;
         this.hitbox.update();
     }
 
     moveForward(){
-        this.zSpeed -= speedMultiplier; 
+      if(-this.zSpeed < this.speedCap) this.zSpeed -= speedMultiplier; 
     }
 
     moveBackward(){
-        this.zSpeed += speedMultiplier;
+      if(this.zSpeed < this.speedCap) this.zSpeed += speedMultiplier;
     }
 
     moveLeft(){
-        this.xSpeed -= speedMultiplier;
+      if(-this.xSpeed < this.speedCap) this.xSpeed -= speedMultiplier;
     }
 
     moveRight(){
-        this.xSpeed += speedMultiplier;
+      if(this.xSpeed < this.speedCap)this.xSpeed += speedMultiplier;
     }
 
 

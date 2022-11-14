@@ -1,8 +1,8 @@
 export class ObjectPosition{
   constructor(){
-    this.x = 0;
-    this.y = 0;
-    this.z = 0;
+    this.position = {x:0,y:0,z:0};
     this.sizeFactor = 1;
+    this.speed = {x:0,y:0,z:0};
+    this.rotation = {x:0,y:0,z:0}
   }
 }

@@ -9,11 +9,13 @@ const setFPS = 30;
 
 let activeControlButton = [];
 let modelHandler = new ModelLoader();
-await modelHandler.loadModel('asteroid','3Dmodels/asteroid.glb');
+await modelHandler.loadModel('asteroid1','3Dmodels/asteroid.glb');
+await modelHandler.loadModel('asteroid2','3Dmodels/asteroid2.glb');
+await modelHandler.loadModel('asteroid3','3Dmodels/asteroid3.glb');
 await modelHandler.loadModel('player','3Dmodels/spaceship.glb');
+await modelHandler.loadModel('projectile','3Dmodels/asteroid3.glb');
 //var loader = new GLTFLoader();
 //const result =  await loader.loadAsync('3Dmodels/asteroid.glb');
-console.log(modelHandler);
 var gameMaster = new GameMaster(modelHandler);
 gameMaster.initGame();
 startGame();
