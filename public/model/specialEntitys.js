@@ -17,6 +17,7 @@ export class PlayerEntity extends Entity{
     }
 
     makeDecision(){
+        let doShoot = false;
         this.speedDown();
         this.moveObject();
         if(this.cameraEntity != undefined){
@@ -40,11 +41,11 @@ export class PlayerEntity extends Entity{
                 //gehe nach unten
                 break;
             case ' ':
-                console.log("FEUER FREI!");
-                //gehe nach unten
+                doShoot = true;
                 break;
         }
         this.userInput = undefined;
+        return  doShoot;
     }
 
     storeUserInput(inputValue){
@@ -92,7 +93,6 @@ export class ProjectileEntity extends Entity{
     }
 
     makeDecision(){
-
     }
 
 }

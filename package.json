@@ -23,7 +23,9 @@
   "homepage": "https://github.com/Sean-Bradley/Threejs-Boilerplate#readme",
   "dependencies": {
     "express": "^4.18.2",
-    "three": "^0.142.0"
+    "three": "^0.142.0",
+    "sqlite": "^4.0.23",
+    "sqlite3": "^5.0.2"
   },
   "main": "app.js",
   "directories": {

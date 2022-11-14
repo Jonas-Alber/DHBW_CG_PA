@@ -4,9 +4,10 @@
 import { WorldGenFactory } from '/controller/worldGen.js'
 import { EntityHandler, ObjectFactory } from '/controller/entityHandler.js'
 import { InfoScreenHandler } from '/view/infoScreen.js'
-import { add3DModel, render, getCamera} from '/view/view.js';
+import { add3DModel, addDModel,render, getCamera} from '/view/view.js';
 import { CameraEntity } from '/model/specialEntitys.js';
 import { ObjectPosition } from '/model/helperClass.js';
+import {ModelLoader} from '/view/modelLoader.js';
 //import * as ExampleAnimation from '/view/example.js'
 
 const STATIC_CAM = false;
@@ -15,7 +16,10 @@ export class GameMaster {
   /**
    * Initializes the game
    */
-  constructor() {
+  constructor(modelLoader) {
+    if(modelLoader instanceof ModelLoader){
+      this.modelLoader = modelLoader;
+    }
     this.entityHandler = new EntityHandler();
     this.worldGenFactory = new WorldGenFactory();
 
@@ -26,10 +30,12 @@ export class GameMaster {
     playerPosition.sizeFactor  = 0.5;
     var innerWidth = document.getElementById('animateScene').offsetWidth;
     var innerHeight = window.innerHeight;
+    let model = this.modelLoader.getModel('player');
     if(STATIC_CAM){
-      add3DModel(this.entityHandler,'3Dmodels/spaceship.glb', playerPosition, 3);
+      addDModel(this.entityHandler,model, playerPosition, 3);
     }else{
-      add3DModel(this.entityHandler,'3Dmodels/spaceship.glb', playerPosition, 3, new CameraEntity(getCamera(),innerWidth, innerHeight, 0, 4));
+      
+      addDModel(this.entityHandler,model, playerPosition, 3, new CameraEntity(getCamera(),innerWidth, innerHeight, 0, 4));
     }
     this.spawnAsteroids();
     var leftInfoScreen = new InfoScreenHandler("leftInfoScreen");
@@ -49,12 +55,13 @@ export class GameMaster {
     
 
   spawnAsteroids(){
+    let model = this.modelLoader.getModel('asteroid');
     for(let i = 0; i < 40; i++){
       let objectPosition = new ObjectPosition();
       objectPosition.x =  this.getRandomInt(-35,35);
       objectPosition.z = this.getRandomInt(-100,50);
       objectPosition.sizeFactor =this.getRandomArbitrary(0.01,0.05);
-      add3DModel(this.entityHandler,'3Dmodels/asteroid.glb', objectPosition);
+      addDModel(this.entityHandler,model, objectPosition);
     }
   }
 
