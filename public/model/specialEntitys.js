@@ -94,13 +94,16 @@ export class ProjectileEntity extends Entity {
     }
 
     //The projectile will be shot by the player/enemy in z-Direction
-    makeDecision() {
+    makeDecision(collisionBool) {
 
-//Move projectile in z-direction until it hits something or is out of border (border probably has healthpoints, in this case, use checkCollision)
-        shootProjectile(){
-            while(checkCollision === false){ //Rückgabewert verarbeiten: bei false: movProjectile
-                this.projectile.position.z += 1; //Speed muss noch konkretisiert werden
-            }
+        if(collisionBool === null) { //no collision
+            this.projectile.position.z += 1; //Speed muss noch konkretisiert werden
+        }else { //Collision at collisionBool
+            While(this.projectile.position.z < collisionBool){
+            this.projectile.position.z += 1; //Speed muss noch konkretisiert werden
+        }
+
+
         }
     }
 }
