@@ -24,21 +24,9 @@ export class ProjectileEntity extends Entity{
 
 
 
-
-
-
-
-
-
-
-
     }
 
 }
-
-
-
-
 
 
 /*

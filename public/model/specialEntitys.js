@@ -35,13 +35,15 @@ export class PlayerEntity extends Entity{
                 //gehe nach links
             case 'w':
                 this.moveForward();
+                //gehe vorwärts
                 break;
             case 's':
-                this.moveBackward();
+                this.moveBackward(); //geht das überhaupt?
                 //gehe nach unten
                 break;
             case ' ':
-                doShoot = true;
+                console.log("FEUER FREI!");
+                //Feuer
                 break;
         }
         this.userInput = undefined;
@@ -85,17 +87,32 @@ export class CameraEntity{
         this.zOffset = zOffset;
     }
 }
-export class ProjectileEntity extends Entity{
+export class ProjectileEntity extends Entity {
 
-    constructor(model, hitbox) {
-        super(model, hitbox);
+    constructor(projectile, hitbox, healthpoints = 1) {
+        //super(model, hitbox);
+        //this.userInput;
 
     }
+/*
 
-    makeDecision(){
+    //The projectile will be shot by the player/enemy in z-Direction
+
+    makeDecision(collisionBool) {
+
+        if(collisionBool === null) { //no collision
+            this.projectile.position.z += 1; //Speed muss noch konkretisiert werden
+        }else { //Collision at collisionBool
+            While(this.projectile.position.z < collisionBool){
+            this.projectile.position.z += 1; //Speed muss noch konkretisiert werden
+        }
+        }
     }
 
+ */
 }
+
+
 
 export class AiEntity extends Entity{
 
@@ -104,8 +121,5 @@ export class AiEntity extends Entity{
 
     }
 
-    makeDecision(){
-
-    }
 
 }

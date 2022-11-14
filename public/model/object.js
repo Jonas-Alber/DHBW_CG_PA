@@ -16,5 +16,19 @@ export class Object {
         return this.healthPoints;
     }
 
+    getHitbox(){
+        return this.hitbox;
+    }
+
+    getXPos(){
+        return this.model.position.x;
+    }
+    getYPos(){
+        return this.model.position.y;
+    }
+    getZPos(){
+        return this.model.position.z;
+    }
+
 
 }
