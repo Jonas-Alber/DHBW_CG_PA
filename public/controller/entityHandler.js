@@ -3,11 +3,11 @@
 */
 import { Object } from '/model/object.js';
 import { Entity } from '/model/entity.js';
-import { PlayerEntity, ProjectileEntity, AiEntity} from '/model/specialEntitys.js';
+import { PlayerEntity, ProjectileEntity, AiEntity } from '/model/specialEntitys.js';
 import { Object3D } from 'three';
 import { ObjectPosition } from '/model/helperClass.js';
-import {ObjectSupplier} from '/controller/objectSupplier.js'
-import { checkCollision } from '../view/view.js';
+import { ObjectSupplier } from '/controller/objectSupplier.js'
+import { checkCollision, removeModel } from '/view/view.js';
 export class EntityHandler {
   constructor(modelLoader) {
     this.objects = [];
@@ -16,7 +16,7 @@ export class EntityHandler {
   }
 
   addObject(entity) {
-    if (entity instanceof Object || entity instanceof Entity ||  entity instanceof PlayerEntity) {
+    if (entity instanceof Object || entity instanceof Entity || entity instanceof PlayerEntity) {
       this.objects.push(entity);
     }
     else {
@@ -24,7 +24,7 @@ export class EntityHandler {
       //console.log(entity);
     }
 
-    if (entity instanceof Entity||  entity instanceof PlayerEntity) {
+    if (entity instanceof Entity || entity instanceof PlayerEntity) {
       this.entities.push(entity);
     }
     return this.getObjectIndex(entity);
@@ -34,52 +34,64 @@ export class EntityHandler {
     return this.objects.indexOf(object);
   }
 
+  getEntityIndex(entity) {
+    return this.entities.indexOf(entity);
+  }
+
   getObject(index) {
     return this.objects[index];
   }
 
   moveObjects() {
-    if (this.entities.length > 0 &&  this.objects.length > 0) {
+    if (this.entities.length > 0 && this.objects.length > 0) {
       var objectIndex;
       let doShoot;
-      var hasCollision = false;
-      for(var entityIndex in this.entities){
+      var colStorage = { hasCol: false, object: undefined };
+      for (var entityIndex in this.entities) {
         try {
           var element = this.entities[entityIndex];
           objectIndex = this.objects.indexOf(element);
           for (var index in this.objects) {
-            if(objectIndex!=index){
-              //if (checkCollision(element, this.objects[index])) {
-              if (false){
-                hasCollision = true;
+            if (objectIndex != index) {
+              if (checkCollision(element, this.objects[index])) {
+                //if (false){
+                colStorage = { hasCol: true, object: index };
                 break;
               }
-            } 
-            
+            }
+
           }
-          var decisions = element.makeDecision();
-          if(decisions !=undefined && decisions.doShoot){
-            let positionElement =  new ObjectPosition();
-            positionElement.x = element.model.position.x;
-            positionElement.z = element.model.position.z;
-            positionElement.xSpeed = element.speed.x;
-            positionElement.zSpeed = element.speed.z;
-            this.addObject(this.objectSupplier.projectile(positionElement));
+          if (colStorage.hasCol) {
+            if (element instanceof ProjectileEntity || this.objects[colStorage.object] instanceof ProjectileEntity) {
+              this.removeObject(this.getObjectIndex(element));
+              this.removeObject(colStorage.object);
+            }
+          }
+          if (true) {
+            var decisions = element.makeDecision();
+            if (decisions != undefined && decisions.doShoot) {
+              let positionElement = new ObjectPosition();
+              positionElement.position.x = element.model.position.x;
+              positionElement.position.z = element.model.position.z - 5;
+              //positionElement.speed.x = element.xSpeed;
+              positionElement.speed.z = element.zSpeed;
+              this.addObject(this.objectSupplier.projectile(positionElement));
+            }
           }
         } catch (exception) {
           console.warn(exception);
         }
       }
       this.entities.forEach(function (element, i) {
-        
       });
     }
   }
 
   removeObject(index) {
-    if (this.object[index] instanceof Entity) {
-      this.entities.splice(this.entities.indexOf(this.object[index]), 1);
+    if (this.objects[index] instanceof Entity) {
+      this.entities.splice(this.entities.indexOf(this.objects[index]), 1);
     }
+    removeModel(this.objects[index].model);
     this.objects.splice(index, 1);
   }
 

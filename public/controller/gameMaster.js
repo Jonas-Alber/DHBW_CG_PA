@@ -52,7 +52,7 @@ export class GameMaster {
     let objectPosition = new ObjectPosition();
     for(let i = 0; i < 40; i++){
       objectPosition.position.x =  this.getRandomInt(-35,35);
-      objectPosition.position.z = this.getRandomInt(-100,50);
+      objectPosition.position.z = this.getRandomInt(-100,-10);
       objectPosition.sizeFactor =this.getRandomArbitrary(0.01,0.05);
       objectPosition.rotation.x = Math.random() * Math.PI *2;
       objectPosition.rotation.y = Math.random() * Math.PI *2;

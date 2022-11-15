@@ -89,15 +89,17 @@ export function addModel(gltf, objectPosition) {
 
 // ---- Collison Handler ----
 
+export function removeModel(model){
+  scene.remove(model);
+}
+
 export function checkCollision(obj1, obj2){
   var collision = false
-  //console.log(obj1)
-  //console.log(obj2)
 
   try{
       if(obj1.hitbox.intersectsBox(obj2.hitbox)){
           collision = true
-          console.log('collision')
+          //console.log('collision')
       }
   }
   catch(error){

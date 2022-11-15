@@ -6,6 +6,7 @@ const speedReduceFactor = speedMultiplier / 2;
 const speedCap = 10;
 const speedFactor = 0.07;
 const shootCap = 15;
+const LeftRightCap = 25;
 export class Entity extends Object  {
 
     constructor(model, hitbox, healthPoints=1, doSpeedDown=true) {
@@ -17,6 +18,7 @@ export class Entity extends Object  {
         this.speedCap = speedCap;
         this.speedFactor = speedFactor;
         this.shootCap = shootCap;
+        this.maxPosition = {x:LeftRightCap,y:0,z:0};
     }
 
     getXPos(){
@@ -91,6 +93,20 @@ export class Entity extends Object  {
     moveObject(){
         this.model.position.z += this.speedFactor * this.zSpeed;
         this.model.position.x += this.speedFactor * this.xSpeed;
+        /*if(this.model.position.x < this.maxPosition.x && this.model.position.x > -this.maxPosition.x){
+            
+        }
+        else if(this.model.position.x >= this.maxPosition.x){
+            if(this.speedFactor * this.xSpeed<0){
+                this.model.position.x += this.speedFactor * this.xSpeed;
+            }
+        }else if(this.model.position.x <= -this.maxPosition.x){
+            if(this.speedFactor * this.xSpeed>0){
+                this.model.position.x += this.speedFactor * this.xSpeed;
+            }
+        }else{
+            console.log("error")
+        }*/
         this.hitbox.setFromObject(this.model);
     }
 
@@ -103,11 +119,15 @@ export class Entity extends Object  {
     }
 
     moveLeft(){
-      if(-this.xSpeed < this.speedCap) this.xSpeed -= speedMultiplier;
+      if(-this.xSpeed < this.speedCap && this.model.position.x > -this.maxPosition.x){
+        this.xSpeed -= speedMultiplier;
+      } 
     }
 
     moveRight(){
-      if(this.xSpeed < this.speedCap)this.xSpeed += speedMultiplier;
+      if(this.xSpeed < this.speedCap && this.model.position.x < this.maxPosition.x){
+        this.xSpeed += speedMultiplier;
+      }
     }
 
 
