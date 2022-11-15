@@ -35,6 +35,12 @@ export class ObjectSupplier{
     var asteroidObject = ObjectFactory(asteroidModel.object, asteroidModel.hitbox, objectPosition,0);
     return asteroidObject;
   }
+
+  enemy(objectPosition){
+    var enemyModel = addModel(this.modelLoader.getModel('enemy'), objectPosition);
+    var enemyObject = ObjectFactory(enemyModel.object, enemyModel.hitbox, objectPosition,2);
+    return enemyObject;
+  }
 }
 
 

@@ -52,7 +52,9 @@ button i{
   font-size: 40px;
   text-shadow: 0 0 20px black;
 }
-
+h3 a{
+  color: #e60202;
+}
 .loader {
   position:absolute;
   left: 40%;

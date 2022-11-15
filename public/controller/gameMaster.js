@@ -12,34 +12,22 @@ import { LightEntity} from '/model/lightEntity.js';
 
 //import * as ExampleAnimation from '/view/example.js'
 
-const STATIC_CAM = false;
+
 export class GameMaster {
 
   /**
    * Initializes the game
    */
   constructor(modelLoader) {
-    this.entityHandler = new EntityHandler(modelLoader);
-    this.worldGenFactory = new WorldGenFactory();
+    this.worldGenFactory = new WorldGenFactory(modelLoader, 130, 1);
 
   }
 
   initGame(){
-    var innerWidth = document.getElementById('animateScene').offsetWidth;
-    var innerHeight = window.innerHeight;
-    let camera;
-    let playerPosition = new ObjectPosition();
-    playerPosition.sizeFactor = 0.5;
-    if(!STATIC_CAM){
-      camera = new CameraEntity(getCamera(),innerWidth,innerHeight, 0,4);
-    }
-    var light = new LightEntity(getAmbientLight(0xcfc4c4));
-    this.entityHandler.addObject(this.entityHandler.objectSupplier.player(playerPosition,camera,light));
-    this.spawnAsteroids();  //TODO: Temporary Function for random asteroid spawn. Should be removed
-    var leftInfoScreen = new InfoScreenHandler("leftInfoScreen");
-    var title = leftInfoScreen.addDivWithText("<h1>Roffelson</h1>");
-    var subtitle = leftInfoScreen.addDivWithText("<h1>The Space Warior</h1>");
-    var tutorial = leftInfoScreen.addDivWithText(
+    this.leftInfoScreen = new InfoScreenHandler("leftInfoScreen");
+    var title = this.leftInfoScreen.addDivWithText("<h1>Roffelson</h1>");
+    var subtitle = this.leftInfoScreen.addDivWithText("<h1>The Space Warior</h1>");
+    var tutorial = this.leftInfoScreen.addDivWithText(
       "<table style='width:90%;text-align: left; margin: 5%;'\
       <tr><td>W</td><td><i class='fa-solid fa-arrow-up'></i></td><td>Ship moves forward</td></tr>\
       <tr><td>S</td><td><i class='fa-solid fa-arrow-down'></td><td>Ship moves backward</td></tr>\
@@ -48,10 +36,11 @@ export class GameMaster {
       <tr><td>Space</td><td><i class='fa-solid fa-meteor'></i></td><td>Ship shoot a projectile</td></tr>\
       </table>"
       );
+      this.enemyStatusIndex = this.leftInfoScreen.addDivWithText("");
   }
     
 
-  spawnAsteroids(){
+  /*spawnAsteroids(){
     let objectPosition = new ObjectPosition();
     for(let i = 0; i < 40; i++){
       objectPosition.position.x =  this.getRandomInt(-35,35);
@@ -72,7 +61,7 @@ export class GameMaster {
 
   getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
-  }
+  }*/
 
 
 /**
@@ -81,13 +70,13 @@ export class GameMaster {
  */
   userInputHandler(event){
     try{
-      if(this.entityHandler.objects.length > 0){
-        var playerIndex = this.entityHandler.objects.findIndex(this.entityHandler.checkIsPlayerEntity);
+      if(this.worldGenFactory.entityHandler.objects.length > 0){
+        var playerIndex = this.worldGenFactory.entityHandler.objects.findIndex(this.worldGenFactory.entityHandler.checkIsPlayerEntity);
         if(event instanceof KeyboardEvent){
-          this.entityHandler.getObject(playerIndex).storeUserInput(event.key);
+          this.worldGenFactory.entityHandler.getObject(playerIndex).storeUserInput(event.key);
         }
         else{
-          this.entityHandler.getObject(playerIndex).storeUserInput(event);
+          this.worldGenFactory.entityHandler.getObject(playerIndex).storeUserInput(event);
         }
       }
     }catch(exception){
@@ -100,6 +89,11 @@ export class GameMaster {
    */
   __task30ms() {
     render();
-    this.entityHandler.moveObjects();
+    var playerIndex = this.worldGenFactory.entityHandler.getPlayerEntityIndex();
+    this.worldGenFactory.checkLoadStatus(playerIndex);
+    this.worldGenFactory.entityHandler.moveObjects();
+    this.leftInfoScreen.setInnerHTML(this.enemyStatusIndex,
+      `<h3>Remaining Enemies <a>${this.worldGenFactory.enemyAmount-this.worldGenFactory.entityHandler.destroyedEnemies}</a> out of <a>${this.worldGenFactory.enemyAmount}</a></h3>`
+    );
   }
 }
