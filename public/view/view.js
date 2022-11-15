@@ -71,21 +71,74 @@ export function addModel(gltf, objectPosition) {
   obj.rotation.y = objectPosition.rotation.y;
   obj.rotation.z = objectPosition.rotation.z;
 
-  hitbox = new THREE.BoxHelper(obj);
-  hitbox.material.color.set(0xff0000);
-  if(hideHitBox){
-    hitbox.material.visible = false;
+  /*
+  var knotBoxHelper  = new THREE.BoxHelper(obj);
+  if(!hideHitBox){
+    knotBoxHelper .material.color.set(0xff0000);
+    //knotBoxHelper .material.visible = false;
+    scene.add(knotBoxHelper);
      // just for testing 
   }
-  scene.add(hitbox);
+  */
+
+  hitbox = new THREE.Box3();  
+  hitbox.setFromObject(obj);
+  console.log(hitbox)
+  
   return { object: obj, hitbox: hitbox, objectPosition: objectPosition};
 }
 
 // ---- Collison Handler ----
 
-export function checkCollision(hitbox1, hitbox2) {
-  if (hitbox1.intersectsBox(hitbox2)) {
-    return true;
+export function checkCollision(obj1, obj2){
+  var collision = false
+  //console.log(obj1)
+  //console.log(obj2)
+
+  try{
+      if(obj1.hitbox.intersectsBox(obj2.hitbox)){
+          collision = true
+          console.log('collision')
+      }
   }
-  return false;
+  catch(error){
+      console.log(error)
+  }
+
+
+  return collision;
+}
+
+
+// ---- Get Location ----  // in progress
+
+/*
+    Get the location of obj2 in relation to obj1
+    Z = up, -Z = down, X = right, -X = Left
+    return values:
+        0: error
+        1: up
+        2: up right
+        3: right
+        4: down right 
+        5: down 
+        6: down left
+        7: left
+        8: up left
+*/
+export function getObjectLocation(obj1, obj2){
+  var pos = 0
+  try{
+      var xDif = obj1.model.position.x - obj2.model.position.x;
+      var zDif = obj1.model.position.z - obj2.model.position.z;
+      
+      console.log(xDif);
+      console.log(zDif);
+
+
+  }
+  catch(error){
+      console.log(error)
+  }
+  return pos
 }

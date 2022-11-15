@@ -91,7 +91,7 @@ export class Entity extends Object  {
     moveObject(){
         this.model.position.z += this.speedFactor * this.zSpeed;
         this.model.position.x += this.speedFactor * this.xSpeed;
-        this.hitbox.update();
+        this.hitbox.setFromObject(this.model);
     }
 
     moveForward(){

@@ -7,6 +7,7 @@ import { PlayerEntity, ProjectileEntity, AiEntity} from '/model/specialEntitys.j
 import { Object3D } from 'three';
 import { ObjectPosition } from '/model/helperClass.js';
 import {ObjectSupplier} from '/controller/objectSupplier.js'
+import { checkCollision } from '../view/view.js';
 export class EntityHandler {
   constructor(modelLoader) {
     this.objects = [];
@@ -48,7 +49,7 @@ export class EntityHandler {
           objectIndex = this.objects.indexOf(element);
           for (var index in this.objects) {
             if(objectIndex!=index){
-              //if (checkCollision(element.hitbox, this.objects[index].hitbox)) {
+              //if (checkCollision(element, this.objects[index])) {
               if (false){
                 hasCollision = true;
                 break;
