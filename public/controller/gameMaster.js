@@ -7,6 +7,8 @@ import { InfoScreenHandler } from '/view/infoScreen.js'
 import { addModel,render, getCamera} from '/view/view.js';
 import { CameraEntity } from '/model/cameraEntity.js';
 import { ObjectPosition } from '/model/helperClass.js';
+import { getAmbientLight } from '/view/view.js';
+import { LightEntity} from '/model/lightEntity.js';
 
 //import * as ExampleAnimation from '/view/example.js'
 
@@ -31,7 +33,8 @@ export class GameMaster {
     if(!STATIC_CAM){
       camera = new CameraEntity(getCamera(),innerWidth,innerHeight, 0,4);
     }
-    this.entityHandler.addObject(this.entityHandler.objectSupplier.player(playerPosition,camera));
+    var light = new LightEntity(getAmbientLight(0xcfc4c4));
+    this.entityHandler.addObject(this.entityHandler.objectSupplier.player(playerPosition,camera,light));
     this.spawnAsteroids();  //TODO: Temporary Function for random asteroid spawn. Should be removed
     var leftInfoScreen = new InfoScreenHandler("leftInfoScreen");
     var title = leftInfoScreen.addDivWithText("<h1>Roffelson</h1>");
@@ -52,7 +55,7 @@ export class GameMaster {
     let objectPosition = new ObjectPosition();
     for(let i = 0; i < 40; i++){
       objectPosition.position.x =  this.getRandomInt(-35,35);
-      objectPosition.position.z = this.getRandomInt(-100,-10);
+      objectPosition.position.z = this.getRandomInt(-400,-10);
       objectPosition.sizeFactor =this.getRandomArbitrary(0.01,0.05);
       objectPosition.rotation.x = Math.random() * Math.PI *2;
       objectPosition.rotation.y = Math.random() * Math.PI *2;

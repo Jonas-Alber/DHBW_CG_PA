@@ -4,7 +4,7 @@ export class PlayerEntity extends Entity {
 
   constructor(model, hitbox, healthPoints = 1) {
     super(model, hitbox, healthPoints);
-    this.userInput;
+    this.userInput = [];
     this.cameraEntity = undefined;
   }
 
@@ -23,27 +23,29 @@ export class PlayerEntity extends Entity {
       this.cameraEntity.setXPos(this.getXPos());
       this.cameraEntity.setZPos(this.getZPos());
     }
-    switch (this.userInput) {
-      case 'd':
-        this.moveRight();
-        break;
-      //gehe nach rechts
-      case 'a':
-        this.moveLeft();
-        break;
-      //gehe nach links
-      case 'w':
-        this.moveForward();
-        //gehe vorwärts
-        break;
-      case 's':
-        this.moveBackward(); //geht das überhaupt?
-        //gehe nach unten
-        break;
-      case ' ':
-        //Feuer
-        doShoot = this.shootObject();
-        break;
+    for(var element in this.userInput){
+      switch (this.userInput[element]) {
+        case 'd':
+          this.moveRight();
+          break;
+        //gehe nach rechts
+        case 'a':
+          this.moveLeft();
+          break;
+        //gehe nach links
+        case 'w':
+          this.moveForward();
+          //gehe vorwärts
+          break;
+        case 's':
+          this.moveBackward(); //geht das überhaupt?
+          //gehe nach unten
+          break;
+        case ' ':
+          //Feuer
+          doShoot = this.shootObject();
+          break;
+      }
     }
     this.userInput = undefined;
     return { doShoot: doShoot };

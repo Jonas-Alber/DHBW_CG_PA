@@ -7,12 +7,14 @@ import { PlayerEntity, ProjectileEntity, AiEntity } from '/model/specialEntitys.
 import { Object3D } from 'three';
 import { ObjectPosition } from '/model/helperClass.js';
 import { ObjectSupplier } from '/controller/objectSupplier.js'
-import { checkCollision, removeModel } from '/view/view.js';
+import { checkCollision, removeModel, getAmbientLight } from '/view/view.js';
+import { LightEntity} from '/model/lightEntity.js';
 export class EntityHandler {
-  constructor(modelLoader) {
+  constructor(modelLoader, maxWorldSize=400) {
     this.objects = [];
     this.entities = [];
     this.objectSupplier = new ObjectSupplier(modelLoader);
+    this.maxWorldSize = maxWorldSize;
   }
 
   addObject(entity) {
@@ -75,8 +77,14 @@ export class EntityHandler {
               positionElement.position.z = element.model.position.z - 5;
               //positionElement.speed.x = element.xSpeed;
               positionElement.speed.z = element.zSpeed;
-              this.addObject(this.objectSupplier.projectile(positionElement));
+              positionElement.sizeFactor = 8;
+              var lightEntity = new LightEntity(getAmbientLight(0x15de12));
+              this.addObject(this.objectSupplier.projectile(positionElement, lightEntity));
             }
+          }
+          if(element instanceof ProjectileEntity && element.model.position.z < -this.maxWorldSize){
+            this.removeObject(this.getObjectIndex(element));
+            console.log("Destroyed projectile which fly away")
           }
         } catch (exception) {
           console.warn(exception);
@@ -90,6 +98,11 @@ export class EntityHandler {
   removeObject(index) {
     if (this.objects[index] instanceof Entity) {
       this.entities.splice(this.entities.indexOf(this.objects[index]), 1);
+      if(this.objects[index].haveSubElemet()){
+        for(var element in this.objects[index].subElements){
+          removeModel(this.objects[index].subElements[element].model);
+        }
+      }
     }
     removeModel(this.objects[index].model);
     this.objects.splice(index, 1);

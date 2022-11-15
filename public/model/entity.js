@@ -19,6 +19,15 @@ export class Entity extends Object  {
         this.speedFactor = speedFactor;
         this.shootCap = shootCap;
         this.maxPosition = {x:LeftRightCap,y:0,z:0};
+        this.subElements = [];
+    }
+
+    addSubElement(subElement){
+        this.subElements.push(subElement);
+    }
+
+    haveSubElemet(sublement){
+        return this.subElements.length > 0;
     }
 
     getXPos(){
@@ -90,9 +99,22 @@ export class Entity extends Object  {
       return false;
     }
 
+    setSlope(){
+        this.model.rotation.z = Math.PI/(8*this.speedCap)*-this.xSpeed;
+        this.model.rotation.x = Math.PI/(10*this.speedCap)*this.zSpeed;
+    }
+
     moveObject(){
         this.model.position.z += this.speedFactor * this.zSpeed;
         this.model.position.x += this.speedFactor * this.xSpeed;
+        this.setSlope();
+
+        if(this.subElements.length > 0){
+            for(var element in this.subElements){
+                this.subElements[element].setXPos(this.model.position.x);
+                this.subElements[element].setZPos(this.model.position.z);
+            }
+        }
         /*if(this.model.position.x < this.maxPosition.x && this.model.position.x > -this.maxPosition.x){
             
         }

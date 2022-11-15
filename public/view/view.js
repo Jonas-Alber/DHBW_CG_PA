@@ -43,6 +43,13 @@ export function render() {
   renderer.render(scene, camera)
 }
 
+export function getAmbientLight(lightColor){
+  const light = new THREE.DirectionalLight( lightColor,0.5); // soft white light
+  light.rotation.y = (Math.PI);
+  scene.add(light);
+  return light;
+}
+
 export function getCamera() {
   return camera;
 }

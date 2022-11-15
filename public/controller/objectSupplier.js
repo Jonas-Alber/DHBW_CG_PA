@@ -9,18 +9,24 @@ export class ObjectSupplier{
     this.modelLoader =  modelLoader;
   }
 
-  player(objectPosition, camera=undefined) {
+  player(objectPosition, camera=undefined, light= undefined) {
     var playerModel = addModel(this.modelLoader.getModel('player'), objectPosition);
     var playerObject = ObjectFactory(playerModel.object, playerModel.hitbox, objectPosition,3);
     if (camera != undefined) {
       playerObject.setCameraEntity(camera);
     }
+    if(light != undefined) {
+      playerObject.addSubElement(light);
+    }
     return playerObject;
   }
 
-  projectile(objectPosition){
+  projectile(objectPosition, light=undefined){
     var projectileModel = addModel(this.modelLoader.getModel('projectile'), objectPosition);
     var projectileObject = ObjectFactory(projectileModel.object, projectileModel.hitbox,objectPosition,1);
+    if(light != undefined) {
+      projectileObject.addSubElement(light);
+    }
     return projectileObject;
   }
 
