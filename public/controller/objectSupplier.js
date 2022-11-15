@@ -2,6 +2,7 @@ import { ObjectPosition } from '/model/helperClass.js';
 import {addModel} from '/view/view.js';
 import {ModelLoader} from '/view/modelLoader.js';
 import { PlayerEntity, ProjectileEntity, AiEntity} from '/model/specialEntitys.js';
+import { Object } from '/model/object.js';
 
 export class ObjectSupplier{
   constructor(modelLoader){

@@ -83,7 +83,6 @@ export function addModel(gltf, objectPosition) {
 
   hitbox = new THREE.Box3();  
   hitbox.setFromObject(obj);
-  console.log(hitbox)
   
   return { object: obj, hitbox: hitbox, objectPosition: objectPosition};
 }
