@@ -90,8 +90,82 @@ export class AiEntity extends Entity {
 
   constructor(model, hitbox, healthPoints = 1) {
     super(model, hitbox, healthPoints);
-
+    //this.userInput = [];
+    this.cameraEntity = undefined;
+    this.randomInput = [];
   }
 
+  makeDecision() {
+    let doShoot = false;
+    super.makeDecision();
 
+    function delay(time) {
+      return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+
+
+
+      function* shuffle(array) {
+
+        var i = array.length;
+
+        while (i--) {
+          yield array.splice(Math.floor(Math.random() * (i+1)), 1)[0];
+        }
+
+      }
+
+      var randomNumbers = shuffle([1,2,3,4,5,6,7,8,9,10]);
+
+    delay(2000).then(() => {
+      let randomX = randomNumbers.next().value;
+
+      console.log(randomX);
+
+      if(randomX > 4){
+        this.moveRight();
+      }else {
+        this.moveLeft();
+      }
+
+    })
+
+
+
+
+
+    /*
+
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    let randomValue = getRandomInt(10, 100);
+
+    console.log(randomValue);
+
+    if(randomValue > 44) { //move right
+
+        this.moveRight();
+
+    }
+
+    else{ //move left
+      this.moveLeft();
+    }
+
+     */
+
+
+    this.randomInput = undefined;
+   // return { doShoot: doShoot };
+  }
+  /*
+  storeUserInput(inputValue) {
+    this.userInput = inputValue;
+  }
+   */
 }
