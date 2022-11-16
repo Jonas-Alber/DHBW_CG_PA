@@ -9,6 +9,7 @@ const setFPS = 30;
 
 let activeControlButton = [];
 let modelHandler = new ModelLoader();
+let timeHandler;
 await modelHandler.loadModel('asteroid1','3Dmodels/asteroid.glb');
 await modelHandler.loadModel('asteroid2','3Dmodels/asteroid2.glb');
 await modelHandler.loadModel('asteroid3','3Dmodels/asteroid3.glb');
@@ -70,11 +71,17 @@ function startGame() {
     registerControlButtonEventListener("controlMoveLeft",'a');
     registerControlButtonEventListener("controlMoveRight",'d');
     registerControlButtonEventListener("controlShoot",' ');
-    setInterval(function(){
-        gameMaster.__task30ms();
+    timeHandler = setInterval(function(){
+        if(!gameMaster.__task30ms()){
+          clearTick();
+        }
     }, 
     1000/setFPS
     );
+  }
+
+  function clearTick(){
+    clearInterval(timeHandler);
   }
 
   function pressControlButton(parameter){

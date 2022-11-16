@@ -1,9 +1,10 @@
 import { Entity } from '/model/entity.js'
+import {getRandomInt,getRandomArbitrary,ObjectPosition } from '/model/helperClass.js';
 
 export class PlayerEntity extends Entity {
 
-  constructor(model, hitbox, healthPoints = 1) {
-    super(model, hitbox, healthPoints);
+  constructor(model, hitbox, objectPosition, healthPoints = 1) {
+    super(model, hitbox,objectPosition, healthPoints);
     this.userInput = [];
     this.cameraEntity = undefined;
   }
@@ -58,8 +59,8 @@ export class PlayerEntity extends Entity {
 }
 export class ProjectileEntity extends Entity {
 
-  constructor(model, hitbox, healthpoints = 1) {
-    super(model, hitbox);
+  constructor(model, hitbox, objectPosition, healthpoints = 1) {
+    super(model, hitbox, objectPosition);
     this.doSpeedDown = false;
     //this.userInput;
 
@@ -70,7 +71,12 @@ export class ProjectileEntity extends Entity {
 
   makeDecision() {
     super.makeDecision();
-    this.moveForward();
+    if(this.objectPosition.faceDirection == 0){
+      this.moveForward();
+    }else if(this.objectPosition.faceDirection == 2){
+      this.moveBackward();
+    }else{
+    }
     /*
       if(collisionBool === null) { //no collision
           this.projectile.position.z += 1; //Speed muss noch konkretisiert werden
@@ -84,14 +90,33 @@ export class ProjectileEntity extends Entity {
 
 }
 
-
-
 export class AiEntity extends Entity {
 
-  constructor(model, hitbox, healthPoints = 1) {
-    super(model, hitbox, healthPoints);
+  constructor(model, hitbox, objectPosition, healthPoints = 1) {
+    super(model, hitbox, objectPosition, healthPoints);
+    this.nextDecision = 0;
+    this.decision = 0;
 
   }
-
+  makeDecision(){;
+    super.makeDecision();
+    var doShoot = false;
+    if(this.nextDecision <= 0){
+      this.nextDecision = getRandomInt(20,61);
+      this.decision = getRandomInt(1,3);
+      doShoot = this.shootObject();
+    }else{
+      this.nextDecision -=1;
+      switch(this.decision){
+        case 1:
+          this.moveRight();
+          break;
+        case 2:
+          this.moveLeft();
+          break;
+      }
+    }
+    return { doShoot: doShoot };
+  }
 
 }

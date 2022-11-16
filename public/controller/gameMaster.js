@@ -90,10 +90,13 @@ export class GameMaster {
   __task30ms() {
     render();
     var playerIndex = this.worldGenFactory.entityHandler.getPlayerEntityIndex();
-    this.worldGenFactory.checkLoadStatus(playerIndex);
+    if(!this.worldGenFactory.checkLoadStatus(playerIndex)){
+      return false;
+    }
     this.worldGenFactory.entityHandler.moveObjects();
     this.leftInfoScreen.setInnerHTML(this.enemyStatusIndex,
       `<h3>Remaining Enemies <a>${this.worldGenFactory.enemyAmount-this.worldGenFactory.entityHandler.destroyedEnemies}</a> out of <a>${this.worldGenFactory.enemyAmount}</a></h3>`
     );
+    return true;
   }
 }

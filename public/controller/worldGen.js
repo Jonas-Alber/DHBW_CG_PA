@@ -44,12 +44,17 @@ export class WorldGenFactory {
     this.enemyAmount = this.enemyPerSection*Math.round(this.mapLength / this.viewDistance);
   }
   checkLoadStatus(playerIndex) {
+    var playerObject = this.entityHandler.getObject(playerIndex)
+    if(playerObject == undefined) {
+      return false;
+    }
     var playerPosition = this.entityHandler.getObject(playerIndex).model.position.z;
     if (playerPosition < (-this.viewDistance * this.playerRegion)) {
       console.log("Load new World Element");
       this.playerRegion += 1;
       this.__generateWorld();
     }
+    return true;
   }
 
   __generateWorld() {

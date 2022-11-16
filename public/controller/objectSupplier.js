@@ -22,6 +22,11 @@ export class ObjectSupplier{
   }
 
   projectile(objectPosition, light=undefined){
+    if(objectPosition.faceDirection == 0){
+      objectPosition.position.z -= 5;
+    }else if(objectPosition.faceDirection == 2){
+      objectPosition.position.z += 15;
+    }
     var projectileModel = addModel(this.modelLoader.getModel('projectile'), objectPosition);
     var projectileObject = ObjectFactory(projectileModel.object, projectileModel.hitbox,objectPosition,1);
     if(light != undefined) {
@@ -38,6 +43,7 @@ export class ObjectSupplier{
 
   enemy(objectPosition){
     var enemyModel = addModel(this.modelLoader.getModel('enemy'), objectPosition);
+    objectPosition.faceDirection = 2;
     var enemyObject = ObjectFactory(enemyModel.object, enemyModel.hitbox, objectPosition,2);
     return enemyObject;
   }
@@ -57,16 +63,16 @@ export class ObjectSupplier{
   var object;
   switch (type) {
     case 1:
-      object = new ProjectileEntity(vectorObject, hitbox);
+      object = new ProjectileEntity(vectorObject, hitbox,objectPosition);
       break;
     case 2:
-      object = new AiEntity(vectorObject, hitbox);
+      object = new AiEntity(vectorObject, hitbox, objectPosition);
       break;
     case 3:
-      object = new PlayerEntity(vectorObject, hitbox);
+      object = new PlayerEntity(vectorObject, hitbox,objectPosition);
       break;
     default:
-      object = new Object(vectorObject, hitbox);
+      object = new Object(vectorObject, hitbox,objectPosition);
       break;
   }
   if(object != undefined) {

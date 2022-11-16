@@ -4,6 +4,7 @@ export class Object {
         this.healthPoints = healthPoints;
         this.model = model;
         this.hitbox = hitbox;
+        // this.objectPosition
     }
 
     setHP(healthPoints) {

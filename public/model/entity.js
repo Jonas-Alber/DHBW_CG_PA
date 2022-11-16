@@ -9,8 +9,9 @@ const shootCap = 15;
 const LeftRightCap = 25;
 export class Entity extends Object  {
 
-    constructor(model, hitbox, healthPoints=1, doSpeedDown=true) {
+    constructor(model, hitbox, objectPosition, healthPoints=1, doSpeedDown=true) {
         super(model, hitbox, healthPoints); //Aufruf constructor von object.js
+        this.objectPosition = objectPosition;
         this.xSpeed=0;
         this.zSpeed=0;
         this.doSpeedDown = doSpeedDown;

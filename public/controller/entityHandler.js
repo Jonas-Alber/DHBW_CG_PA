@@ -78,6 +78,7 @@ export class EntityHandler {
               positionElement.position.z = element.model.position.z - 5;
               //positionElement.speed.x = element.xSpeed;
               positionElement.speed.z = element.zSpeed;
+              positionElement.faceDirection = element.objectPosition.faceDirection;
               //positionElement.sizeFactor = 8;
               //var lightEntity = new LightEntity(getAmbientLight(0x15de12));
               this.addObject(this.objectSupplier.projectile(positionElement));
