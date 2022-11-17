@@ -11,6 +11,7 @@ const WORLD_SIZE = 25;
 export class WorldGenFactory {
   constructor(modelLoader, viewDistance, difficulty = 1) {
     this.difficulty = difficulty;
+    this.worldSize = WORLD_SIZE;
     this.viewDistance = viewDistance;
     this.__calculateWorldSettings();
     this.entityHandler = new EntityHandler(modelLoader,this.mapLength);

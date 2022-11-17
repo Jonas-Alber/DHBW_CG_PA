@@ -69,6 +69,20 @@ export class GameMaster {
  * Takes a event and store the information in the player entity
  * @param {*} event 
  */
+
+  isPlayerNearBorder(buffer){
+    var playerIndex = this.worldGenFactory.entityHandler.objects.findIndex(this.worldGenFactory.entityHandler.checkIsPlayerEntity);
+    var player = this.worldGenFactory.entityHandler.getObject(playerIndex);
+    var maxXAmount = this.worldGenFactory.worldSize;
+    var playerX = player.model.position.x;
+    var playerY = player.model.position.y;
+    if(playerX > maxXAmount-buffer || playerX < -(maxXAmount-buffer)){
+      return true;
+    }else if(playerY > maxXAmount-buffer || playerY < -(maxXAmount-buffer)){
+      return true;
+    }
+    return false;
+  }
   userInputHandler(event){
     try{
       if(this.worldGenFactory.entityHandler.objects.length > 0){

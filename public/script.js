@@ -105,6 +105,11 @@ function startGame() {
     if(!parameterExists){
       var interval = setInterval(function(){
         gameMaster.userInputHandler(parameter);
+        if(gameMaster.isPlayerNearBorder(0)){
+          document.getElementById('warningScreen').style.display = 'block';
+        }else{
+          document.getElementById('warningScreen').style.display = 'none';
+        }
       }, 1000/setFPS);
       activeControlButton.push({key: parameter, function: interval});
     }
