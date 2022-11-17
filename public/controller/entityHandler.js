@@ -8,9 +8,9 @@ import { Object3D } from 'three';
 import { ObjectPosition } from '/model/helperClass.js';
 import { ObjectSupplier } from '/controller/objectSupplier.js'
 import { checkCollision, removeModel, getAmbientLight } from '/view/view.js';
-import { LightEntity} from '/model/lightEntity.js';
+import { LightEntity } from '/model/lightEntity.js';
 export class EntityHandler {
-  constructor(modelLoader, maxWorldSize=400) {
+  constructor(modelLoader, maxWorldSize = 400) {
     this.objects = [];
     this.entities = [];
     this.objectSupplier = new ObjectSupplier(modelLoader);
@@ -65,9 +65,14 @@ export class EntityHandler {
 
           }
           if (colStorage.hasCol) {
-            if (element instanceof ProjectileEntity || this.objects[colStorage.object] instanceof ProjectileEntity) {
-              this.removeObject(this.getObjectIndex(element));
-              this.removeObject(colStorage.object);
+            if (element instanceof ProjectileEntity) {
+              if (this.objects[colStorage.object].constructor === element.parentType.constructor) {
+              } else {
+                if (this.objects[colStorage.object] instanceof AiEntity || this.objects[colStorage.object] instanceof PlayerEntity || this.objects[colStorage.object] instanceof ProjectileEntity) {
+                  this.removeObject(this.getObjectIndex(element));
+                  this.removeObject(colStorage.object);
+                }
+              }
             }
           }
           if (true) {
@@ -75,17 +80,26 @@ export class EntityHandler {
             if (decisions != undefined && decisions.doShoot) {
               let positionElement = new ObjectPosition();
               positionElement.position.x = element.model.position.x;
+              positionElement.position.y = element.model.position.y;
               positionElement.position.z = element.model.position.z - 5;
               //positionElement.speed.x = element.xSpeed;
               positionElement.speed.z = element.zSpeed;
               positionElement.faceDirection = element.objectPosition.faceDirection;
               //positionElement.sizeFactor = 8;
               //var lightEntity = new LightEntity(getAmbientLight(0x15de12));
-              this.addObject(this.objectSupplier.projectile(positionElement));
+              var projectileObject = this.objectSupplier.projectile(positionElement)
+              if (element instanceof AiEntity) {
+                projectileObject.parentType = element;
+              }
+              else {
+                projectileObject.parentType = element;
+              }
+              this.addObject(projectileObject);
             }
           }
-          if(element instanceof ProjectileEntity && element.model.position.z < -this.maxWorldSize){
+          if (element instanceof ProjectileEntity && element.model.position.z < -this.maxWorldSize) {
             this.removeObject(this.getObjectIndex(element));
+            console.log(this.maxWorldSize);
             console.log("Destroyed projectile which fly away")
           }
         } catch (exception) {
@@ -99,12 +113,12 @@ export class EntityHandler {
 
   removeObject(index) {
     if (this.objects[index] instanceof Entity) {
-      if(this.objects[index] instanceof AiEntity){
-        this.destroyedEnemies+=1;
+      if (this.objects[index] instanceof AiEntity) {
+        this.destroyedEnemies += 1;
       }
       this.entities.splice(this.entities.indexOf(this.objects[index]), 1);
-      if(this.objects[index].haveSubElemet()){
-        for(var element in this.objects[index].subElements){
+      if (this.objects[index].haveSubElemet()) {
+        for (var element in this.objects[index].subElements) {
           removeModel(this.objects[index].subElements[element].model);
         }
       }
@@ -117,7 +131,7 @@ export class EntityHandler {
     return entity instanceof PlayerEntity;
   }
 
-  getPlayerEntityIndex(){
+  getPlayerEntityIndex() {
     return this.objects.findIndex(this.checkIsPlayerEntity);
   }
 }

@@ -5,7 +5,7 @@ import { LightEntity} from '/model/lightEntity.js';
 import { addModel,render, getCamera, getAmbientLight} from '/view/view.js';
 
 const STATIC_CAM = false;
-const ASTEROID_AMOUNT = 12;
+const ASTEROID_AMOUNT = 30;
 const ASTEROID_SPREAD = 70;
 const WORLD_SIZE = 25;
 export class WorldGenFactory {
@@ -14,6 +14,7 @@ export class WorldGenFactory {
     this.viewDistance = viewDistance;
     this.__calculateWorldSettings();
     this.entityHandler = new EntityHandler(modelLoader,this.mapLength);
+    console.log(this.mapLength);
     this.__spawnPlayer();
     this.playerRegion = 0;
     this.__generateWorld();
@@ -28,7 +29,7 @@ export class WorldGenFactory {
     let playerPosition = new ObjectPosition();
     playerPosition.sizeFactor = 0.5;
     if (!STATIC_CAM) {
-      camera = new CameraEntity(getCamera(), innerWidth, innerHeight, 0, 4);
+      camera = new CameraEntity(getCamera(), innerWidth, innerHeight, 0, 20, 0);
     }
     var light = new LightEntity(getAmbientLight(0xcfc4c4));
     this.entityHandler.addObject(this.entityHandler.objectSupplier.player(playerPosition, camera, light));
@@ -69,6 +70,7 @@ export class WorldGenFactory {
     let objectPosition = new ObjectPosition();
     for (let i = 0; i < ASTEROID_AMOUNT; i++) {
       objectPosition.position.x = getRandomInt(-ASTEROID_SPREAD, ASTEROID_SPREAD);
+      objectPosition.position.y = getRandomInt(-ASTEROID_SPREAD, ASTEROID_SPREAD);
       objectPosition.position.z = getRandomInt(-(this.viewDistance*(playerRegion+1)), -10-((this.viewDistance*playerRegion)));
       objectPosition.sizeFactor = getRandomArbitrary(0.01, 0.05);
       objectPosition.rotation.x = Math.random() * Math.PI * 2;
@@ -80,10 +82,16 @@ export class WorldGenFactory {
 
   __spawnEnemy(playerRegion){   
     let objectPosition = new ObjectPosition();
+    var zPosition = 0;
     for (let i = 0; i < this.enemyPerSection; i++) {
       console.log("Spawn Enemy")
       objectPosition.position.x = getRandomInt(-WORLD_SIZE, WORLD_SIZE);
-      objectPosition.position.z = getRandomInt(-(this.viewDistance*(playerRegion+1)), -30-((this.viewDistance*playerRegion)));
+      objectPosition.position.y = getRandomInt(-WORLD_SIZE, WORLD_SIZE);
+      zPosition = getRandomInt(-(this.viewDistance*(playerRegion+1)), -30-((this.viewDistance*playerRegion)));
+      if(zPosition >= this.mapLength) {
+        zPosition = this.mapLength -10;
+      }
+      objectPosition.position.z = zPosition;
       objectPosition.rotation.y = Math.PI + Math.PI/2;
       objectPosition.sizeFactor = 0.02;
       this.entityHandler.addObject(this.entityHandler.objectSupplier.enemy(objectPosition));

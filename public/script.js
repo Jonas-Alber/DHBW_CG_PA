@@ -10,6 +10,8 @@ const setFPS = 30;
 let activeControlButton = [];
 let modelHandler = new ModelLoader();
 let timeHandler;
+let gameStatus = false;
+let playerIsAlive = true;
 await modelHandler.loadModel('asteroid1','3Dmodels/asteroid.glb');
 await modelHandler.loadModel('asteroid2','3Dmodels/asteroid2.glb');
 await modelHandler.loadModel('asteroid3','3Dmodels/asteroid3.glb');
@@ -46,6 +48,15 @@ function startGame() {
    * Stop the game
    */
   function stopGame() {
+    document.getElementById('endScreen').style.display = 'block';
+    if(!playerIsAlive){
+      document.getElementById('endScreenType').innerHTML = "<h2>You have lost!</h2";
+    }
+    else{
+      document.getElementById('endScreenType').innerHTML = "<h2>You have won!</h2";
+    }
+
+    clearInterval(timeHandler);
     pauseGame();
   }
 
@@ -53,6 +64,7 @@ function startGame() {
    * Stop the animation rendering process
    */
   function pauseGame() {
+    gameStatus = false;
     clearInterval(this.__task30ms);
   }
 
@@ -60,6 +72,7 @@ function startGame() {
    * Start the animation rendering process
    */
   function resumeGame() {
+    gameStatus = true;
     document.addEventListener("keydown", function(event){
       pressControlButton(event.key);
     });
@@ -72,19 +85,16 @@ function startGame() {
     registerControlButtonEventListener("controlMoveRight",'d');
     registerControlButtonEventListener("controlShoot",' ');
     timeHandler = setInterval(function(){
-        if(!gameMaster.__task30ms()){
-          clearTick();
+      playerIsAlive = gameMaster.__task30ms();
+        if(!playerIsAlive || !gameMaster.gameIsActive){
+          stopGame();
         }
     }, 
     1000/setFPS
     );
   }
-
-  function clearTick(){
-    clearInterval(timeHandler);
-  }
-
   function pressControlButton(parameter){
+    if(gameStatus){
     var parameterExists = false;
     for(var indexPoint in activeControlButton){
       if(activeControlButton[indexPoint].key === parameter){
@@ -97,6 +107,7 @@ function startGame() {
         gameMaster.userInputHandler(parameter);
       }, 1000/setFPS);
       activeControlButton.push({key: parameter, function: interval});
+    }
     }
   }
 

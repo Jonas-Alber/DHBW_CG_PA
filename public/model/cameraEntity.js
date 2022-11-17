@@ -1,7 +1,8 @@
 export class CameraEntity {
-  constructor(camera, canvasWidth, canvasHeight, xOffset = 0, zOffset = 0) {
+  constructor(camera, canvasWidth, canvasHeight, xOffset = 0, yOffset, zOffset = 0) {
     this.camera = camera;
     this.xOffset = xOffset;
+    this.yOffset = yOffset;
     this.zOffset = zOffset;
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
@@ -10,6 +11,10 @@ export class CameraEntity {
 
   setXPos(xPos) {
     this.camera.position.x = xPos + this.xOffset;
+  }
+
+  setYPos(yPos){
+    this.camera.position.y = yPos + this.yOffset;
   }
 
   setZPos(zPos) {

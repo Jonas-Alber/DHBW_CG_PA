@@ -16,7 +16,6 @@ const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 2000);
 camera.rotation.x = (-Math.PI / 2) + 0.7;
-camera.position.y = 30;
 
 //camera.position.y = Math.PI/2;
 //camera.rotation.x = Math.PI/2;

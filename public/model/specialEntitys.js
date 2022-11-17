@@ -1,10 +1,10 @@
 import { Entity } from '/model/entity.js'
-import {getRandomInt,getRandomArbitrary,ObjectPosition } from '/model/helperClass.js';
+import { getRandomInt, getRandomArbitrary, ObjectPosition } from '/model/helperClass.js';
 
 export class PlayerEntity extends Entity {
 
   constructor(model, hitbox, objectPosition, healthPoints = 1) {
-    super(model, hitbox,objectPosition, healthPoints);
+    super(model, hitbox, objectPosition, healthPoints);
     this.userInput = [];
     this.cameraEntity = undefined;
   }
@@ -22,9 +22,10 @@ export class PlayerEntity extends Entity {
     super.makeDecision();
     if (this.cameraEntity != undefined) {
       this.cameraEntity.setXPos(this.getXPos());
+      this.cameraEntity.setYPos(this.getYPos());
       this.cameraEntity.setZPos(this.getZPos());
     }
-    for(var element in this.userInput){
+    for (var element in this.userInput) {
       switch (this.userInput[element]) {
         case 'd':
           this.moveRight();
@@ -40,6 +41,14 @@ export class PlayerEntity extends Entity {
           break;
         case 's':
           this.moveBackward(); //geht das überhaupt?
+          //gehe nach unten
+          break;
+        case 'q':
+          this.moveUp(); //geht das überhaupt?
+          //gehe nach unten
+          break;
+        case 'e':
+          this.moveDown(); //geht das überhaupt?
           //gehe nach unten
           break;
         case ' ':
@@ -62,6 +71,7 @@ export class ProjectileEntity extends Entity {
   constructor(model, hitbox, objectPosition, healthpoints = 1) {
     super(model, hitbox, objectPosition);
     this.doSpeedDown = false;
+    this.parentType = undefined;
     //this.userInput;
 
   }
@@ -71,11 +81,11 @@ export class ProjectileEntity extends Entity {
 
   makeDecision() {
     super.makeDecision();
-    if(this.objectPosition.faceDirection == 0){
+    if (this.objectPosition.faceDirection == 0) {
       this.moveForward();
-    }else if(this.objectPosition.faceDirection == 2){
+    } else if (this.objectPosition.faceDirection == 2) {
       this.moveBackward();
-    }else{
+    } else {
     }
     /*
       if(collisionBool === null) { //no collision
@@ -98,22 +108,27 @@ export class AiEntity extends Entity {
     this.decision = 0;
 
   }
-  makeDecision(){;
+  makeDecision() {
+    ;
     super.makeDecision();
     var doShoot = false;
-    if(this.nextDecision <= 0){
-      this.nextDecision = getRandomInt(20,61);
-      this.decision = getRandomInt(1,3);
+    if (this.nextDecision <= 0) {
+      this.nextDecision = getRandomInt(20, 61);
+      this.decision = getRandomInt(1, 5);
       doShoot = this.shootObject();
-    }else{
-      this.nextDecision -=1;
-      switch(this.decision){
+    } else {
+      this.nextDecision -= 1;
+      switch (this.decision) {
         case 1:
           this.moveRight();
           break;
         case 2:
           this.moveLeft();
           break;
+        case 3:
+          this.moveUp();
+        case 4:
+          this.moveDown();
       }
     }
     return { doShoot: doShoot };

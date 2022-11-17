@@ -20,6 +20,7 @@ export class GameMaster {
    */
   constructor(modelLoader) {
     this.worldGenFactory = new WorldGenFactory(modelLoader, 130, 1);
+    this.gameIsActive = true;
 
   }
 
@@ -97,6 +98,10 @@ export class GameMaster {
     this.leftInfoScreen.setInnerHTML(this.enemyStatusIndex,
       `<h3>Remaining Enemies <a>${this.worldGenFactory.enemyAmount-this.worldGenFactory.entityHandler.destroyedEnemies}</a> out of <a>${this.worldGenFactory.enemyAmount}</a></h3>`
     );
+    if(this.worldGenFactory.enemyAmount-this.worldGenFactory.entityHandler.destroyedEnemies<=0){
+      this.gameIsActive = false;
+      return true;
+    }
     return true;
   }
 }
