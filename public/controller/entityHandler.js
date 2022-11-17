@@ -10,6 +10,11 @@ import { ObjectSupplier } from '/controller/objectSupplier.js'
 import { checkCollision, removeModel, getAmbientLight } from '/view/view.js';
 import { LightEntity } from '/model/lightEntity.js';
 export class EntityHandler {
+  /**
+   * Initializes the EntityHandler and the ObjectSupplier
+   * @param {ModelLoader} modelLoader - instance of ModelLoader which contains all 3D models
+   * @param {int} maxWorldSize - Z Coordinate size of the world
+   */
   constructor(modelLoader, maxWorldSize = 400) {
     this.objects = [];
     this.entities = [];
@@ -18,6 +23,11 @@ export class EntityHandler {
     this.destroyedEnemies = 0;
   }
 
+  /**
+   * Takes a instance of Class Object or ChildClasses and stores into the internal buffers
+   * @param {Object} entity Instance of Class Object or ChildClasses
+   * @returns {int} index of the stored object
+   */
   addObject(entity) {
     if (entity instanceof Object || entity instanceof Entity || entity instanceof PlayerEntity) {
       this.objects.push(entity);
@@ -33,6 +43,11 @@ export class EntityHandler {
     return this.getObjectIndex(entity);
   }
 
+  /**
+   * Takes the object instance and returns the related object index
+   * @param {*} object 
+   * @returns 
+   */
   getObjectIndex(object) {
     return this.objects.indexOf(object);
   }
