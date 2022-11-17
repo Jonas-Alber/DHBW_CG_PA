@@ -76,6 +76,14 @@ export class EntityHandler {
             }
           }
           if (true) {
+            if(element instanceof AiEntity){
+              var playerIndex = this.getPlayerEntityIndex();
+              var player = this.getObject(playerIndex);
+              element.setPlayerPosition(
+                player.model.position.x,
+                player.model.position.y,
+                player.model.position.z);
+            }
             var decisions = element.makeDecision();
             if (decisions != undefined && decisions.doShoot) {
               let positionElement = new ObjectPosition();

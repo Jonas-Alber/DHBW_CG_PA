@@ -8,7 +8,16 @@ const STATIC_CAM = false;
 const ASTEROID_AMOUNT = 30;
 const ASTEROID_SPREAD = 70;
 const WORLD_SIZE = 25;
+/**
+ * 
+ */
 export class WorldGenFactory {
+  /**
+   * 
+   * @param {modelLoader} modelLoader - instance of class modelLoader, containing all 3D models
+   * @param {int} viewDistance - number how far the camera can see
+   * @param {int} difficulty - difficulty level which determent enemy spawn rate
+   */
   constructor(modelLoader, viewDistance, difficulty = 1) {
     this.difficulty = difficulty;
     this.worldSize = WORLD_SIZE;
@@ -23,6 +32,9 @@ export class WorldGenFactory {
     this.__generateWorld();
   }
 
+  /**
+   * Creates a player instance and adds it to the EntityHandler.
+   */
   __spawnPlayer() {
     var innerWidth = document.getElementById('animateScene').offsetWidth;
     var innerHeight = window.innerHeight;
@@ -36,6 +48,9 @@ export class WorldGenFactory {
     this.entityHandler.addObject(this.entityHandler.objectSupplier.player(playerPosition, camera, light));
   }
 
+  /**
+   * Calculates world settings depending on the world size and difficulty setting
+   */
   __calculateWorldSettings() {
     this.enemyAmount = getRandomInt(
       3 * this.difficulty,          //calculation for low chance of enemy spawn
@@ -45,6 +60,7 @@ export class WorldGenFactory {
     this.enemyPerSection = Math.round(this.enemyAmount / (this.mapLength / this.viewDistance));
     this.enemyAmount = this.enemyPerSection*Math.round(this.mapLength / this.viewDistance);
   }
+
   checkLoadStatus(playerIndex) {
     var playerObject = this.entityHandler.getObject(playerIndex)
     if(playerObject == undefined) {
@@ -100,12 +116,24 @@ export class WorldGenFactory {
   }
 }
 
+/**
+ * Takes min and max values and randomly select a integer number between them
+ * @param {int} min 
+ * @param {int} max 
+ * @returns {int} random int
+ */
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
 
+/**
+ * Takes a min and a max number and return a number between min and max
+ * @param {Number} min 
+ * @param {Number} max 
+ * @returns {Number} random number
+ */
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }

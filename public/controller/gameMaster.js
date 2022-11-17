@@ -23,8 +23,13 @@ export class GameMaster {
     this.gameIsActive = true;
 
   }
-
   initGame(){
+    this.rightInfoScreen = new InfoScreenHandler("rightInfoScreen");
+    this.rightInfoScreen.addDivWithText("<h1>Backstory</h1>");
+    this.rightInfoScreen.addDivWithText("Hello stranger,");
+    this.rightInfoScreen.addDivWithText("apparently Tokrok has captured you too. Inside his ship are already stranded dozens of ships. But there is a way to escape. <h3>Destroy all of Tokrok's children and freedom will be yours.</h3>");
+    this.rightInfoScreen.addDivWithText("<h3>But be careful, they use transphasic torpedoes that can fly through backstops.</h3>");
+    this.rightInfoScreen.addDivWithText("Good luck!");
     this.leftInfoScreen = new InfoScreenHandler("leftInfoScreen");
     var title = this.leftInfoScreen.addDivWithText("<h1>Roffelson</h1>");
     var subtitle = this.leftInfoScreen.addDivWithText("<h1>The Space Warior</h1>");
@@ -83,6 +88,11 @@ export class GameMaster {
     }
     return false;
   }
+
+  /**
+   * 
+   * @param {event} event - Keyboard input event
+   */
   userInputHandler(event){
     try{
       if(this.worldGenFactory.entityHandler.objects.length > 0){

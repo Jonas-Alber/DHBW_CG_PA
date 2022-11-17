@@ -106,7 +106,12 @@ export class AiEntity extends Entity {
     super(model, hitbox, objectPosition, healthPoints);
     this.nextDecision = 0;
     this.decision = 0;
+    this.playerPosition = undefined;
 
+  }
+
+  setPlayerPosition(xPos, yPos, zPos){
+    this.playerPosition = {x: xPos, y: yPos, z: zPos};
   }
   makeDecision() {
     ;
@@ -115,9 +120,39 @@ export class AiEntity extends Entity {
     if (this.nextDecision <= 0) {
       this.nextDecision = getRandomInt(20, 61);
       this.decision = getRandomInt(1, 5);
+      this.doRandom = getRandomInt(1,3);
       doShoot = this.shootObject();
     } else {
       this.nextDecision -= 1;
+      if(this.playerPosition == undefined){
+        this.__getRandomDecision();
+      }
+      else{
+        this.__getDecision();
+      }
+    }
+    return { doShoot: doShoot };
+  }
+
+  __getDecision(){
+    if(this.doRandom == 1){
+      this.__getRandomDecision()
+    }
+    else{
+      if(this.model.position.x-this.playerPosition.x > 1){
+        this.moveLeft();
+      }else if(this.model.position.x-this.playerPosition.x < -1){
+        this.moveRight();
+      }
+      if(this.model.position.y-this.playerPosition.y > 1){
+        this.moveDown();
+      }else if(this.model.position.y-this.playerPosition.y < -1){
+        this.moveUp();
+      }
+    }
+  }
+
+  __getRandomDecision(){
       switch (this.decision) {
         case 1:
           this.moveRight();
@@ -130,8 +165,6 @@ export class AiEntity extends Entity {
         case 4:
           this.moveDown();
       }
-    }
-    return { doShoot: doShoot };
   }
 
 }
