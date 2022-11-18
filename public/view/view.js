@@ -1,10 +1,5 @@
-// AUTOR: Ralf Ehli
-
 import * as THREE from '/build/three.module.js'
-import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
 import { ObjectPosition } from '/model/helperClass.js';
-
-const hideHitBox = true;
 
 // ---- Initialisierung der Scene ----
 
@@ -17,14 +12,9 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 2000);
 camera.rotation.x = (-Math.PI / 2) + 0.7;
 
-//camera.position.y = Math.PI/2;
-//camera.rotation.x = Math.PI/2;
-
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(innerWidth, innerHeight);
 document.getElementById('animateScene').appendChild(renderer.domElement);
-
-var loader = new GLTFLoader();
 
 scene.background = new THREE.Color(0x222222);
 
@@ -37,11 +27,17 @@ scene.add(ambiantLight);
 
 /**
  * Render Function
+ * Reders the scene, must be called every frame
  */
 export function render() {
   renderer.render(scene, camera)
 }
 
+/**
+ * Adds a new AbientLight to the scene and returns it
+ * @param {*} lightColor - color of the light
+ * @returns {object} light
+ */
 export function getAmbientLight(lightColor){
   const light = new THREE.DirectionalLight( lightColor,0.5); // soft white light
   light.rotation.y = (Math.PI);
@@ -49,6 +45,10 @@ export function getAmbientLight(lightColor){
   return light;
 }
 
+/**
+ * Getter for the Camera
+ * @returns {object} camera
+ */
 export function getCamera() {
   return camera;
 }
@@ -77,31 +77,30 @@ export function addModel(gltf, objectPosition) {
   obj.rotation.y = objectPosition.rotation.y;
   obj.rotation.z = objectPosition.rotation.z;
 
-  /*
-  var knotBoxHelper  = new THREE.BoxHelper(obj);
-  if(!hideHitBox){
-    knotBoxHelper .material.color.set(0xff0000);
-    //knotBoxHelper .material.visible = false;
-    scene.add(knotBoxHelper);
-     // just for testing 
-  }
-  */
-
   hitbox = new THREE.Box3();  
   hitbox.setFromObject(obj);
   
   return { object: obj, hitbox: hitbox, objectPosition: objectPosition};
 }
 
-// ---- Collison Handler ----
-
+/**
+ * Recives a model and deletes it from the scene 
+ * @param {object} model - Model to be removed
+ */
 export function removeModel(model){
   scene.remove(model);
 }
 
+// ---- Collison Handler ----
+
+/**
+ * Recives two objects and tests if they intersect
+ * @param {object} obj1 - First object 
+ * @param {object} obj2 - Second object
+ * @returns {boolean} collision - True if objects intersect
+ */
 export function checkCollision(obj1, obj2){
   var collision = false
-
   try{
       if(obj1.hitbox.intersectsBox(obj2.hitbox)){
           collision = true
@@ -111,27 +110,27 @@ export function checkCollision(obj1, obj2){
   catch(error){
       console.log(error)
   }
-
-
   return collision;
 }
 
 
 // ---- Get Location ----  // in progress
 
-/*
-    Get the location of obj2 in relation to obj1
-    Z = up, -Z = down, X = right, -X = Left
-    return values:
-        0: error
-        1: up
-        2: up right
-        3: right
-        4: down right 
-        5: down 
-        6: down left
-        7: left
-        8: up left
+/** 
+ *  Get the location of obj2 in relation to obj1
+ *  Z = up, -Z = down, X = right, -X = Left
+ *  @param {object} obj1 - Base object 
+ *  @param {object} obj2 - Second object
+ *  @param {int} pos - Possion number with following meanings:
+ *      0: error
+ *      1: up
+ *      2: up right
+ *      3: right
+ *      4: down right 
+ *      5: down 
+ *      6: down left
+ *      7: left
+ *      8: up left
 */
 export function getObjectLocation(obj1, obj2){
   var pos = 0
