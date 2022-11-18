@@ -5,6 +5,11 @@ export class ModelLoader{
     this.loader = new GLTFLoader();
   }
 
+  /**
+   * Loads a model and stores it in the model buffer with the given name
+   * @param {string} modelName - name of the model
+   * @param {string} modelFileDirection - path to the model
+   */
   async loadModel(modelName, modelFileDirection){
     try{
       let object = await this.loader.loadAsync(modelFileDirection);
@@ -14,6 +19,10 @@ export class ModelLoader{
     }
   }
 
+  /**
+   * NOT IN USE AT THE MOMENT
+   * @param {*} modelList 
+   */
   async loadList(modelList){
     let promises  = [];
     for(let index in modelList){
@@ -22,6 +31,11 @@ export class ModelLoader{
     await Promise.all(promises);
   }
 
+  /**
+   * Get a model from the model buffer 
+   * @param {string} name - Name of the model
+   * @returns {object} returnValue - Model from the modelBuffer
+   */
   getModel(name){
     let returnValue;
     for(let index in this.modelBuffer){
