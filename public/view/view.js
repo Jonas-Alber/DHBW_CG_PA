@@ -1,5 +1,6 @@
 import * as THREE from '/build/three.module.js'
 import { ObjectPosition } from '/model/helperClass.js';
+//import {abs} from 'modules/mathjs/lib/browser/math.js' 
 
 // ---- Initialisierung der Scene ----
 
@@ -114,37 +115,51 @@ export function checkCollision(obj1, obj2){
 }
 
 
-// ---- Get Location ----  // in progress
+// ---- Get Location ----  
 
 /** 
  *  Get the location of obj2 in relation to obj1
  *  Z = up, -Z = down, X = right, -X = Left
  *  @param {object} obj1 - Base object 
  *  @param {object} obj2 - Second object
- *  @param {int} pos - Possion number with following meanings:
- *      0: error
- *      1: up
- *      2: up right
- *      3: right
- *      4: down right 
- *      5: down 
- *      6: down left
- *      7: left
- *      8: up left
+ *  @param {array} pos - Possion number 
 */
 export function getObjectLocation(obj1, obj2){
-  var pos = 0
+  var pos = []
   try{
       var xDif = obj1.model.position.x - obj2.model.position.x;
+      var yDif = obj1.model.position.y - obj2.model.position.y;
       var zDif = obj1.model.position.z - obj2.model.position.z;
+
+      var xOffset = Math.abs((obj1.hitbox.min.x - obj1.hitbox.max.x)/2)
+      var yOffset = Math.abs((obj1.hitbox.min.y - obj1.hitbox.max.y)/2)
+      var zOffset = Math.abs((obj1.hitbox.min.z - obj1.hitbox.max.z)/2)
       
-      console.log(xDif);
-      console.log(zDif);
+      if(Math.abs(xDif) < xOffset) 
+          pos.x = 0
+      else if(xDif > 0)
+          pos.x = 1
+      else if(xDif < 0)
+          pos.x = -1
 
+      if(Math.abs(yDif) < yOffset) 
+          pos.y = 0
+      else if(yDif > 0)
+          pos.y = 1
+      else if(yDif < 0)
+          pos.y = -1
 
+      if(Math.abs(zDif) < zOffset) 
+          pos.z = 0
+      else if(zDif > 0)
+          pos.z = 1
+      else if(zDif < 0)
+          pos.z = -1
+      
   }
   catch(error){
       console.log(error)
   }
+  console.log(pos)
   return pos
 }
