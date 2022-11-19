@@ -1,30 +1,46 @@
+/**
+ * @file WorldGen handle the generation of the world
+ * @Author Jonas Alber
+ * @Version 1.0.0
+ */
+
+/**Start of import zone */
 import { EntityHandler } from '/controller/entityHandler.js';
 import { ObjectPosition } from '/model/helperClass.js';
-import { CameraEntity } from '/model/cameraEntity.js';
-import { LightEntity} from '/model/lightEntity.js';
-import { addModel,render, getCamera, getAmbientLight} from '/view/view.js';
+import { LightEntity,CameraEntity } from '/model/specialEntitys.js';
+import {getCamera, getAmbientLight } from '/view/view.js';
+/**End of import zone */
 
+/**Start of constant definition zone */
 const STATIC_CAM = false;
 const ASTEROID_AMOUNT = 30;
 const ASTEROID_SPREAD = 70;
 const WORLD_SIZE = 25;
+/**End of constant definition zone */
+
 /**
- * 
+ * @file WorldGen handle the generation of the world
  */
-export class WorldGenFactory {
+export class WorldGen {
   /**
-   * 
    * @param {modelLoader} modelLoader - instance of class modelLoader, containing all 3D models
    * @param {int} viewDistance - number how far the camera can see
    * @param {int} difficulty - difficulty level which determent enemy spawn rate
    */
   constructor(modelLoader, viewDistance, difficulty = 1) {
+    //Set basic variables for world generation
     this.difficulty = difficulty;
     this.worldSize = WORLD_SIZE;
     this.viewDistance = viewDistance;
+
+    //Based on the previous set variables calculate the required settings
     this.__calculateWorldSettings();
-    this.entityHandler = new EntityHandler(modelLoader,this.mapLength);
-    console.log(this.mapLength);
+
+    //Create an instance of class EntityHandler to store the generated objects
+    this.entityHandler = new EntityHandler(modelLoader, this.mapLength);
+
+    //Spawn the first and second map section.
+    //Each map section have the length of the given viewDistance
     this.__spawnPlayer();
     this.playerRegion = 0;
     this.__generateWorld();
@@ -58,12 +74,12 @@ export class WorldGenFactory {
     );
     this.mapLength = 2 * this.viewDistance + (this.viewDistance * this.difficulty * 0.5);
     this.enemyPerSection = Math.round(this.enemyAmount / (this.mapLength / this.viewDistance));
-    this.enemyAmount = this.enemyPerSection*Math.round(this.mapLength / this.viewDistance);
+    this.enemyAmount = this.enemyPerSection * Math.round(this.mapLength / this.viewDistance);
   }
 
   checkLoadStatus(playerIndex) {
     var playerObject = this.entityHandler.getObject(playerIndex)
-    if(playerObject == undefined) {
+    if (playerObject == undefined) {
       return false;
     }
     var playerPosition = this.entityHandler.getObject(playerIndex).model.position.z;
@@ -75,11 +91,25 @@ export class WorldGenFactory {
     return true;
   }
 
+  isPlayerNearBorder(buffer) {
+    var playerIndex = this.entityHandler.objects.findIndex(this.entityHandler.checkIsPlayerEntity);
+    var player = this.entityHandler.getObject(playerIndex);
+    var maxXAmount = this.worldSize;
+    var playerX = player.model.position.x;
+    var playerY = player.model.position.y;
+    if (playerX > maxXAmount - buffer || playerX < -(maxXAmount - buffer)) {
+      return true;
+    } else if (playerY > maxXAmount - buffer || playerY < -(maxXAmount - buffer)) {
+      return true;
+    }
+    return false;
+  }
+
   __generateWorld() {
-    if(this.playerRegion*this.viewDistance >= -(this.mapLength-this.viewDistance)){
+    if (this.playerRegion * this.viewDistance >= -(this.mapLength - this.viewDistance)) {
       console.log("made")
       this.__spawnAsteroids(this.playerRegion);
-    this.__spawnEnemy(this.playerRegion);
+      this.__spawnEnemy(this.playerRegion);
     }
   }
 
@@ -88,7 +118,7 @@ export class WorldGenFactory {
     for (let i = 0; i < ASTEROID_AMOUNT; i++) {
       objectPosition.position.x = getRandomInt(-ASTEROID_SPREAD, ASTEROID_SPREAD);
       objectPosition.position.y = getRandomInt(-ASTEROID_SPREAD, ASTEROID_SPREAD);
-      objectPosition.position.z = getRandomInt(-(this.viewDistance*(playerRegion+1)), -10-((this.viewDistance*playerRegion)));
+      objectPosition.position.z = getRandomInt(-(this.viewDistance * (playerRegion + 1)), -10 - ((this.viewDistance * playerRegion)));
       objectPosition.sizeFactor = getRandomArbitrary(0.01, 0.05);
       objectPosition.rotation.x = Math.random() * Math.PI * 2;
       objectPosition.rotation.y = Math.random() * Math.PI * 2;
@@ -97,19 +127,19 @@ export class WorldGenFactory {
     }
   }
 
-  __spawnEnemy(playerRegion){   
+  __spawnEnemy(playerRegion) {
     let objectPosition = new ObjectPosition();
     var zPosition = 0;
     for (let i = 0; i < this.enemyPerSection; i++) {
       console.log("Spawn Enemy")
       objectPosition.position.x = getRandomInt(-WORLD_SIZE, WORLD_SIZE);
       objectPosition.position.y = getRandomInt(-WORLD_SIZE, WORLD_SIZE);
-      zPosition = getRandomInt(-(this.viewDistance*(playerRegion+1)), -30-((this.viewDistance*playerRegion)));
-      if(zPosition >= this.mapLength) {
-        zPosition = this.mapLength -10;
+      zPosition = getRandomInt(-(this.viewDistance * (playerRegion + 1)), -30 - ((this.viewDistance * playerRegion)));
+      if (zPosition >= this.mapLength) {
+        zPosition = this.mapLength - 10;
       }
       objectPosition.position.z = zPosition;
-      objectPosition.rotation.y = Math.PI + Math.PI/2;
+      objectPosition.rotation.y = Math.PI + Math.PI / 2;
       objectPosition.sizeFactor = 0.02;
       this.entityHandler.addObject(this.entityHandler.objectSupplier.enemy(objectPosition));
     }

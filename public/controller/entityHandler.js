@@ -1,14 +1,21 @@
-/*
-* Author: Jonas Alber
-*/
+/**
+ * @file Manage all instances of the class Object and its inherited classes
+ * @Author Jonas Alber
+ * @Version 1.0.0
+ */
+
+/**Start of import zone */
 import { Object } from '/model/object.js';
 import { Entity } from '/model/entity.js';
-import { PlayerEntity, ProjectileEntity, AiEntity } from '/model/specialEntitys.js';
-import { Object3D } from 'three';
+import { PlayerEntity, ProjectileEntity, AiEntity } from '/model/movingEntitys.js';
 import { ObjectPosition } from '/model/helperClass.js';
 import { ObjectSupplier } from '/controller/objectSupplier.js'
-import { checkCollision, removeModel, getAmbientLight } from '/view/view.js';
-import { LightEntity } from '/model/lightEntity.js';
+import { checkCollision, removeModel} from '/view/view.js';
+/**End of import zone */
+
+/**
+ * @file Manage all instances of the class Object and its inherited classes
+ */
 export class EntityHandler {
   /**
    * Initializes the EntityHandler and the ObjectSupplier
@@ -16,50 +23,70 @@ export class EntityHandler {
    * @param {int} maxWorldSize - Z Coordinate size of the world
    */
   constructor(modelLoader, maxWorldSize = 400) {
-    this.objects = [];
-    this.entities = [];
-    this.objectSupplier = new ObjectSupplier(modelLoader);
+    //Set required variables
     this.maxWorldSize = maxWorldSize;
     this.destroyedEnemies = 0;
+    //Initialize the arrays for the Objects and the Entitys
+    this.objects = [];
+    this.entities = [];
+    //Create an instance of the Object Supplier Class
+    this.objectSupplier = new ObjectSupplier(modelLoader);
   }
 
   /**
-   * Takes a instance of Class Object or ChildClasses and stores into the internal buffers
+   * Takes a instance of Class Object or ChildClasses and stores it into the internal buffers
    * @param {Object} entity Instance of Class Object or ChildClasses
-   * @returns {int} index of the stored object
+   * @returns {int} index of the stored element inside the objects array
    */
-  addObject(entity) {
-    if (entity instanceof Object || entity instanceof Entity || entity instanceof PlayerEntity) {
-      this.objects.push(entity);
-    }
-    else {
-      //console.log("Given Element is not a Object");
-      //console.log(entity);
-    }
+  addObject(element) {
+    //Check if the Element fits the requirements
+    if (element instanceof Object || element instanceof Entity || element instanceof PlayerEntity) {
+      //If it is an instance of Object or its inherited the element is stored into  the objects array
+      this.objects.push(element);
 
-    if (entity instanceof Entity || entity instanceof PlayerEntity) {
-      this.entities.push(entity);
+      //If it is an instance of Object or its inherited the element is stored into  the objects array
+      if (element instanceof Entity || element instanceof PlayerEntity) {
+        //If it fits the requirements the instance is also added to the entities array
+        this.entities.push(element);
+      }
     }
-    return this.getObjectIndex(entity);
+    //Return the index of the element inside the objects array
+    return this.getObjectIndex(element);
   }
 
   /**
-   * Takes the object instance and returns the related object index
-   * @param {*} object 
-   * @returns 
+   * Takes the Object instance and returns the related object index
+   * @param {Object} object - instance of Class Object or its inherited
+   * @returns {int} index of the element inside the objects array
    */
   getObjectIndex(object) {
     return this.objects.indexOf(object);
   }
 
+  /**
+   * Takes the Entity instance and returns the related entity index
+   * @param {Entity} object - instance of Class Entity or its inherited
+   * @returns {int} index of the element inside the entitys array
+   */
   getEntityIndex(entity) {
     return this.entities.indexOf(entity);
   }
 
+  /**
+   * Takes an index and returns the related object from the objects array
+   * @param {int} index - index of the desired element
+   * @returns {Object} - returns the related object
+   */
   getObject(index) {
     return this.objects[index];
   }
 
+  /**
+   * Call over all objects and check there status
+   * Check if they have a collision ore been destroyed
+   * If not, there makeDecision Function is called for the next movement
+   */
+  //TODO: ADD Collision Handling and refactor the function
   moveObjects() {
     if (this.entities.length > 0 && this.objects.length > 0) {
       var objectIndex;
@@ -134,26 +161,45 @@ export class EntityHandler {
     }
   }
 
+  /**
+   * @param {index} index index of the object which should be removed
+   */
   removeObject(index) {
+    //Check if the object is an instance of the Entity class
     if (this.objects[index] instanceof Entity) {
+      //Check if the object is an instance of the AiEntity class
       if (this.objects[index] instanceof AiEntity) {
+        //If it is, count the destroyedEnemies counter up
         this.destroyedEnemies += 1;
       }
+      //Remove the entity from the Entities Array
       this.entities.splice(this.entities.indexOf(this.objects[index]), 1);
+
+      //Check if the entity have SubElements
       if (this.objects[index].haveSubElemet()) {
+        //If it have SubElements,loop over them and remove them from the view
         for (var element in this.objects[index].subElements) {
           removeModel(this.objects[index].subElements[element].model);
         }
       }
     }
+    //Remove the object from the view
     removeModel(this.objects[index].model);
+    //Remove the object from the objects Array
     this.objects.splice(index, 1);
   }
 
+  /**
+   * @param {Object} entity - Object for which it is to be checked whether it is a player object.
+   * @returns {Boolean} - returns if it is a player object or not
+   */
   checkIsPlayerEntity(entity) {
     return entity instanceof PlayerEntity;
   }
 
+  /**
+   * @returns {int} - returns the index of the player object within the object array
+   */
   getPlayerEntityIndex() {
     return this.objects.findIndex(this.checkIsPlayerEntity);
   }

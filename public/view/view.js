@@ -1,6 +1,13 @@
+/**
+ * @file View Handler
+ * @Author Ralf Ehli
+ * @Version 1.0.0
+ */
+
+/**Start of import zone */
 import * as THREE from '/build/three.module.js'
 import { ObjectPosition } from '/model/helperClass.js';
-//import {abs} from 'modules/mathjs/lib/browser/math.js' 
+/**End of import zone */
 
 // ---- Initialisierung der Scene ----
 
