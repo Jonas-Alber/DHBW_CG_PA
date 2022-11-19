@@ -160,6 +160,6 @@ export function getObjectLocation(obj1, obj2){
   catch(error){
       console.log(error)
   }
-  console.log(pos)
+  //console.log(pos)
   return pos
 }
