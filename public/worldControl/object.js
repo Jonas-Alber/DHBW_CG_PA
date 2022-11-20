@@ -19,6 +19,7 @@ export class Object {
 
     /**
     * Sets the healthpoints of the object
+    * @param {int} healthpoints -number of healthpoints a object e.g. player, enemy,... has
     */
     setHP(healthPoints) {
         this.healthpoints = healthPoints;

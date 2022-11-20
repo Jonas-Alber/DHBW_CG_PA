@@ -1,3 +1,11 @@
+/**
+ * @Author Marvin Franke
+ * @Version 1.0.0
+ */
+
+/**
+  *This Class helps other objects to correct their velocity, positioning etc.
+  */
 export class ObjectPosition{
   constructor(){
     this.position = {x:0,y:0,z:20};
@@ -10,12 +18,25 @@ export class ObjectPosition{
   }
 }
 
+ /**
+    * Creates a random integer for the Ai Entity between min and max
+    * @param {number} min -minimum number of the integer that will be returned
+    * @param {number} max -maximum number of the integer that will be returned
+    * @returns {int} -random integer to be returned
+    */
 export function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
 
+
+/**
+    * Creates a random integer for the Ai Entity between min and max
+    * @param {number} min -minimum number of the integer that will be returned
+    * @param {number} max -maximum number of the integer that will be returned
+    * @returns {int} -random integer to be returned
+    */
 export function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }

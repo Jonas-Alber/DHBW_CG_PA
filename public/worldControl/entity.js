@@ -3,9 +3,8 @@
  * @Version 1.0.0
  */
 
-
 /**Start of import zone */
-import { CompressedTextureLoader } from 'three';
+import { Box3, CompressedTextureLoader } from 'three';
 import { Object } from '/model/object.js'
 /**End of import zone */
 
@@ -20,18 +19,9 @@ export class Entity extends Object {
     /**
     * @param {int} healthPoints -number of healthpoints a object e.g. player, enemy,... has
     * @param {Object} model -three.js model 
-    * @param {Object} hitbox -three.js hitbox
+    * @param {Box3} hitbox -three.js hitbox
     * @param {int} objectPosition - coordinates where the object is
     * @param {boolean} doSpeedDown -entity will decrease speed or not
-    * @param {number} xSpeed -sets the velocity in x-direction
-    * @param {number} ySpeed -sets the velocity in y-direction
-    * @param {number} zSpeed -sets the velocity in z-direction
-    * @param {number} haveShoot
-    * @param {number} speedCap
-    * @param {number} speedFactor
-    * @param {number} shootCap
-    * @param {int} maxPosition
-    * @param {Array} subElements
    */
 
     constructor(model, hitbox, objectPosition, healthPoints = 1, doSpeedDown = true) {
@@ -52,6 +42,7 @@ export class Entity extends Object {
 
     /**
     * Adds an sublement
+    * @param {Array} subElement -
     */
     addSubElement(subElement) {
         this.subElements.push(subElement);
@@ -59,6 +50,8 @@ export class Entity extends Object {
 
     /**
     * Tests, if sublement exists
+    * @param {string} sublement -equals one subElement
+    * @returns {number} -greater than 0, if subElement exists
     */
     haveSubElemet(sublement) {
         return this.subElements.length > 0;
@@ -87,12 +80,19 @@ export class Entity extends Object {
 
     /**
     * Sets the x and z-Position of the model
+    * @param {number} xPos -number representing the x-Coordinate
+    * @param {number} zPos -number representing the z-Coordinate
     */
     setPosition(xPos, zPos) {
         this.model.position.x = xPos;
         this.model.position.z = zPos;
     }
 
+    /**
+    * Regulates movement and ability to shoot projectiles
+    * @param {Object} canMove -list of booleans declaring, 
+    * whether entity can move or not in specific direction
+    */
     makeDecision(canMove) {
         this.moveObject(canMove);
         if (this.doSpeedDown) {
@@ -104,7 +104,7 @@ export class Entity extends Object {
     }
 
     /**
-    * Speeds the entity realistically down with physical acceleration
+    * Speeds the entity realistically down considering physical acceleration
     */
     speedDown() {
         //Check, if velocity in x-Direction is negative
@@ -184,6 +184,7 @@ export class Entity extends Object {
 
     /**
     * Tests, whether object is shootable or not
+    * @returns {boolean} -true, if no ammo left
     */
     shootObject() {
         //Checks, whether there is ammo available
@@ -204,7 +205,14 @@ export class Entity extends Object {
         this.model.rotation.x = Math.PI / (10 * this.speedCap) * this.zSpeed;
     }
 
+
+     /**
+    * Move the entity in the area where it is supposed to fly
+    * @param {Object} canMove -list of booleans declaring, 
+    * whether entity can move or not in specific direction
+    */
     moveObject(canMove) {
+        //Check, if entity tries to leave allowed flight area
       if((!canMove.left && this.xSpeed < 0)|| (!canMove.right && this.xSpeed > 0)) this.xSpeed = 0;
       if((!canMove.down && this.ySpeed < 0)|| (!canMove.up && this.ySpeed > 0)) this.ySpeed = 0;
       if((!canMove.forward && this.zSpeed < 0)|| (!canMove.backward && this.zSpeed > 0)) this.zSpeed = 0;
@@ -266,6 +274,7 @@ export class Entity extends Object {
 
     /**
     * Adjust position in x-direction
+    * @param {number} amountX -Adjust the x position
     */
     adjustXPosition(amountX) {
         this.model.position.x += amountX;
@@ -273,16 +282,9 @@ export class Entity extends Object {
 
     /**
     * Adjust position in y-direction
+    * @param {number} amount> -Adjust the y position
     */
     adjustYPosition(amountY) {
         this.model.position.y += amountY;
     }
-
-
-    adjustRotation(degreeAdjustment) {
-       
-        //Adjust rotation of entity
-        //Entity.rotation = rotation + degreeAdjustment;
-    }
-
 }
