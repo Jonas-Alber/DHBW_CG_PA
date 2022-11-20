@@ -1,4 +1,16 @@
+/**
+ * @file File Provides Functions to access the html functions
+ * @Author Jonas Alber
+ * @Version 1.0.0
+ */
+
+/**Start of import zone */
 import { InfoScreenHandler } from '/view/infoScreen.js'
+/**End of import zone */
+
+/**
+ *  Load the static data into the right Info screen
+ */
 export function loadRightInfoScreen() {
   var rightInfoScreen = new InfoScreenHandler("rightInfoScreen");
   rightInfoScreen.addDivWithText("<h1>Backstory</h1>");
@@ -9,7 +21,13 @@ export function loadRightInfoScreen() {
   return rightInfoScreen;
 }
 
+/**
+ * Load the static data into the left Info screen
+ */
 export class LeftInfoScreenLoader {
+  /**
+  * Load the static data into the left Info screen
+  */
   constructor() {
     this.leftInfoScreen = new InfoScreenHandler("leftInfoScreen");
     this.leftInfoScreen.addDivWithText("<h1>Roffelson</h1>");
@@ -25,13 +43,21 @@ export class LeftInfoScreenLoader {
     );
     this.enemyCount = this.leftInfoScreen.addDivWithText("");
   }
-
+  /**
+   * Update the Enemy information section 
+   * @param {int} activeEnemies - amount ov enemies alive
+   * @param {int} everyEnemies - amount of all spawned enemies
+   */
   setEnemyStatus(activeEnemies, everyEnemies) {
     var text = `<h3>Remaining Enemies <a>${activeEnemies}</a> out of <a>${everyEnemies}</a></h3>`
     this.leftInfoScreen.setInnerHTML(this.enemyCount, text);
   }
 }
 
+/**
+ * Switch the Warning Screen which tells the player if he is near a border
+ * @param {Boolean} visibility false = invisible, true = visible
+ */
 export function setWarningVisibility(visibility) {
   if (visibility) {
     document.getElementById('warningScreen').style.display = 'block';
@@ -40,6 +66,10 @@ export function setWarningVisibility(visibility) {
   }
 }
 
+/**
+ * Show the end screen with win or loose information
+ * @param {Boolean} playerIsAlive false = dead, true = alive
+ */
 export function showGameEnd(playerIsAlive) {
   document.getElementById('endScreen').style.display = 'block';
   if (!playerIsAlive) {
@@ -50,6 +80,9 @@ export function showGameEnd(playerIsAlive) {
   }
 }
 
+/**
+ * Switch from the loadingScreen to the game Screen
+ */
 export function showGame() {
   document.getElementById('controler').style.display = 'grid';
   document.getElementById('loadingScreen').style.display = 'none';

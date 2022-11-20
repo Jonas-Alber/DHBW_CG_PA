@@ -16,11 +16,6 @@ const speedReduceFactor = speedMultiplier / 2;
 const speedCap = 10;
 const speedFactor = 0.07;
 const shootCap = 15;
-const LeftRightCap = 25;
-/**End of constant definition zone */
-
-
-
 export class Entity extends Object {
     /**
     * @param {int} healthPoints -number of healthpoints a object e.g. player, enemy,... has
@@ -52,7 +47,6 @@ export class Entity extends Object {
         this.speedCap = speedCap;
         this.speedFactor = speedFactor;
         this.shootCap = shootCap;
-        this.maxPosition = { x: LeftRightCap, y: LeftRightCap, z: 0 };
         this.subElements = [];
     }
 
@@ -99,12 +93,8 @@ export class Entity extends Object {
         this.model.position.z = zPos;
     }
 
-    /**
-    * Handles the decisions (movement and shooting) of an entity 
-    */
-    makeDecision() {
-
-        this.moveObject();
+    makeDecision(canMove) {
+        this.moveObject(canMove);
         if (this.doSpeedDown) {
             this.speedDown();
         }
@@ -214,12 +204,10 @@ export class Entity extends Object {
         this.model.rotation.x = Math.PI / (10 * this.speedCap) * this.zSpeed;
     }
 
-
-    /**
-    * Moves the entity in a realistic way
-    */
-    moveObject() {
-        //Adjusts the model position with speedfactor and velocity in each direction
+    moveObject(canMove) {
+      if((!canMove.left && this.xSpeed < 0)|| (!canMove.right && this.xSpeed > 0)) this.xSpeed = 0;
+      if((!canMove.down && this.ySpeed < 0)|| (!canMove.up && this.ySpeed > 0)) this.ySpeed = 0;
+      if((!canMove.forward && this.zSpeed < 0)|| (!canMove.backward && this.zSpeed > 0)) this.zSpeed = 0;
         this.model.position.z += this.speedFactor * this.zSpeed;
         this.model.position.y += this.speedFactor * this.ySpeed;
         this.model.position.x += this.speedFactor * this.xSpeed;
@@ -233,20 +221,6 @@ export class Entity extends Object {
                 this.subElements[element].setZPos(this.model.position.z);
             }
         }
-        /*if(this.model.position.x < this.maxPosition.x && this.model.position.x > -this.maxPosition.x){
-            
-        }
-        else if(this.model.position.x >= this.maxPosition.x){
-            if(this.speedFactor * this.xSpeed<0){
-                this.model.position.x += this.speedFactor * this.xSpeed;
-            }
-        }else if(this.model.position.x <= -this.maxPosition.x){
-            if(this.speedFactor * this.xSpeed>0){
-                this.model.position.x += this.speedFactor * this.xSpeed;
-            }
-        }else{
-            console.log("error")
-        }*/
         this.hitbox.setFromObject(this.model);
     }
 
@@ -255,33 +229,37 @@ export class Entity extends Object {
     * vary the velocity in each direction realistically of the entity
     */
     moveForward() {
-        if (-this.zSpeed < this.speedCap) this.zSpeed -= speedMultiplier;
+      if (-this.zSpeed < this.speedCap) {
+        this.zSpeed -= speedMultiplier;
+      }
     }
 
     moveBackward() {
-        if (this.zSpeed < this.speedCap) this.zSpeed += speedMultiplier;
+      if (this.zSpeed < this.speedCap) {
+        this.zSpeed += speedMultiplier;
+      }
     }
 
     moveLeft() {
-        if (-this.xSpeed < this.speedCap && this.model.position.x > -this.maxPosition.x) {
+        if (-this.xSpeed < this.speedCap && this.model.position.x > this.objectPosition.minPosition.x) {
             this.xSpeed -= speedMultiplier;
         }
     }
 
     moveRight() {
-        if (this.xSpeed < this.speedCap && this.model.position.x < this.maxPosition.x) {
+        if (this.xSpeed < this.speedCap && this.model.position.x < this.objectPosition.maxPosition.x) {
             this.xSpeed += speedMultiplier;
         }
     }
 
     moveUp() {
-        if (this.ySpeed < this.speedCap && this.model.position.y < this.maxPosition.y) {
+        if (this.ySpeed < this.speedCap && this.model.position.y < this.objectPosition.maxPosition.y) {
             this.ySpeed += speedMultiplier;
         }
     }
 
     moveDown() {
-        if (-this.ySpeed < this.speedCap && this.model.position.y > -this.maxPosition.y) {
+        if (-this.ySpeed < this.speedCap && this.model.position.y > this.objectPosition.minPosition.y) {
             this.ySpeed -= speedMultiplier;
         }
     }
