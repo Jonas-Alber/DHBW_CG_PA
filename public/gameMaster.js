@@ -39,6 +39,7 @@ await modelLoader.loadModel('asteroid1', '3Dmodels/asteroid.glb');
 await modelLoader.loadModel('player', '3Dmodels/spaceship.glb');
 await modelLoader.loadModel('projectile', '3Dmodels/projectile-magma-ball.glb');
 await modelLoader.loadModel('enemy', '3Dmodels/enemy-red.glb');
+await modelLoader.loadModel('background', '3Dmodels/enemy-red.glb');
 /** End of Load 3D Model zone */
 
 // One-liner to resume playback when user interacted with the page.
