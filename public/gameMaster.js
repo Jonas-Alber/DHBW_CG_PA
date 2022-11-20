@@ -6,9 +6,10 @@
 
 /**Start of import zone */
 import { ModelLoader } from '/view/modelLoader.js';
-import { LeftInfoScreenLoader, loadRightInfoScreen, setWarningVisibility, showGameEnd, showGame } from '/view/htmlHandler.js';
+import { AudioLoader } from '/view/audioLoader.js';
+import {hideStartScreen, LeftInfoScreenLoader, loadRightInfoScreen, setWarningVisibility, showGameEnd, showGame } from '/view/htmlHandler.js';
 import { WorldGen } from '/controller/worldGen.js'
-import { render } from '/view/view.js';
+import { render,getListener } from '/view/view.js';
 /**End of import zone */
 
 /**Start of constant definition zone */
@@ -26,27 +27,65 @@ let leftInfoScreen;
 /**Start of defined variable zone */
 var activeControlButton = [];
 var modelLoader = new ModelLoader();
+var audioLoader = new AudioLoader(getListener());
 var playerIsAlive = true;
+var playAudio = true;
 /**End of defined variable zone */
 
 /** Start of Load 3D Model zone */
 await modelLoader.loadModel('asteroid1', '3Dmodels/asteroid.glb');
-await modelLoader.loadModel('asteroid2', '3Dmodels/asteroid2.glb');
-await modelLoader.loadModel('asteroid3', '3Dmodels/asteroid3.glb');
+//await modelLoader.loadModel('asteroid2', '3Dmodels/asteroid2.glb');
+//await modelLoader.loadModel('asteroid3', '3Dmodels/asteroid3.glb');
 await modelLoader.loadModel('player', '3Dmodels/spaceship.glb');
-await modelLoader.loadModel('projectile', '3Dmodels/asteroid3.glb');
+await modelLoader.loadModel('projectile', '3Dmodels/projectile-magma-ball.glb');
 await modelLoader.loadModel('enemy', '3Dmodels/enemy-red.glb');
+await modelLoader.loadModel('background', '3Dmodels/enemy-red.glb');
 /** End of Load 3D Model zone */
 
-//Start Game after loading all 3D model
-startGame();
+// One-liner to resume playback when user interacted with the page.
+document.getElementById("startGameButton").addEventListener('click', function() {
+  var context = new AudioContext();
+  context.resume().then(() => {
+    console.log('Playback resumed successfully');
+    audioLoader.playAudio(bgAudioIndex);
+    hideStartScreen(true);
+    startGame();
+    document.getElementById('soundOff').style.display = 'block';
+  });
+});
 
+// One-liner to resume playback when user interacted with the page.
+document.getElementById("soundOn").addEventListener('click', function() {
+  playAudio =  true;
+  document.getElementById('soundOn').style.display = 'none';
+  document.getElementById('soundOff').style.display = 'block';
+  audioLoader.playAudio(bgAudioIndex);
+});
+
+// One-liner to resume playback when user interacted with the page.
+document.getElementById("soundOff").addEventListener('click', function() {
+  playAudio =  false;
+  document.getElementById('soundOff').style.display = 'none';
+  document.getElementById('soundOn').style.display = 'block';
+  audioLoader.stopAudio(bgAudioIndex);
+});
+
+
+
+var bgAudioIndex = await audioLoader.loadAudio('background', 'sound/background.mp3');
+var winAudioIndex = await audioLoader.loadAudio('win', 'sound/winSound.mp3');
+var looseAudioIndex = await audioLoader.loadAudio('loose', 'sound/looseSound.mp3');
+//Start Game after loading all 3D model
+initGame();
+function startGame(){
+  timeHandler = setInterval(function () { task30ms(); }, 1000 / setFPS);
+}
 
 /**
  * Initializes the game and all necessary class instances
  * After initialization, it starts the game
  */
-function startGame() {
+function initGame() {
   //Initialize the WorldGen and transfers the loaded 3D models
   worldGen = new WorldGen(modelLoader, 130, 1);
 
@@ -64,8 +103,6 @@ function startGame() {
 
   if (autoHideLoadingScreen) {
     //Start the Rendering Process via call task30ms 
-    timeHandler = setInterval(function () { task30ms(); }, 1000 / setFPS);
-
     //Switch to the gameScreen
     showGame();
   }
@@ -73,7 +110,6 @@ function startGame() {
     document.addEventListener("keydown", function (event) {
       if (event.key == "l") {
         //Start the Rendering Process via call task30ms 
-        timeHandler = setInterval(function () { task30ms(); }, 1000 / setFPS);
         //Switch to the gameScreen
         showGame();
       }
@@ -119,6 +155,13 @@ function task30ms() {
 function stopGame() {
   //Show end screen
   showGameEnd(playerIsAlive);
+  audioLoader.stopAudio(bgAudioIndex);
+  if(playerIsAlive && playAudio){
+    audioLoader.stopAudio(winAudioIndex);
+  }
+  else if(playAudio){
+    audioLoader.playAudio(looseAudioIndex);
+  }
 
   //Clear task30ms interval
   clearInterval(timeHandler);

@@ -9,6 +9,8 @@ import * as THREE from '/build/three.module.js'
 import { ObjectPosition } from '/model/helperClass.js';
 /**End of import zone */
 
+const USE_AUDIO = true;
+
 // ---- Initialisierung der Scene ----
 
 var innerWidth = window.innerWidth*(3/5);
@@ -19,6 +21,9 @@ const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 2000);
 camera.rotation.x = (-Math.PI / 2) + 0.7;
+
+const listener = new THREE.AudioListener();
+camera.add(listener);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(innerWidth, innerHeight);
@@ -65,6 +70,14 @@ export function getAmbientLight(lightColor){
  */
 export function getCamera() {
   return camera;
+}
+
+/**
+ * Getter for the Listener
+ * @returns {listener} listener
+ */
+ export function getListener() {
+  return listener;
 }
 
 /**

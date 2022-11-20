@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Three.js Tutorials by Sean Bradley : https://sbcode.net/threejs/</title> <!-- Müsste hier nicht ein anderer Titel stehen? ^^ -->
+        <title>Roffelson - The Space Warior</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script src="https://kit.fontawesome.com/3280cc807a.js" crossorigin="anonymous"></script>
         <style>
@@ -39,6 +39,10 @@
             <h2 id="endScreenType">An error accured!</h2>
             <button onclick="location.reload();"><h1>Press to start a new Game!</h1></button>
         </div>
+        <div id="startScreen" class="endScreen">
+            <h1>Game is ready</h1>
+            <button id="startGameButton"><h1>Press to start the Game!</h1></button>
+        </div>
         <video autoplay  muted loop id="backgroundVideo">
             <source src="/public/img/loadingVideo.mp4" type="video/mp4">
         </video>
@@ -54,14 +58,6 @@
         <div id="controler"class="controler">
             <div class="grid-item">
                 <div id="leftInfoScreen"></div>
-                <div class="controlGrid">
-                    <div></div>
-                    <button id="controlMoveUp" class="controlButton"><i class='fa-solid fa-arrow-up'></i></button>
-                    <button id="controlShoot" class="controlButton"><i class="fa-solid fa-meteor"></i></button>
-                    <button id="controlMoveLeft" class="controlButton"><i class='fa-solid fa-arrow-left'></i></button>
-                    <button id="controlMoveDown" class="controlButton"><i class='fa-solid fa-arrow-down'></i></button>
-                    <button id="controlMoveRight" class="controlButton"><i class='fa-solid fa-arrow-right'></i></button>
-                </div>
             </div>
 
             <div class="grid-item" id="animateScene">
@@ -70,9 +66,14 @@
 
             <div class="grid-item">
                 <div id="rightInfoScreen"></div>
+                <div id="soundOn" class="controlButton">
+                    <button><i class="fa-solid fa-volume-high"></i></button>
+                </div>
+                <div id="soundOff" class="controlButton">
+                    <button><i class="fa-solid fa-volume-xmark"></i></button>
+                </div>
             </div>
         </div>
     </body>
     <script type="module" src="/public/gameMaster.js"></script>
-    <!--<script type="module" src="client.js"></script>-->
 </html>

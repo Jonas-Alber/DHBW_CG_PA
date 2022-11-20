@@ -43,7 +43,7 @@ export class WorldGen {
 
     //Spawn the first and second map section.
     //Each map section have the length of the given viewDistance
-    loadGameBackground(modelLoader.getModel('enemy'),  this.mapLength);
+    loadGameBackground(modelLoader.getModel('background'),  this.mapLength);
     this.__spawnPlayer();
     this.playerRegion = 0;
     this.__generateWorld();
