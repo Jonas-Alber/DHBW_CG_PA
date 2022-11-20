@@ -1,3 +1,9 @@
+/**
+ * @file Model Loder
+ * @Author Ralf Ehli
+ * @Version 1.0.0
+ */
+
 import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
 export class ModelLoader{
   constructor(){
