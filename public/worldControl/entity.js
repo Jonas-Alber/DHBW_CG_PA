@@ -59,6 +59,7 @@ export class Entity extends Object {
 
     /**
     * Retrieves the x-Position of the model
+    * @return {number} - x-position
     */
     getXPos() {
         return this.model.position.x;
@@ -66,6 +67,7 @@ export class Entity extends Object {
 
     /**
     * Retrieves the y-Position of the model
+    * @return {number} - y-position
     */
     getYPos() { 
         return this.model.position.y;
@@ -73,6 +75,7 @@ export class Entity extends Object {
 
     /**
     * Retrieves the z-Position of the model
+    * @return {number} - z-position
     */
     getZPos() {
         return this.model.position.z;

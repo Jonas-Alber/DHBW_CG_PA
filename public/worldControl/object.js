@@ -27,6 +27,7 @@ export class Object {
 
     /**
     * Retrieves the healthpoints of the object
+    * @return {number} -healthpoints
     */
     getHP() {
         return this.healthPoints;
@@ -34,6 +35,7 @@ export class Object {
 
     /**
     * Retrieves the hitbox of the object
+    * @return {Object} -hitbox object
     */
     getHitbox(){
         return this.hitbox;
@@ -41,6 +43,7 @@ export class Object {
 
     /**
     * Retrieves the x-position of the object
+    * @return {number} -x-position
     */
     getXPos(){
         return this.model.position.x;
@@ -48,6 +51,7 @@ export class Object {
 
     /**
     * Retrieves the y-position of the object
+    * @return {number} - y-position
     */
     getYPos(){
         return this.model.position.y;
@@ -55,6 +59,7 @@ export class Object {
 
     /**
     * Retrieves the z-position of the object
+    * @return {number} - z-position
     */
     getZPos(){
         return this.model.position.z;
