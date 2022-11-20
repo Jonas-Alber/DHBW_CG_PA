@@ -10,7 +10,7 @@ import { Entity } from '/model/entity.js';
 import { PlayerEntity, ProjectileEntity, AiEntity } from '/model/movingEntitys.js';
 import { ObjectPosition } from '/model/helperClass.js';
 import { ObjectSupplier } from '/controller/objectSupplier.js'
-import { checkCollision, removeModel} from '/view/view.js';
+import { checkCollision, removeModel, getObjectLocation } from '/view/view.js';
 /**End of import zone */
 
 /**
@@ -86,79 +86,132 @@ export class EntityHandler {
    * Check if they have a collision ore been destroyed
    * If not, there makeDecision Function is called for the next movement
    */
-  //TODO: ADD Collision Handling and refactor the function
   moveObjects() {
+    //Check if the entitie and the objects array containing elements
     if (this.entities.length > 0 && this.objects.length > 0) {
       var objectIndex;
-      let doShoot;
-      var colStorage = { hasCol: false, object: undefined };
+      //Loop over all Entities inside the entities array
       for (var entityIndex in this.entities) {
+        var canMove = { up: true, down: true, left: true, right: true, forward: true, backward: true };;
         try {
+          //Get the active entity
           var element = this.entities[entityIndex];
           objectIndex = this.objects.indexOf(element);
+          //compare the entity with all objects and check if there is a collision
           for (var index in this.objects) {
-            if (objectIndex != index) {
-              if (checkCollision(element, this.objects[index])) {
-                //if (false){
-                colStorage = { hasCol: true, object: index };
+            if (objectIndex != index && checkCollision(element, this.objects[index])) {
+              //If the objects collide, check if they have to be destroyed
+              if (this.__collisionHandler(element, index)) {
+                //If they are destroyed, leave the loop
                 break;
               }
-            }
-
-          }
-          if (colStorage.hasCol) {
-            if (element instanceof ProjectileEntity) {
-              if (this.objects[colStorage.object].constructor === element.parentType.constructor) {
-              } else {
-                if (this.objects[colStorage.object] instanceof AiEntity || this.objects[colStorage.object] instanceof PlayerEntity || this.objects[colStorage.object] instanceof ProjectileEntity) {
-                  this.removeObject(this.getObjectIndex(element));
-                  this.removeObject(colStorage.object);
+              else {
+                //If the objects are not destroyed check if the element is not a projectile
+                if (!(element instanceof ProjectileEntity)) {
+                  //Get the location of the collision and deactivate movement in that direction
+                  var collisionPosition = getObjectLocation(element, this.objects[index]);
+                  if (collisionPosition.x == 1) canMove.left = false;
+                  if (collisionPosition.x == -1) canMove.right = false;
+                  if (collisionPosition.y == 1) canMove.up = false;
+                  if (collisionPosition.y == -1) canMove.down = false;
+                  if (collisionPosition.z == 1) canMove.forward = false;
+                  if (collisionPosition.z == -1) canMove.backward = false;
                 }
               }
             }
           }
-          if (true) {
-            if(element instanceof AiEntity){
-              var playerIndex = this.getPlayerEntityIndex();
-              var player = this.getObject(playerIndex);
-              element.setPlayerPosition(
-                player.model.position.x,
-                player.model.position.y,
-                player.model.position.z);
-            }
-            var decisions = element.makeDecision();
-            if (decisions != undefined && decisions.doShoot) {
-              let positionElement = new ObjectPosition();
-              positionElement.position.x = element.model.position.x;
-              positionElement.position.y = element.model.position.y;
-              positionElement.position.z = element.model.position.z - 5;
-              //positionElement.speed.x = element.xSpeed;
-              positionElement.speed.z = element.zSpeed;
-              positionElement.faceDirection = element.objectPosition.faceDirection;
-              //positionElement.sizeFactor = 8;
-              //var lightEntity = new LightEntity(getAmbientLight(0x15de12));
-              var projectileObject = this.objectSupplier.projectile(positionElement)
-              if (element instanceof AiEntity) {
-                projectileObject.parentType = element;
-              }
-              else {
-                projectileObject.parentType = element;
-              }
-              this.addObject(projectileObject);
-            }
+          //If element is an Ai pass the actual player position to them
+          if (element instanceof AiEntity) {
+            //get Player element
+            var playerIndex = this.getPlayerEntityIndex();
+            var player = this.getObject(playerIndex);
+            //Give the Ai the  player position
+            element.setPlayerPosition(
+              player.model.position.x,
+              player.model.position.y,
+              player.model.position.z);
           }
-          if (element instanceof ProjectileEntity && element.model.position.z < -this.maxWorldSize) {
-            this.removeObject(this.getObjectIndex(element));
-            console.log(this.maxWorldSize);
-            console.log("Destroyed projectile which fly away")
+          //Call the makeDecision function on the element
+          var decisions = element.makeDecision(canMove);
+          //Check if the element wants to shoot
+          if (decisions != undefined && decisions.doShoot) {
+            this.__spawnProjectile(element)
           }
+          //When the element is a projectile, check if it leaves the world borders in z direction
+          if (element instanceof ProjectileEntity) { this.__checkIfProjectileIsInWorld(element); }
         } catch (exception) {
           console.warn(exception);
         }
       }
-      this.entities.forEach(function (element, i) {
-      });
     }
+  }
+  /**
+   * Takes the entity which shoot the projectile and generates an projectile
+   * @param {Entity} element entity which shoot the projectile 
+   */
+  __spawnProjectile(element) {
+    let positionElement = new ObjectPosition();
+    positionElement.minPosition = element.objectPosition.minPosition;
+    positionElement.maxPosition = element.objectPosition.maxPosition;
+    //Get the  positions from  the parent element
+    positionElement.position.x = element.model.position.x;
+    positionElement.position.y = element.model.position.y;
+    positionElement.position.z = element.model.position.z - 5;
+    positionElement.speed.z = element.zSpeed;
+    positionElement.faceDirection = element.objectPosition.faceDirection;
+    //Get an instance of class ProjectileEntity
+    var projectileObject = this.objectSupplier.projectile(positionElement)
+
+    //Add Parent Type
+    if (element instanceof AiEntity) {
+      projectileObject.parentType = element;
+    }
+    else {
+      projectileObject.parentType = element;
+    }
+    //Add the  projectile into the entityHandler itself
+    this.addObject(projectileObject);
+  }
+
+  /**
+   * Compare both collided objects and decide wether they have to be destroyed
+   * @param {Entity} element - entity which moves
+   * @param {JSON} collisionIndex - object with which the object collides
+   */
+  __collisionHandler(element, collisionIndex) {
+    try {
+      //Check if the moving entity is a projectile
+      if (element instanceof ProjectileEntity) {
+        //If it is check if the parent of the projectile and the collided instance are from the same class
+        if (this.objects[collisionIndex].constructor !== element.parentType.constructor) {
+          //If it is not, check if the object is not an asteroid
+          if (this.objects[collisionIndex] instanceof AiEntity || this.objects[collisionIndex] instanceof PlayerEntity || this.objects[collisionIndex] instanceof ProjectileEntity) {
+            //If it is not, remove both objects
+            this.removeObject(this.getObjectIndex(element));
+            this.removeObject(collisionIndex);
+            return true;
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    return false;
+  }
+
+  /**
+   * Check if the element leaves the world borders in z direction and destroy it#
+   * @param {ProjectileEntity} projectile - instance thats position should be checked
+   * @return {boolean} true = destroyed, false = not destroyed
+   */
+  __checkIfProjectileIsInWorld(projectile) {
+    //Check if the element leaves the world borders in z direction
+    if (projectile.model.position.z < -this.maxWorldSize - 50 || projectile.model.position.z > 50) {
+      //If it leaves the world borders, destroy it
+      this.removeObject(this.getObjectIndex(projectile));
+      return true;
+    }
+    return false;
   }
 
   /**

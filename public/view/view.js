@@ -109,15 +109,10 @@ export function removeModel(model){
  */
 export function checkCollision(obj1, obj2){
   var collision = false
-  try{
       if(obj1.hitbox.intersectsBox(obj2.hitbox)){
           collision = true
           //console.log('collision')
       }
-  }
-  catch(error){
-      console.log(error)
-  }
   return collision;
 }
 
@@ -130,6 +125,7 @@ export function checkCollision(obj1, obj2){
  *  @param {object} obj1 - Base object 
  *  @param {object} obj2 - Second object
  *  @param {array} pos - Possion number 
+ *  @returns {List} positions in x y and z
 */
 export function getObjectLocation(obj1, obj2){
   var pos = []

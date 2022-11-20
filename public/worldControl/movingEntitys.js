@@ -17,9 +17,9 @@ export class PlayerEntity extends Entity {
     return this.cameraEntity;
   }
 
-  makeDecision() {
+  makeDecision(canMove) {
     let doShoot = false;
-    super.makeDecision();
+    super.makeDecision(canMove);
     if (this.cameraEntity != undefined) {
       this.cameraEntity.setXPos(this.getXPos());
       this.cameraEntity.setYPos(this.getYPos());
@@ -79,8 +79,8 @@ export class ProjectileEntity extends Entity {
 
   //The projectile will be shot by the player/enemy in z-Direction
 
-  makeDecision() {
-    super.makeDecision();
+  makeDecision(canMove) {
+    super.makeDecision(canMove);
     if (this.objectPosition.faceDirection == 0) {
       this.moveForward();
     } else if (this.objectPosition.faceDirection == 2) {
@@ -113,9 +113,9 @@ export class AiEntity extends Entity {
   setPlayerPosition(xPos, yPos, zPos){
     this.playerPosition = {x: xPos, y: yPos, z: zPos};
   }
-  makeDecision() {
+  makeDecision(canMove) {
     ;
-    super.makeDecision();
+    super.makeDecision(canMove);
     var doShoot = false;
     if (this.nextDecision <= 0) {
       this.nextDecision = getRandomInt(20, 61);
