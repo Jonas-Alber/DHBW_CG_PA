@@ -107,6 +107,9 @@ export class EntityHandler {
                 break;
               }
               else {
+                if(element instanceof PlayerEntity){
+                  element.playCollisionSound();
+                }
                 //If the objects are not destroyed check if the element is not a projectile
                 if (!(element instanceof ProjectileEntity)) {
                   //Get the location of the collision and deactivate movement in that direction
@@ -223,6 +226,7 @@ export class EntityHandler {
   removeObject(index) {
     //Check if the object is an instance of the Entity class
     if (this.objects[index] instanceof Entity) {
+      this.objects[index].playerDestructionSound();
       //Check if the object is an instance of the AiEntity class
       if (this.objects[index] instanceof AiEntity) {
         //If it is, count the destroyedEnemies counter up

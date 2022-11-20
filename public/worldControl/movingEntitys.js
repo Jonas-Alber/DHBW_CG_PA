@@ -63,7 +63,6 @@ export class PlayerEntity extends Entity {
     //Go through each element of the user's input
     for (var element in this.userInput) {
       //In each specific case, call a specific movement action
-      console.log(element);
       switch (this.userInput[element]) {
         case 'd':
           this.moveRight();

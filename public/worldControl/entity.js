@@ -49,6 +49,25 @@ export class Entity extends Object {
     this.subElements.push(subElement);
   }
 
+  playerDestructionSound(){
+    for(var soundIndex in this.audioElements){
+      if(this.audioElements[soundIndex].audioName == 'destroyed'){
+        this.audioElements[soundIndex].audioSound.play();
+      }
+    }
+  }
+
+  playCollisionSound(){
+    for(var soundIndex in this.audioElements){
+      if(this.audioElements[soundIndex].audioName == 'collision'){
+        if(!this.audioElements[soundIndex].audioSound.isPlaying){
+          this.audioElements[soundIndex].audioSound.play();
+        }
+        
+      }
+    }
+  }
+
   /**
   * Tests, if sublement exists
   * @param {string} sublement -equals one subElement

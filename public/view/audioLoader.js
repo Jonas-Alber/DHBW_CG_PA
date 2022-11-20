@@ -13,6 +13,7 @@ import * as THREE from '/build/three.module.js'
     this.listener = listener
      this.audioBuffer  = [];
      this.posAudioBuffer =  [];
+     this.activePosAudio =  [];
      this.loader = new THREE.AudioLoader();
    }
  
@@ -36,10 +37,10 @@ import * as THREE from '/build/three.module.js'
      return this.audioBuffer.length-1;
    }
 
-   async loadPositionalAudio(audioName, audioFileDirection,loop = true, setVolume = 0.1){
+   async loadPositionalAudio(audioName, audioFileDirection,loop = true, setVolume = 0.1, soundLength = 10){
     try{
      let buffer = await this.loader.loadAsync(audioFileDirection);
-     this.posAudioBuffer.push({name: audioName, audioBuffer: buffer, doLoop: loop, volume: setVolume});
+     this.posAudioBuffer.push({name: audioName, audioBuffer: buffer, doLoop: loop, volume: setVolume, maxSoundLength: soundLength});
     }catch (exception){
       console.error("Model " + audioFileDirection +" cannot be loaded properly: " + exception);
     }
@@ -70,10 +71,13 @@ import * as THREE from '/build/three.module.js'
       if(this.posAudioBuffer[index].name == name){
         var audioData = this.posAudioBuffer[index];
         let sound = new THREE.PositionalAudio(this.listener);
+        this.activePosAudio.push(sound);
         sound.setBuffer( audioData.audioBuffer );
         sound.setLoop(audioData.doLoop);
         sound.setRefDistance(10);
         sound.setVolume(audioData.volume);
+        sound.setMaxDistance(audioData.maxSoundLength);
+        sound.setRolloffFactor(0.9);
         returnValue = sound;
       }
     }
@@ -88,6 +92,16 @@ import * as THREE from '/build/three.module.js'
    }
    stopAudio(index){
     this.audioBuffer[index].audio.stop();
+   }
+
+   stopPosAudio(){
+      for(var index in this.activePosAudio){
+        try{
+          this.activePosAudio[index].stop();
+        }catch (e){
+
+        }
+      }
    }
  }
  

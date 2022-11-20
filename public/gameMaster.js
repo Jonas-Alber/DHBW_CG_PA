@@ -76,8 +76,9 @@ var looseAudioIndex = await audioLoader.loadAudio('loose', 'sound/looseSound.mp3
 await audioLoader.loadPositionalAudio('boost','sound/boost.mp3',true, 0.15);
 await audioLoader.loadPositionalAudio('nozzle','sound/nozzle.mp3',  true, 0.05);
 await audioLoader.loadPositionalAudio('fireProjectileSound','sound/fireProjectile.mp3',  false,0.3);
-await audioLoader.loadPositionalAudio('projectileDestroyed','sound/projectileDestroyed.mp3',  false,0.3);
-await audioLoader.loadPositionalAudio('shipDestroyed','sound/shipDestroyed.mp3',  false,0.3);
+await audioLoader.loadPositionalAudio('projectileDestroyed','sound/projectileDestroyed.mp3',  false,0.1);
+await audioLoader.loadPositionalAudio('shipDestroyed','sound/shipDestroyed.mp3',  false, 1);
+await audioLoader.loadPositionalAudio('collision','sound/collisionSound.mp3',  true, 1);
 
 //Start Game after loading all 3D model
 initGame();
@@ -160,6 +161,7 @@ function stopGame() {
   //Show end screen
   showGameEnd(playerIsAlive);
   audioLoader.stopAudio(bgAudioIndex);
+  audioLoader.stopPosAudio();
   if(playerIsAlive && playAudio){
     audioLoader.playAudio(winAudioIndex);
   }
