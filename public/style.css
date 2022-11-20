@@ -20,7 +20,6 @@ button i{
 }
 
 .controlButton{
-  display: none;
   margin: 5%;
   text-align: center;
   vertical-align: middle;
@@ -158,3 +157,10 @@ h3 a{
   padding-top: 10%;
 }
 
+#soundOn{
+  display: none;
+}
+
+#soundOff{
+  display: none;
+}

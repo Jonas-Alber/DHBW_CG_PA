@@ -29,6 +29,7 @@ var activeControlButton = [];
 var modelLoader = new ModelLoader();
 var audioLoader = new AudioLoader(getListener());
 var playerIsAlive = true;
+var playAudio = true;
 /**End of defined variable zone */
 
 /** Start of Load 3D Model zone */
@@ -47,9 +48,28 @@ document.getElementById("startGameButton").addEventListener('click', function() 
     console.log('Playback resumed successfully');
     audioLoader.playAudio(bgAudioIndex);
     hideStartScreen(true);
-    startGame()
+    startGame();
+    document.getElementById('soundOff').style.display = 'block';
   });
 });
+
+// One-liner to resume playback when user interacted with the page.
+document.getElementById("soundOn").addEventListener('click', function() {
+  playAudio =  true;
+  document.getElementById('soundOn').style.display = 'none';
+  document.getElementById('soundOff').style.display = 'block';
+  audioLoader.playAudio(bgAudioIndex);
+});
+
+// One-liner to resume playback when user interacted with the page.
+document.getElementById("soundOff").addEventListener('click', function() {
+  playAudio =  false;
+  document.getElementById('soundOff').style.display = 'none';
+  document.getElementById('soundOn').style.display = 'block';
+  audioLoader.stopAudio(bgAudioIndex);
+});
+
+
 
 var bgAudioIndex = await audioLoader.loadAudio('background', 'sound/background.mp3');
 var winAudioIndex = await audioLoader.loadAudio('win', 'sound/winSound.mp3');
@@ -135,10 +155,10 @@ function stopGame() {
   //Show end screen
   showGameEnd(playerIsAlive);
   audioLoader.stopAudio(bgAudioIndex);
-  if(playerIsAlive){
+  if(playerIsAlive && playAudio){
     audioLoader.stopAudio(winAudioIndex);
   }
-  else{
+  else if(playAudio){
     audioLoader.playAudio(looseAudioIndex);
   }
 
