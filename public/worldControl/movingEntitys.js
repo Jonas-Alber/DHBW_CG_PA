@@ -8,6 +8,7 @@ import { Entity } from '/model/entity.js'
 import { getRandomInt, getRandomArbitrary, ObjectPosition } from '/model/helperClass.js';
 /**End of import zone */
 
+const SOUND_CHECK_TIME = 10;
 export class PlayerEntity extends Entity {
   /**
    * @param {int} healthPoints -number of healthpoints a object e.g. player, enemy,... has
@@ -20,6 +21,10 @@ export class PlayerEntity extends Entity {
     super(model, hitbox, objectPosition, healthPoints);
     this.userInput = [];
     this.cameraEntity = undefined;
+    this.boostSound = false;
+    this.nozzleSound = false;
+    this.checkSound = 0;
+    this.playingSound = false;
   }
 
   /**
@@ -53,44 +58,81 @@ export class PlayerEntity extends Entity {
       this.cameraEntity.setYPos(this.getYPos());
       this.cameraEntity.setZPos(this.getZPos());
     }
-
+    var boostSound =false;
+    var nozzleSound = false;
     //Go through each element of the user's input
     for (var element in this.userInput) {
       //In each specific case, call a specific movement action
+      console.log(element);
       switch (this.userInput[element]) {
         case 'd':
           this.moveRight();
-          break;    
+          nozzleSound=true;
+          break;
         case 'a':
           this.moveLeft();
+          nozzleSound = true;
           break;
         case 'w':
           this.moveForward();
+          boostSound = true;
           break;
         case 's':
-          this.moveBackward(); 
+          this.moveBackward();
+          boostSound = true;
           break;
         case 'q':
-          this.moveUp(); 
+          this.moveUp();
+          nozzleSound = true;
           break;
         case 'e':
-          this.moveDown(); 
+          this.moveDown();
+          nozzleSound = true;
           break;
         case ' ':
           doShoot = this.shootObject();
           break;
       }
     }
+    if(this.checkSound == 0 || !this.playingSound){
+      this.__manageAudio('boost',boostSound);
+      this.__manageAudio('nozzle',nozzleSound);
+      this.checkSound = SOUND_CHECK_TIME;
+    }else{
+      this.checkSound -=1;
+    }
+    
+
     this.userInput = undefined;
     return { doShoot: doShoot };
   }
 
-   /**
-    *Store user's input in Object to retrieve it later
-    @param {Object} inputValue -conatins user input information
-  */
+  /**
+   *Store user's input in Object to retrieve it later
+   @param {Object} inputValue -conatins user input information
+ */
   storeUserInput(inputValue) {
     this.userInput = inputValue;
+  }
+
+  __manageAudio(name, status){
+    var audio =  this.__getAudioElement(name);
+    if (audio != undefined) {
+      if (status) {
+        this.playingSound = true;
+        try{
+          audio.pause();
+        }catch (e){
+        }
+          audio.play();
+      } else {
+        this.playingSound = false;
+        try{
+          audio.stop();
+        }catch (e){
+        }
+      }
+    }
   }
 
 }
@@ -147,14 +189,14 @@ export class AiEntity extends Entity {
 
   }
 
- /**
-    *Moves the projectile in direction according to the facing direction
-    * @param {Number} xPos -xPosition of Player
-    * @param {Number} yPos -yPosition of Player
-    * @param {Number} zPos -zPosition of Player
-  */
-  setPlayerPosition(xPos, yPos, zPos){
-    this.playerPosition = {x: xPos, y: yPos, z: zPos};
+  /**
+     *Moves the projectile in direction according to the facing direction
+     * @param {Number} xPos -xPosition of Player
+     * @param {Number} yPos -yPosition of Player
+     * @param {Number} zPos -zPosition of Player
+   */
+  setPlayerPosition(xPos, yPos, zPos) {
+    this.playerPosition = { x: xPos, y: yPos, z: zPos };
   }
 
   /**
@@ -171,15 +213,15 @@ export class AiEntity extends Entity {
     if (this.nextDecision <= 0) {
       this.nextDecision = getRandomInt(20, 61);
       this.decision = getRandomInt(1, 5);
-      this.doRandom = getRandomInt(1,3);
+      this.doRandom = getRandomInt(1, 3);
       doShoot = this.shootObject();
     } else {
       this.nextDecision -= 1;
       //Check, if player Position is available 
-      if(this.playerPosition == undefined){
+      if (this.playerPosition == undefined) {
         this.__getRandomDecision();
       }
-      else{ //Player position is available
+      else { //Player position is available
         this.__getDecision();
       }
     }
@@ -187,45 +229,45 @@ export class AiEntity extends Entity {
   }
 
 
-   /**
-    *Ai tracks movements of player and then adapts it's behaviour to the one of the player
-    *to be more realistic and challenging for the player
-  */
-  __getDecision(){
+  /**
+   *Ai tracks movements of player and then adapts it's behaviour to the one of the player
+   *to be more realistic and challenging for the player
+ */
+  __getDecision() {
     //One third chance to call the RandomDecision 
-    if(this.doRandom == 1){
+    if (this.doRandom == 1) {
       this.__getRandomDecision()
     }
-    else{
-      if(this.model.position.x-this.playerPosition.x > 1){
+    else {
+      if (this.model.position.x - this.playerPosition.x > 1) {
         this.moveLeft();
-      }else if(this.model.position.x-this.playerPosition.x < -1){
+      } else if (this.model.position.x - this.playerPosition.x < -1) {
         this.moveRight();
       }
-      if(this.model.position.y-this.playerPosition.y > 1){
+      if (this.model.position.y - this.playerPosition.y > 1) {
         this.moveDown();
-      }else if(this.model.position.y-this.playerPosition.y < -1){
+      } else if (this.model.position.y - this.playerPosition.y < -1) {
         this.moveUp();
       }
     }
   }
 
-/**
-    *Ai will make completly random movements
-  */
-  __getRandomDecision(){
-      switch (this.decision) {
-        case 1:
-          this.moveRight();
-          break;
-        case 2:
-          this.moveLeft();
-          break;
-        case 3:
-          this.moveUp();
-        case 4:
-          this.moveDown();
-      }
+  /**
+      *Ai will make completly random movements
+    */
+  __getRandomDecision() {
+    switch (this.decision) {
+      case 1:
+        this.moveRight();
+        break;
+      case 2:
+        this.moveLeft();
+        break;
+      case 3:
+        this.moveUp();
+      case 4:
+        this.moveDown();
+    }
   }
 
 }

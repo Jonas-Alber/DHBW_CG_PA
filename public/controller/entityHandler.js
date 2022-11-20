@@ -20,9 +20,10 @@ export class EntityHandler {
   /**
    * Initializes the EntityHandler and the ObjectSupplier
    * @param {ModelLoader} modelLoader - instance of ModelLoader which contains all 3D models
+   * @param {AudioLoader} audioLoader - instance of class audioLoader, containing all audio files
    * @param {int} maxWorldSize - Z Coordinate size of the world
    */
-  constructor(modelLoader, maxWorldSize = 400) {
+  constructor(modelLoader, audioLoader, maxWorldSize = 400) {
     //Set required variables
     this.maxWorldSize = maxWorldSize;
     this.destroyedEnemies = 0;
@@ -30,7 +31,7 @@ export class EntityHandler {
     this.objects = [];
     this.entities = [];
     //Create an instance of the Object Supplier Class
-    this.objectSupplier = new ObjectSupplier(modelLoader);
+    this.objectSupplier = new ObjectSupplier(modelLoader,audioLoader);
   }
 
   /**
@@ -172,6 +173,7 @@ export class EntityHandler {
     }
     //Add the  projectile into the entityHandler itself
     this.addObject(projectileObject);
+    element.__fireProjectileSound();
   }
 
   /**
@@ -207,7 +209,7 @@ export class EntityHandler {
    */
   __checkIfProjectileIsInWorld(projectile) {
     //Check if the element leaves the world borders in z direction
-    if (projectile.model.position.z < -this.maxWorldSize - 50 || projectile.model.position.z > 50) {
+    if (projectile.model.position.z < -this.maxWorldSize - 150 || projectile.model.position.z > 50) {
       //If it leaves the world borders, destroy it
       this.removeObject(this.getObjectIndex(projectile));
       return true;

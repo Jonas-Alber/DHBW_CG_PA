@@ -16,9 +16,11 @@ import { Object } from '/model/object.js';
 export class ObjectSupplier {
   /**
    * @param {ModelLoader} modelLoader - Instance of class ModelLoader which contain all 3D models
-   */
-  constructor(modelLoader) {
+   * @param {AudioLoader} audioLoader - instance of class audioLoader, containing all audio files
+  */
+  constructor(modelLoader,audioLoader) {
     this.modelLoader = modelLoader;
+    this.audioLoader = audioLoader;
   }
 
   /**
@@ -43,6 +45,11 @@ export class ObjectSupplier {
     if (light != undefined) {
       //If it is, add the light to the player object
       playerObject.addSubElement(light);
+    }
+    if(this.audioLoader != undefined) {
+      playerObject.addAudioElement(this.audioLoader.getPosAudio('boost'),'boost');
+      playerObject.addAudioElement(this.audioLoader.getPosAudio('nozzle'),'nozzle');
+      playerObject.addAudioElement(this.audioLoader.getPosAudio('fireProjectileSound'),'fireProjectileSound');
     }
     return playerObject;
   }
@@ -98,6 +105,7 @@ export class ObjectSupplier {
     objectPosition.faceDirection = 2;
     //Send the model to the ObjectFactory to get a AiEntity instance.
     var enemyObject = ObjectFactory(enemyModel.object, enemyModel.hitbox, objectPosition, 2);
+    enemyObject.addAudioElement(this.audioLoader.getPosAudio('fireProjectileSound'),'fireProjectileSound');
     return enemyObject;
   }
 }

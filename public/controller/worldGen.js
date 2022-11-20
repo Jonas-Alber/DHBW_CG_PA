@@ -23,11 +23,12 @@ const WORLD_SIZE = 25;
  */
 export class WorldGen {
   /**
-   * @param {modelLoader} modelLoader - instance of class modelLoader, containing all 3D models
+   * @param {ModelLoader} modelLoader - instance of class modelLoader, containing all 3D models
+   * @param {AudioLoader} audioLoader - instance of class audioLoader, containing all audio files
    * @param {int} viewDistance - number how far the camera can see
    * @param {int} difficulty - difficulty level which determent enemy spawn rate
    */
-  constructor(modelLoader, viewDistance, difficulty = 1) {
+  constructor(modelLoader, audioLoader, viewDistance, difficulty = 1) {
     //Set basic variables for world generation
     this.difficulty = difficulty;
     this.worldSize = WORLD_SIZE;
@@ -39,7 +40,7 @@ export class WorldGen {
     this.__calculateWorldSettings();
 
     //Create an instance of class EntityHandler to store the generated objects
-    this.entityHandler = new EntityHandler(modelLoader, this.mapLength);
+    this.entityHandler = new EntityHandler(modelLoader, audioLoader, this.mapLength);
 
     //Spawn the first and second map section.
     //Each map section have the length of the given viewDistance
