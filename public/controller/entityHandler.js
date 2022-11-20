@@ -154,10 +154,11 @@ export class EntityHandler {
     positionElement.minPosition = element.objectPosition.minPosition;
     positionElement.maxPosition = element.objectPosition.maxPosition;
     //Get the  positions from  the parent element
-    positionElement.position.x = element.model.position.x;
+    positionElement.position.x = element.model.position.x - 0.29;
     positionElement.position.y = element.model.position.y;
-    positionElement.position.z = element.model.position.z - 5;
+    positionElement.position.z = element.model.position.z + 3;
     positionElement.speed.z = element.zSpeed;
+    positionElement.sizeFactor = 0.03;
     positionElement.faceDirection = element.objectPosition.faceDirection;
     //Get an instance of class ProjectileEntity
     var projectileObject = this.objectSupplier.projectile(positionElement)

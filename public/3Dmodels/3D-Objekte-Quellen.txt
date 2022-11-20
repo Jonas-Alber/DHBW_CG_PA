@@ -1,12 +1,6 @@
-ufo: https://sketchfab.com/3d-models/ufo-8288a85fdf9d48f6a9a9ec6df27d5aa0    22.10.22
+
 enemy-red: https://sketchfab.com/3d-models/ufo-hypercasual-game-39a58ccb969741439bcdf80ce4864812 22.10.22
 asteroid: https://sketchfab.com/3d-models/asteroid-01-df95d3da67aa4c769ec81394e0b0ffef 22.10.22
 spaceship: https://sketchfab.com/3d-models/spaceship-1d2f6d0c373e497c83e7846ec3f5fad6 22.10.22
 
-asteroid2: https://sketchfab.com/3d-models/asteroid-80a70567fb2a42df836e6d70204e0b68 09.11.22
-asteroid3: https://sketchfab.com/3d-models/asteroid-04a7fdda5dfe4f8fb16d1c2fa8b1bf52 09.11.22
-spaceship2: https://sketchfab.com/3d-models/star-sparrow-modular-spaceship-28806b168f8043bbb5c1c922f98452c9 09.11.22
-
-cabbage: https://sketchfab.com/3d-models/cabbage-a2ce58a7c4a64a42bfb13af2350d18db 09.11.22
 projectile-magma-ball: https://sketchfab.com/3d-models/projectile-magma-ball-915c10ddb81543eeaa122f7e159eccc5 09.11.22
-projectile-skewer-ball: https://sketchfab.com/3d-models/projectile-skewer-ball-3987c69127594abb8600745d6e015cdd 09.11.22
