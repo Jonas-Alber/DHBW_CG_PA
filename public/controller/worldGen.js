@@ -8,7 +8,7 @@
 import { EntityHandler } from '/controller/entityHandler.js';
 import { ObjectPosition } from '/model/helperClass.js';
 import { LightEntity, CameraEntity } from '/model/specialEntitys.js';
-import { getCamera, getAmbientLight } from '/view/view.js';
+import { getCamera, getAmbientLight,loadGameBackground } from '/view/view.js';
 /**End of import zone */
 
 /**Start of constant definition zone */
@@ -43,6 +43,7 @@ export class WorldGen {
 
     //Spawn the first and second map section.
     //Each map section have the length of the given viewDistance
+    loadGameBackground(modelLoader.getModel('enemy'),  this.mapLength);
     this.__spawnPlayer();
     this.playerRegion = 0;
     this.__generateWorld();

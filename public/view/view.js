@@ -32,6 +32,12 @@ scene.add(directionalLight);
 const ambiantLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambiantLight);
 
+export function loadGameBackground(glft,worldSize){
+  var position = new ObjectPosition();
+  position.position.z = worldSize/2;	
+  position.sizeFactor = 10;
+  addModel(glft,position);
+}
 
 /**
  * Render Function

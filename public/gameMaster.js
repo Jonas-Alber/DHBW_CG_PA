@@ -13,6 +13,8 @@ import { render } from '/view/view.js';
 
 /**Start of constant definition zone */
 const setFPS = 30;
+//If false game will wait with loading until the user press l on his keyboard
+const autoHideLoadingScreen = true;
 /**End of constant definition zone */
 
 /**Start of undefined variable zone */
@@ -60,11 +62,24 @@ function startGame() {
   loadRightInfoScreen();
   leftInfoScreen = new LeftInfoScreenLoader();
 
-  //Start the Rendering Process via call task30ms 
-  timeHandler = setInterval(function () { task30ms(); }, 1000 / setFPS);
+  if (autoHideLoadingScreen) {
+    //Start the Rendering Process via call task30ms 
+    timeHandler = setInterval(function () { task30ms(); }, 1000 / setFPS);
 
-  //Switch to the gameScreen
-  showGame();
+    //Switch to the gameScreen
+    showGame();
+  }
+  else {
+    document.addEventListener("keydown", function (event) {
+      if (event.key == "l") {
+        //Start the Rendering Process via call task30ms 
+        timeHandler = setInterval(function () { task30ms(); }, 1000 / setFPS);
+        //Switch to the gameScreen
+        showGame();
+      }
+    });
+  }
+
 
 }
 
