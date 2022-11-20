@@ -52,6 +52,8 @@ document.getElementById("startGameButton").addEventListener('click', function() 
 });
 
 var bgAudioIndex = await audioLoader.loadAudio('background', 'sound/background.mp3');
+var winAudioIndex = await audioLoader.loadAudio('win', 'sound/winSound.mp3');
+var looseAudioIndex = await audioLoader.loadAudio('loose', 'sound/looseSound.mp3');
 //Start Game after loading all 3D model
 initGame();
 function startGame(){
@@ -132,6 +134,13 @@ function task30ms() {
 function stopGame() {
   //Show end screen
   showGameEnd(playerIsAlive);
+  audioLoader.stopAudio(bgAudioIndex);
+  if(playerIsAlive){
+    audioLoader.stopAudio(winAudioIndex);
+  }
+  else{
+    audioLoader.playAudio(looseAudioIndex);
+  }
 
   //Clear task30ms interval
   clearInterval(timeHandler);

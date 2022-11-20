@@ -56,5 +56,8 @@ import * as THREE from '/build/three.module.js'
    playAudio(index){
     this.audioBuffer[index].audio.play();
    }
+   stopAudio(index){
+    this.audioBuffer[index].audio.stop();
+   }
  }
  
