@@ -6,9 +6,10 @@
 
 /**Start of import zone */
 import { ModelLoader } from '/view/modelLoader.js';
-import { LeftInfoScreenLoader, loadRightInfoScreen, setWarningVisibility, showGameEnd, showGame } from '/view/htmlHandler.js';
+import { AudioLoader } from '/view/audioLoader.js';
+import {hideStartScreen, LeftInfoScreenLoader, loadRightInfoScreen, setWarningVisibility, showGameEnd, showGame } from '/view/htmlHandler.js';
 import { WorldGen } from '/controller/worldGen.js'
-import { render } from '/view/view.js';
+import { render,getListener } from '/view/view.js';
 /**End of import zone */
 
 /**Start of constant definition zone */
@@ -26,6 +27,7 @@ let leftInfoScreen;
 /**Start of defined variable zone */
 var activeControlButton = [];
 var modelLoader = new ModelLoader();
+var audioLoader = new AudioLoader(getListener());
 var playerIsAlive = true;
 /**End of defined variable zone */
 
@@ -38,15 +40,29 @@ await modelLoader.loadModel('projectile', '3Dmodels/asteroid3.glb');
 await modelLoader.loadModel('enemy', '3Dmodels/enemy-red.glb');
 /** End of Load 3D Model zone */
 
-//Start Game after loading all 3D model
-startGame();
+// One-liner to resume playback when user interacted with the page.
+document.getElementById("startGameButton").addEventListener('click', function() {
+  var context = new AudioContext();
+  context.resume().then(() => {
+    console.log('Playback resumed successfully');
+    audioLoader.playAudio(bgAudioIndex);
+    hideStartScreen(true);
+    startGame()
+  });
+});
 
+var bgAudioIndex = await audioLoader.loadAudio('background', 'sound/background.mp3');
+//Start Game after loading all 3D model
+initGame();
+function startGame(){
+  timeHandler = setInterval(function () { task30ms(); }, 1000 / setFPS);
+}
 
 /**
  * Initializes the game and all necessary class instances
  * After initialization, it starts the game
  */
-function startGame() {
+function initGame() {
   //Initialize the WorldGen and transfers the loaded 3D models
   worldGen = new WorldGen(modelLoader, 130, 1);
 
@@ -64,8 +80,6 @@ function startGame() {
 
   if (autoHideLoadingScreen) {
     //Start the Rendering Process via call task30ms 
-    timeHandler = setInterval(function () { task30ms(); }, 1000 / setFPS);
-
     //Switch to the gameScreen
     showGame();
   }
@@ -73,7 +87,6 @@ function startGame() {
     document.addEventListener("keydown", function (event) {
       if (event.key == "l") {
         //Start the Rendering Process via call task30ms 
-        timeHandler = setInterval(function () { task30ms(); }, 1000 / setFPS);
         //Switch to the gameScreen
         showGame();
       }

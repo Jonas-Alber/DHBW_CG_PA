@@ -38,6 +38,8 @@ export class LeftInfoScreenLoader {
       <tr><td>S</td><td><i class='fa-solid fa-arrow-down'></td><td>Ship moves backward</td></tr>\
       <tr><td>A</td><td><i class='fa-solid fa-arrow-left'></td><td>Ship moves left</td></tr>\
       <tr><td>D</td><td><i class='fa-solid fa-arrow-right'></td><td>Ship moves right</td></tr>\
+      <tr><td>Q</td><td><i class='fa-solid fa-arrow-up'></td><td>Ship moves up</td></tr>\
+      <tr><td>E</td><td><i class='fa-solid fa-arrow-down'></td><td>Ship moves down</td></tr>\
       <tr><td>Space</td><td><i class='fa-solid fa-meteor'></i></td><td>Ship shoot a projectile</td></tr>\
       </table>"
     );
@@ -80,10 +82,20 @@ export function showGameEnd(playerIsAlive) {
   }
 }
 
+export function hideStartScreen(isHidden) {
+  if(isHidden){
+    document.getElementById('startScreen').style.display = 'none';
+  }else{
+    document.getElementById('startScreen').style.display = 'block';
+  }
+  
+}
+
 /**
  * Switch from the loadingScreen to the game Screen
  */
 export function showGame() {
+  hideStartScreen(false);
   document.getElementById('controler').style.display = 'grid';
   document.getElementById('loadingScreen').style.display = 'none';
 }
