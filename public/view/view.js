@@ -14,7 +14,6 @@ const USE_AUDIO = true;
 // ---- Initialisierung der Scene ----
 
 var innerWidth = window.innerWidth*(3/5);
-//var innerWidth = document.getElementById('animateScene').offsetWidth;
 var innerHeight = window.innerHeight;
 
 const scene = new THREE.Scene();
@@ -31,12 +30,17 @@ document.getElementById('animateScene').appendChild(renderer.domElement);
 
 scene.background = new THREE.Color(0x222222);
 
-// Test Licht
+// light source
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
 scene.add(directionalLight);
 const ambiantLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambiantLight);
 
+/**
+ * Loads the background model
+ * @param {Data from GLTF Importer} glft 
+ * @param {int} worldSize 
+ */
 export function loadGameBackground(glft,worldSize){
   var position = new ObjectPosition();
   position.position.z = worldSize/2;	
@@ -81,7 +85,7 @@ export function getCamera() {
 }
 
 /**
- * 
+ * Adds models to Scene and creates Hitbox
  * @param {Data from GLTF Importer} gltf 
  * @param {Instance of Class ObjectPosition} objectPosition 
  * @returns {object, hitbox} List
