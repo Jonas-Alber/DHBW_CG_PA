@@ -35,7 +35,7 @@ var playAudio = true;
 
 /** Start of Load 3D Model zone */
 await modelLoader.loadModel('asteroid1', '3Dmodels/asteroid.glb');
-await modelLoader.loadModel('player', '3Dmodels/spaceship.glb');
+await modelLoader.loadModel('player', '3Dmodels/enemy-blue.glb');
 await modelLoader.loadModel('projectile', '3Dmodels/projectile-magma-ball.glb');
 await modelLoader.loadModel('enemy', '3Dmodels/enemy-red.glb');
 await modelLoader.loadModel('background', '3Dmodels/enemy-blue.glb');

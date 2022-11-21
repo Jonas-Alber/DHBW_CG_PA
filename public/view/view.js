@@ -20,7 +20,7 @@ var innerHeight = window.innerHeight;
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 2000);
-camera.rotation.x = (-Math.PI / 2) + 0.7;
+//camera.rotation.x = (-Math.PI / 2) + 0.7;
 
 const listener = new THREE.AudioListener();
 camera.add(listener);
@@ -29,7 +29,7 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(innerWidth, innerHeight);
 document.getElementById('animateScene').appendChild(renderer.domElement);
 
-scene.background = new THREE.Color(0x222222);
+scene.background = new THREE.Color(0xc0c2c4);
 
 // Test Licht
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);

@@ -44,7 +44,7 @@ export class WorldGen {
 
     //Spawn the first and second map section.
     //Each map section have the length of the given viewDistance
-    loadGameBackground(modelLoader.getModel('background'),  this.mapLength);
+    //loadGameBackground(modelLoader.getModel('background'),  this.mapLength);
     this.__spawnPlayer();
     this.playerRegion = 0;
     this.__generateWorld();
@@ -62,9 +62,9 @@ export class WorldGen {
     let playerPosition = new ObjectPosition();
     playerPosition.minPosition = this.minWorldSize;
     playerPosition.maxPosition = this.maxWorldSize;
-    playerPosition.sizeFactor = 0.5;
+    playerPosition.sizeFactor = 0.02;
     if (!STATIC_CAM) {
-      camera = new CameraEntity(getCamera(), innerWidth, innerHeight, 0, 20, 0);
+      camera = new CameraEntity(getCamera(), innerWidth, innerHeight, 0, 0, 5);
     }
     var light = new LightEntity(getAmbientLight(0xcfc4c4));
     this.entityHandler.addObject(this.entityHandler.objectSupplier.player(playerPosition, camera, light));
@@ -140,8 +140,8 @@ export class WorldGen {
     //Check if player is not at the Z End of the world
     if (this.playerRegion * this.viewDistance < (this.mapLength)) {
       //Generate new Asteroids and Enemys
-      this.__spawnAsteroids(this.playerRegion);
-      this.__spawnEnemy(this.playerRegion);
+      //this.__spawnAsteroids(this.playerRegion);
+      //this.__spawnEnemy(this.playerRegion);
     }
   }
 

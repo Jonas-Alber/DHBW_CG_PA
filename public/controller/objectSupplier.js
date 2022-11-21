@@ -34,6 +34,7 @@ export class ObjectSupplier {
   player(objectPosition, camera = undefined, light = undefined) {
     //Get a THREEE.js Model with the 3D Model of player
     var playerModel = addModel(this.modelLoader.getModel('player'), objectPosition);
+    //playerModel.object.rotation.y = Math.PI + Math.PI/2
     //Send the model to the ObjectFactory to get a Object instance.
     var playerObject = ObjectFactory(playerModel.object, playerModel.hitbox, objectPosition, 3);
     //Check if a camera is passed.
