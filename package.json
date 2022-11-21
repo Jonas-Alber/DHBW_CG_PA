@@ -1,31 +1,23 @@
 {
-  "name": "threejs-boilerplate",
-  "version": "0.1.0",
-  "description": "A Threejs Boilerplate to aid in quick prototyping",
+  "name": "Roffel-the-space-warrior",
+  "version": "1.0.0",
+  "description": "DHBW TIT20 Computergrafik Projekt",
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sean-Bradley/Threejs-Boilerplate.git"
+    "url": ""
   },
   "keywords": [
     "threejs",
-    "boilerplate",
-    "threejs boilerplate"
+    "Roffel-the-space-warrior"
   ],
-  "author": "Sean Bradley",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Sean-Bradley/Threejs-Boilerplate/issues"
-  },
-  "homepage": "https://github.com/Sean-Bradley/Threejs-Boilerplate#readme",
+  "author": "Ralf Ehli, Jonas Alber, Marvin Franke",
   "dependencies": {
     "express": "^4.18.2",
-    "three": "^0.142.0",
-    "sqlite": "^4.0.23",
-    "sqlite3": "^5.0.2"
+    "three": "^0.142.0"
   },
   "main": "app.js",
   "directories": {
