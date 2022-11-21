@@ -41,7 +41,10 @@ await modelLoader.loadModel('enemy', '3Dmodels/enemy-red.glb');
 await modelLoader.loadModel('background', '3Dmodels/enemy-blue.glb');
 /** End of Load 3D Model zone */
 
-// One-liner to resume playback when user interacted with the page.
+/*Start of Button Even Listener
+TODO: Refactoring
+*/
+//Start the game
 document.getElementById("startGameButton").addEventListener('click', function() {
   var context = new AudioContext();
   context.resume().then(() => {
@@ -53,7 +56,7 @@ document.getElementById("startGameButton").addEventListener('click', function() 
   });
 });
 
-// One-liner to resume playback when user interacted with the page.
+//Activate Ambient Sound
 document.getElementById("soundOn").addEventListener('click', function() {
   playAudio =  true;
   document.getElementById('soundOn').style.display = 'none';
@@ -61,25 +64,29 @@ document.getElementById("soundOn").addEventListener('click', function() {
   audioLoader.playAudio(bgAudioIndex);
 });
 
-// One-liner to resume playback when user interacted with the page.
+//Deactivate Ambient Sound
 document.getElementById("soundOff").addEventListener('click', function() {
   playAudio =  false;
   document.getElementById('soundOff').style.display = 'none';
   document.getElementById('soundOn').style.display = 'block';
   audioLoader.stopAudio(bgAudioIndex);
 });
+/*End of Button event listener*/
 
 
-
+//Start of Ambient Sound
 var bgAudioIndex = await audioLoader.loadAudio('background', 'sound/background.mp3');
 var winAudioIndex = await audioLoader.loadAudio('win', 'sound/winSound.mp3');
 var looseAudioIndex = await audioLoader.loadAudio('loose', 'sound/looseSound.mp3');
+//End of Ambient Sound
+//Start of Positional Sound
 await audioLoader.loadPositionalAudio('boost','sound/boost.mp3',true, 0.15);
 await audioLoader.loadPositionalAudio('nozzle','sound/nozzle.mp3',  true, 0.05);
 await audioLoader.loadPositionalAudio('fireProjectileSound','sound/fireProjectile.mp3',  false,0.3);
 await audioLoader.loadPositionalAudio('projectileDestroyed','sound/projectileDestroyed.mp3',  false,0.1);
 await audioLoader.loadPositionalAudio('shipDestroyed','sound/shipDestroyed.mp3',  false, 1);
 await audioLoader.loadPositionalAudio('collision','sound/collisionSound.mp3',  true, 1);
+//End of Positional Sound
 
 //Start Game after loading all 3D model
 initGame();
@@ -161,8 +168,10 @@ function task30ms() {
 function stopGame() {
   //Show end screen
   showGameEnd(playerIsAlive);
+  //Stop Ambient and Positional Audio
   audioLoader.stopAudio(bgAudioIndex);
   audioLoader.stopPosAudio();
+  //Start win or loose Sound depending if the player is alive
   if(playerIsAlive && playAudio){
     audioLoader.playAudio(winAudioIndex);
   }

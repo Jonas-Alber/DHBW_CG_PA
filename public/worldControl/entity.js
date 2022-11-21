@@ -49,22 +49,45 @@ export class Entity extends Object {
     this.subElements.push(subElement);
   }
 
+  /**
+   * Try to play the destruction sound of the instance
+   */
   playerDestructionSound(){
+    //Search for audio in the array
     for(var soundIndex in this.audioElements){
       if(this.audioElements[soundIndex].audioName == 'destroyed'){
+        //if the searched audio is found, play it
         this.audioElements[soundIndex].audioSound.play();
       }
     }
   }
 
+  /**
+   * Try to play the collision sound of the instance
+   */
   playCollisionSound(){
+    //Search for audio in the array
     for(var soundIndex in this.audioElements){
       if(this.audioElements[soundIndex].audioName == 'collision'){
         if(!this.audioElements[soundIndex].audioSound.isPlaying){
+          //If the searched audio is found, play it
           this.audioElements[soundIndex].audioSound.play();
         }
         
       }
+    }
+  }
+
+  /**
+   * Search if the projectile audioFile is played. If not, it will played
+   */
+  __fireProjectileSound(){
+    var audio = this.__getAudioElement('fireProjectileSound');
+    if(audio!=undefined){
+      if(audio.isPlaying){
+        audio.stop();
+      }
+      audio.play();
     }
   }
 
@@ -274,49 +297,53 @@ export class Entity extends Object {
   }
 
   /**
-  * All of the following 6 functions 
-  * vary the velocity in each direction realistically of the entity
-  */
+   * Decrease zSpeed to move forward
+   */
   moveForward() {
     if (-this.zSpeed < this.speedCap) {
       this.zSpeed -= speedMultiplier;
     }
   }
 
-  __fireProjectileSound(){
-    var audio = this.__getAudioElement('fireProjectileSound');
-    if(audio!=undefined){
-      if(audio.isPlaying){
-        audio.stop();
-      }
-      audio.play();
-    }
-  }
-
+  /**
+   * Increase zSpeed to move backwards
+   */
   moveBackward() {
     if (this.zSpeed < this.speedCap) {
       this.zSpeed += speedMultiplier;
     }
   }
 
+  /**
+   * Decrease xSpeed to move left
+   */
   moveLeft() {
     if (-this.xSpeed < this.speedCap && this.model.position.x > this.objectPosition.minPosition.x) {
       this.xSpeed -= speedMultiplier;
     }
   }
 
+  /**
+   * Increase xSpeed to move right
+   */
   moveRight() {
     if (this.xSpeed < this.speedCap && this.model.position.x < this.objectPosition.maxPosition.x) {
       this.xSpeed += speedMultiplier;
     }
   }
 
+  /**
+   * Increase ySpeed to move up
+   */
   moveUp() {
     if (this.ySpeed < this.speedCap && this.model.position.y < this.objectPosition.maxPosition.y) {
       this.ySpeed += speedMultiplier;
     }
   }
 
+  /**
+   * Decrease ySpeed to move down
+   */
   moveDown() {
     if (-this.ySpeed < this.speedCap && this.model.position.y > this.objectPosition.minPosition.y) {
       this.ySpeed -= speedMultiplier;

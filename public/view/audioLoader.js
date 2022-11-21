@@ -21,6 +21,7 @@ import * as THREE from '/build/three.module.js'
     * Loads a audio and stores it in the audio buffer with the given name
     * @param {string} audioName - name of the audio
     * @param {string} audioFileDirection - path to the audio
+    * @param {boolean} loop - if the audio should loop after end
     * @return {int} index of the audio in the audioBuffer array
     */
    async loadAudio(audioName, audioFileDirection,loop = true){
@@ -37,6 +38,15 @@ import * as THREE from '/build/three.module.js'
      return this.audioBuffer.length-1;
    }
 
+   /**
+    * Take a name and direction and load a sound into the buffer
+    * @param {string} audioName - Name of the audio file for the buffer
+    * @param {string} audioFileDirection - Location of the audio file
+    * @param {boolean} loop - if the audio should loop after end
+    * @param {float} setVolume - Volume between 0 and 1
+    * @param {int} soundLength - Max Distance where the audio is hearable
+    * @return {int} - index of audio in buffer
+    */
    async loadPositionalAudio(audioName, audioFileDirection,loop = true, setVolume = 0.1, soundLength = 10){
     try{
      let buffer = await this.loader.loadAsync(audioFileDirection);
@@ -65,6 +75,11 @@ import * as THREE from '/build/three.module.js'
      return returnValue;
    }
 
+   /**
+    * Takes a loaded audio and create an instance of Positional Audio
+    * @param {string} name - Name of the audio in buffer
+    * @returns {PositionalAudio} instance of class Positional Audio
+    */
    getPosAudio(name){
     let returnValue;
     for(let index in this.posAudioBuffer){
