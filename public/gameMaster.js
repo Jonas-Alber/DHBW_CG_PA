@@ -14,6 +14,7 @@ import { render,getListener } from '/view/view.js';
 
 /**Start of constant definition zone */
 const setFPS = 30;
+const setDifficulty = 1;
 //If false game will wait with loading until the user press l on his keyboard
 const autoHideLoadingScreen = true;
 /**End of constant definition zone */
@@ -92,7 +93,7 @@ function startGame(){
  */
 function initGame() {
   //Initialize the WorldGen and transfers the loaded 3D models
-  worldGen = new WorldGen(modelLoader,audioLoader, 130, 1);
+  worldGen = new WorldGen(modelLoader,audioLoader, 130, setDifficulty);
 
   //Add Event Listener for Keyboard Button Press and Release
   document.addEventListener("keydown", function (event) {
