@@ -9,8 +9,6 @@ import * as THREE from '/build/three.module.js'
 import { ObjectPosition } from '/model/helperClass.js';
 /**End of import zone */
 
-const USE_AUDIO = true;
-
 // ---- Initialisierung der Scene ----
 
 var innerWidth = window.innerWidth*(3/5);

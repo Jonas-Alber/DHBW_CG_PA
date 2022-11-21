@@ -12,10 +12,10 @@ import { getCamera, getAmbientLight,loadGameBackground } from '/view/view.js';
 /**End of import zone */
 
 /**Start of constant definition zone */
-const STATIC_CAM = false;
-const ASTEROID_AMOUNT = 30;
-const ASTEROID_SPREAD = 70;
-const WORLD_SIZE = 25;
+const staticCam = false;
+const asteroidAmount = 30;
+const asteroidSpread = 70;
+const worldSize = 25;
 /**End of constant definition zone */
 
 /**
@@ -31,9 +31,9 @@ export class WorldGen {
   constructor(modelLoader, audioLoader, viewDistance, difficulty = 1) {
     //Set basic variables for world generation
     this.difficulty = difficulty;
-    this.worldSize = WORLD_SIZE;
-    this.minWorldSize = { x: -WORLD_SIZE, y: -WORLD_SIZE, z: -50 };
-    this.maxWorldSize = { x: WORLD_SIZE, y: WORLD_SIZE, z: 0 };
+    this.worldSize = worldSize;
+    this.minWorldSize = { x: -worldSize, y: -worldSize, z: -50 };
+    this.maxWorldSize = { x: worldSize, y: worldSize, z: 0 };
     this.viewDistance = viewDistance;
 
     //Based on the previous set variables calculate the required settings
@@ -63,7 +63,7 @@ export class WorldGen {
     playerPosition.minPosition = this.minWorldSize;
     playerPosition.maxPosition = this.maxWorldSize;
     playerPosition.sizeFactor = 0.5;
-    if (!STATIC_CAM) {
+    if (!staticCam) {
       camera = new CameraEntity(getCamera(), innerWidth, innerHeight, 0, 20, 0);
     }
     var light = new LightEntity(getAmbientLight(0xcfc4c4));
@@ -155,10 +155,10 @@ export class WorldGen {
     objectPosition.minPosition = this.minWorldSize;
     objectPosition.maxPosition = this.maxWorldSize;
     //Generate specified Amount of Asteroids
-    for (let i = 0; i < ASTEROID_AMOUNT; i++) {
+    for (let i = 0; i < asteroidAmount; i++) {
       //Set Position, Size and Rotation of the new Asteroid
-      objectPosition.position.x = getRandomInt(-ASTEROID_SPREAD, ASTEROID_SPREAD);
-      objectPosition.position.y = getRandomInt(-ASTEROID_SPREAD, ASTEROID_SPREAD);
+      objectPosition.position.x = getRandomInt(-asteroidSpread, asteroidSpread);
+      objectPosition.position.y = getRandomInt(-asteroidSpread, asteroidSpread);
       objectPosition.position.z = getRandomInt(-(this.viewDistance * (playerRegion + 1)), -10 - ((this.viewDistance * playerRegion)));
       objectPosition.sizeFactor = getRandomArbitrary(0.01, 0.05);
       objectPosition.rotation.x = Math.random() * Math.PI * 2;
@@ -182,8 +182,8 @@ export class WorldGen {
     //Generate specified Amount of Enemies
     for (let i = 0; i < this.enemyPerSection; i++) {
       //Set Position, Size and Rotation of the new Enemies
-      objectPosition.position.x = getRandomInt(-WORLD_SIZE, WORLD_SIZE);
-      objectPosition.position.y = getRandomInt(-WORLD_SIZE, WORLD_SIZE);
+      objectPosition.position.x = getRandomInt(-worldSize, worldSize);
+      objectPosition.position.y = getRandomInt(-worldSize, worldSize);
       zPosition = getRandomInt(-(this.viewDistance * (playerRegion + 1)), -30 - ((this.viewDistance * playerRegion)));
       if (zPosition >= this.mapLength) {
         zPosition = this.mapLength - 10;
