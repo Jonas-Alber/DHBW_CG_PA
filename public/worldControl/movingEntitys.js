@@ -8,7 +8,7 @@ import { Entity } from '/model/entity.js'
 import { getRandomInt, getRandomArbitrary, ObjectPosition } from '/model/helperClass.js';
 /**End of import zone */
 
-const SOUND_CHECK_TIME = 10;
+const soundCheckTime = 10;
 export class PlayerEntity extends Entity {
   /**
    * @param {int} healthPoints -number of healthpoints a object e.g. player, enemy,... has
@@ -96,7 +96,7 @@ export class PlayerEntity extends Entity {
     if(this.checkSound == 0 || !this.playingSound){
       this.__manageAudio('boost',boostSound);
       this.__manageAudio('nozzle',nozzleSound);
-      this.checkSound = SOUND_CHECK_TIME;
+      this.checkSound = soundCheckTime;
     }else{
       this.checkSound -=1;
     }

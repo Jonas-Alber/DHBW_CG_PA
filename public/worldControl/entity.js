@@ -112,19 +112,21 @@ export class Entity extends Object {
     return this.model.position.x;
   }
 
-  /**
-  * Retrieves the y-Position of the model
-  */
-  getYPos() {
-    return this.model.position.y;
-  }
+    /**
+    * Retrieves the y-Position of the model
+    * @return {number} - y-position
+    */
+    getYPos() { 
+        return this.model.position.y;
+    }
 
-  /**
-  * Retrieves the z-Position of the model
-  */
-  getZPos() {
-    return this.model.position.z;
-  }
+    /**
+    * Retrieves the z-Position of the model
+    * @return {number} - z-position
+    */
+    getZPos() {
+        return this.model.position.z;
+    }
 
   /**
   * Sets the x and z-Position of the model
