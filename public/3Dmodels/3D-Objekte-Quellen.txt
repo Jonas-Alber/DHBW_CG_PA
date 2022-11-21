@@ -1,5 +1,5 @@
 
-enemy-red: https://sketchfab.com/3d-models/ufo-hypercasual-game-39a58ccb969741439bcdf80ce4864812 22.10.22
+enemy-red & enemy-blue: https://sketchfab.com/3d-models/ufo-hypercasual-game-39a58ccb969741439bcdf80ce4864812 22.10.22
 asteroid: https://sketchfab.com/3d-models/asteroid-01-df95d3da67aa4c769ec81394e0b0ffef 22.10.22
 spaceship: https://sketchfab.com/3d-models/spaceship-1d2f6d0c373e497c83e7846ec3f5fad6 22.10.22
 

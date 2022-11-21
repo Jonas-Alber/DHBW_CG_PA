@@ -20,9 +20,10 @@ export class EntityHandler {
   /**
    * Initializes the EntityHandler and the ObjectSupplier
    * @param {ModelLoader} modelLoader - instance of ModelLoader which contains all 3D models
+   * @param {AudioLoader} audioLoader - instance of class audioLoader, containing all audio files
    * @param {int} maxWorldSize - Z Coordinate size of the world
    */
-  constructor(modelLoader, maxWorldSize = 400) {
+  constructor(modelLoader, audioLoader, maxWorldSize = 400) {
     //Set required variables
     this.maxWorldSize = maxWorldSize;
     this.destroyedEnemies = 0;
@@ -30,7 +31,7 @@ export class EntityHandler {
     this.objects = [];
     this.entities = [];
     //Create an instance of the Object Supplier Class
-    this.objectSupplier = new ObjectSupplier(modelLoader);
+    this.objectSupplier = new ObjectSupplier(modelLoader,audioLoader);
   }
 
   /**
@@ -106,6 +107,9 @@ export class EntityHandler {
                 break;
               }
               else {
+                if(element instanceof PlayerEntity){
+                  element.playCollisionSound();
+                }
                 //If the objects are not destroyed check if the element is not a projectile
                 if (!(element instanceof ProjectileEntity)) {
                   //Get the location of the collision and deactivate movement in that direction
@@ -172,6 +176,7 @@ export class EntityHandler {
     }
     //Add the  projectile into the entityHandler itself
     this.addObject(projectileObject);
+    element.__fireProjectileSound();
   }
 
   /**
@@ -207,7 +212,7 @@ export class EntityHandler {
    */
   __checkIfProjectileIsInWorld(projectile) {
     //Check if the element leaves the world borders in z direction
-    if (projectile.model.position.z < -this.maxWorldSize - 50 || projectile.model.position.z > 50) {
+    if (projectile.model.position.z < -this.maxWorldSize - 150 || projectile.model.position.z > 50) {
       //If it leaves the world borders, destroy it
       this.removeObject(this.getObjectIndex(projectile));
       return true;
@@ -221,6 +226,7 @@ export class EntityHandler {
   removeObject(index) {
     //Check if the object is an instance of the Entity class
     if (this.objects[index] instanceof Entity) {
+      this.objects[index].playerDestructionSound();
       //Check if the object is an instance of the AiEntity class
       if (this.objects[index] instanceof AiEntity) {
         //If it is, count the destroyedEnemies counter up

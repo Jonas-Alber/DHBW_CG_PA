@@ -14,6 +14,7 @@ import { render,getListener } from '/view/view.js';
 
 /**Start of constant definition zone */
 const setFPS = 30;
+const setDifficulty = 1;
 //If false game will wait with loading until the user press l on his keyboard
 const autoHideLoadingScreen = true;
 /**End of constant definition zone */
@@ -73,6 +74,13 @@ document.getElementById("soundOff").addEventListener('click', function() {
 var bgAudioIndex = await audioLoader.loadAudio('background', 'sound/background.mp3');
 var winAudioIndex = await audioLoader.loadAudio('win', 'sound/winSound.mp3');
 var looseAudioIndex = await audioLoader.loadAudio('loose', 'sound/looseSound.mp3');
+await audioLoader.loadPositionalAudio('boost','sound/boost.mp3',true, 0.15);
+await audioLoader.loadPositionalAudio('nozzle','sound/nozzle.mp3',  true, 0.05);
+await audioLoader.loadPositionalAudio('fireProjectileSound','sound/fireProjectile.mp3',  false,0.3);
+await audioLoader.loadPositionalAudio('projectileDestroyed','sound/projectileDestroyed.mp3',  false,0.1);
+await audioLoader.loadPositionalAudio('shipDestroyed','sound/shipDestroyed.mp3',  false, 1);
+await audioLoader.loadPositionalAudio('collision','sound/collisionSound.mp3',  true, 1);
+
 //Start Game after loading all 3D model
 initGame();
 function startGame(){
@@ -85,7 +93,7 @@ function startGame(){
  */
 function initGame() {
   //Initialize the WorldGen and transfers the loaded 3D models
-  worldGen = new WorldGen(modelLoader, 130, 1);
+  worldGen = new WorldGen(modelLoader,audioLoader, 130, setDifficulty);
 
   //Add Event Listener for Keyboard Button Press and Release
   document.addEventListener("keydown", function (event) {
@@ -154,8 +162,9 @@ function stopGame() {
   //Show end screen
   showGameEnd(playerIsAlive);
   audioLoader.stopAudio(bgAudioIndex);
+  audioLoader.stopPosAudio();
   if(playerIsAlive && playAudio){
-    audioLoader.stopAudio(winAudioIndex);
+    audioLoader.playAudio(winAudioIndex);
   }
   else if(playAudio){
     audioLoader.playAudio(looseAudioIndex);

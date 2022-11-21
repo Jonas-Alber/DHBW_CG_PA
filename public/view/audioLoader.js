@@ -12,6 +12,8 @@ import * as THREE from '/build/three.module.js'
    constructor(listener){
     this.listener = listener
      this.audioBuffer  = [];
+     this.posAudioBuffer =  [];
+     this.activePosAudio =  [];
      this.loader = new THREE.AudioLoader();
    }
  
@@ -21,7 +23,7 @@ import * as THREE from '/build/three.module.js'
     * @param {string} audioFileDirection - path to the audio
     * @return {int} index of the audio in the audioBuffer array
     */
-   async loadAudio(audioName, audioFileDirection,loop){
+   async loadAudio(audioName, audioFileDirection,loop = true){
      try{
       let sound = new THREE.Audio(this.listener);
       let buffer = await this.loader.loadAsync(audioFileDirection);
@@ -34,6 +36,16 @@ import * as THREE from '/build/three.module.js'
      }
      return this.audioBuffer.length-1;
    }
+
+   async loadPositionalAudio(audioName, audioFileDirection,loop = true, setVolume = 0.1, soundLength = 10){
+    try{
+     let buffer = await this.loader.loadAsync(audioFileDirection);
+     this.posAudioBuffer.push({name: audioName, audioBuffer: buffer, doLoop: loop, volume: setVolume, maxSoundLength: soundLength});
+    }catch (exception){
+      console.error("Model " + audioFileDirection +" cannot be loaded properly: " + exception);
+    }
+    return this.audioBuffer.length-1;
+  }
  
    /**
     * Get a audio from the audio buffer 
@@ -48,16 +60,48 @@ import * as THREE from '/build/three.module.js'
        }
      }
      if(returnValue == undefined){
-       throw Error("No Model with given name found");
+       throw Error("No Sound with given name found");
      }
      return returnValue;
    }
+
+   getPosAudio(name){
+    let returnValue;
+    for(let index in this.posAudioBuffer){
+      if(this.posAudioBuffer[index].name == name){
+        var audioData = this.posAudioBuffer[index];
+        let sound = new THREE.PositionalAudio(this.listener);
+        this.activePosAudio.push(sound);
+        sound.setBuffer( audioData.audioBuffer );
+        sound.setLoop(audioData.doLoop);
+        sound.setRefDistance(10);
+        sound.setVolume(audioData.volume);
+        sound.setMaxDistance(audioData.maxSoundLength);
+        sound.setRolloffFactor(0.9);
+        returnValue = sound;
+      }
+    }
+    if(returnValue == undefined){
+      throw Error("No Sound with given name found");
+    }
+    return returnValue;
+  }
 
    playAudio(index){
     this.audioBuffer[index].audio.play();
    }
    stopAudio(index){
     this.audioBuffer[index].audio.stop();
+   }
+
+   stopPosAudio(){
+      for(var index in this.activePosAudio){
+        try{
+          this.activePosAudio[index].stop();
+        }catch (e){
+
+        }
+      }
    }
  }
  

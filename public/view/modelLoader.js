@@ -26,18 +26,6 @@ export class ModelLoader{
   }
 
   /**
-   * NOT IN USE AT THE MOMENT
-   * @param {*} modelList 
-   */
-  async loadList(modelList){
-    let promises  = [];
-    for(let index in modelList){
-      promises.push(this.loadModel(modelList[index][0], modelList[index][1]));
-    }
-    await Promise.all(promises);
-  }
-
-  /**
    * Get a model from the model buffer 
    * @param {string} name - Name of the model
    * @returns {object} returnValue - Model from the modelBuffer
